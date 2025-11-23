@@ -1,0 +1,379 @@
+[gd_scene load_steps=3 format=3 uid="uid://88jpn26ij3hx"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1"]
+[ext_resource type="Texture2D" path="res://game title.png" id="2"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+mouse_filter = 2
+
+[node name="TitlePanel" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="TitlePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+theme_override_constants/separation = 32
+
+[node name="TitleLogo" type="TextureRect" parent="TitlePanel/VBox"]
+layout_mode = 2
+visible = true
+texture = ExtResource("2")
+stretch_mode = 6
+size_flags_horizontal = 4
+size_flags_vertical = 4
+expand_mode = 2
+offset_top = -40.0
+custom_minimum_size = Vector2(1100, 300)
+
+[node name="Title" type="Label" parent="TitlePanel/VBox"]
+layout_mode = 2
+visible = false
+
+[node name="PlayButton" type="Button" parent="TitlePanel/VBox"]
+layout_mode = 2
+text = "Play"
+custom_minimum_size = Vector2(0, 70)
+margin_top = 12.0
+
+[node name="SettingsButton" type="Button" parent="TitlePanel/VBox"]
+layout_mode = 2
+text = "Settings"
+custom_minimum_size = Vector2(0, 70)
+margin_top = 8.0
+
+[node name="VerseOfDay" type="VBoxContainer" parent="TitlePanel/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 6
+
+[node name="VerseTitle" type="Label" parent="TitlePanel/VBox/VerseOfDay"]
+layout_mode = 2
+text = "Verse of the Day"
+horizontal_alignment = 1
+
+[node name="VerseText" type="Label" parent="TitlePanel/VBox/VerseOfDay"]
+layout_mode = 2
+text = "Loading..."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="VerseReference" type="Label" parent="TitlePanel/VBox/VerseOfDay"]
+layout_mode = 2
+text = ""
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="TitlePanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="SettingsPanel" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Content" type="MarginContainer" parent="SettingsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 240
+theme_override_constants/margin_right = 240
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_bottom = 60
+
+[node name="VBox" type="VBoxContainer" parent="SettingsPanel/Content"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+theme_override_constants/separation = 32
+size_flags_horizontal = 4
+
+[node name="SettingsTitle" type="Label" parent="SettingsPanel/Content/VBox"]
+layout_mode = 2
+text = "Settings"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 52
+
+[node name="LanguageLabel" type="Label" parent="SettingsPanel/Content/VBox"]
+layout_mode = 2
+text = "Language"
+horizontal_alignment = 1
+
+[node name="LanguageOption" type="OptionButton" parent="SettingsPanel/Content/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(520, 0)
+size_flags_horizontal = 4
+
+[node name="MusicLabel" type="Label" parent="SettingsPanel/Content/VBox"]
+layout_mode = 2
+text = "Music Volume"
+horizontal_alignment = 1
+
+[node name="MusicSlider" type="HSlider" parent="SettingsPanel/Content/VBox"]
+layout_mode = 2
+min_value = -30.0
+max_value = 6.0
+step = 0.5
+value = -6.0
+custom_minimum_size = Vector2(520, 0)
+size_flags_horizontal = 4
+
+[node name="BackButton" type="Button" parent="SettingsPanel/Content/VBox"]
+layout_mode = 2
+text = "Back"
+
+[node name="ExitButton" type="Button" parent="SettingsPanel/Content/VBox"]
+layout_mode = 2
+text = "Exit Game"
+custom_minimum_size = Vector2(0, 70)
+
+[node name="PlayerSelectPanel" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="PlayerSelectPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="SelectTitle" type="Label" parent="PlayerSelectPanel/VBox"]
+layout_mode = 2
+text = "Select Players"
+horizontal_alignment = 1
+
+[node name="PlayerCount" type="OptionButton" parent="PlayerSelectPanel/VBox"]
+layout_mode = 2
+
+[node name="InfoLabel" type="Label" parent="PlayerSelectPanel/VBox"]
+layout_mode = 2
+text = "Keyboard: Player 1 (Spacebar). Controllers: any button. Empty slots become AI."
+autowrap_mode = 2
+
+[node name="StartButton" type="Button" parent="PlayerSelectPanel/VBox"]
+layout_mode = 2
+text = "Start Game"
+
+[node name="RootVBox" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="TitleLogoMain" type="TextureRect" parent="RootVBox"]
+layout_mode = 2
+visible = false
+texture = ExtResource("2")
+stretch_mode = 6
+size_flags_horizontal = 4
+size_flags_vertical = 4
+expand_mode = 2
+custom_minimum_size = Vector2(1100, 300)
+
+[node name="TitleLabel" type="Label" parent="RootVBox"]
+layout_mode = 2
+visible = false
+
+[node name="Scoreboard" type="HBoxContainer" parent="RootVBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="TurnLabel" type="Label" parent="RootVBox"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="BoardMargin" type="MarginContainer" parent="RootVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="BoardGrid" type="GridContainer" parent="RootVBox/BoardMargin"]
+layout_mode = 2
+columns = 3
+
+[node name="QuestionPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 60.0
+offset_right = -40.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="QuestionVBox" type="VBoxContainer" parent="QuestionPanel"]
+layout_mode = 2
+alignment = 1
+
+[node name="QuestionCategory" type="Label" parent="QuestionPanel/QuestionVBox"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="QuestionValue" type="Label" parent="QuestionPanel/QuestionVBox"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="QuestionText" type="Label" parent="QuestionPanel/QuestionVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ResultLabel" type="Label" parent="QuestionPanel/QuestionVBox"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Characters" type="HBoxContainer" parent="QuestionPanel/QuestionVBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="LeftCharacter" type="TextureRect" parent="QuestionPanel/QuestionVBox/Characters"]
+layout_mode = 2
+
+[node name="RightCharacter" type="TextureRect" parent="QuestionPanel/QuestionVBox/Characters"]
+layout_mode = 2
+
+[node name="AnswerButtons" type="Control" parent="QuestionPanel/QuestionVBox"]
+layout_mode = 2
+
+[node name="FinalWager" type="VBoxContainer" parent="QuestionPanel"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.12
+anchor_right = 0.75
+anchor_bottom = 0.3
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+theme_override_constants/separation = 32
+
+[node name="WagerLabel" type="Label" parent="QuestionPanel/FinalWager"]
+layout_mode = 2
+text = "Set Final Wager"
+horizontal_alignment = 1
+
+[node name="WagerInput" type="LineEdit" parent="QuestionPanel/FinalWager"]
+layout_mode = 2
+placeholder_text = "Enter wager"
+caret_blink = true
+
+[node name="SetWagerButton" type="Button" parent="QuestionPanel/FinalWager"]
+layout_mode = 2
+text = "Set Wager"
+
+[node name="FinalClueButton" type="Button" parent="QuestionPanel/FinalWager"]
+layout_mode = 2
+text = "Get Clue (-10%)"
+
+[node name="TimerBar" type="ProgressBar" parent="QuestionPanel/QuestionVBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(800, 28)
+size_flags_horizontal = 4
+size_flags_vertical = 1
+
+[node name="AnswerTimer" type="Label" parent="QuestionPanel"]
+layout_mode = 2
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="QuestionMusicPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="CorrectSfxPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="WrongSfxPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="SelectSfxPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="PauseMenu" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="Panel" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.75
+anchor_bottom = 0.75
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBox" type="VBoxContainer" parent="PauseMenu/Panel"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="PauseLabel" type="Label" parent="PauseMenu/Panel/VBox"]
+layout_mode = 2
+text = "Paused"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="PauseMenu/Panel/VBox"]
+layout_mode = 2
+text = "Resume"
+
+[node name="SettingsButton" type="Button" parent="PauseMenu/Panel/VBox"]
+layout_mode = 2
+text = "Settings"
+
+[node name="MainMenuButton" type="Button" parent="PauseMenu/Panel/VBox"]
+layout_mode = 2
+text = "Main Menu"

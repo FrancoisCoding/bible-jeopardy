@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cjm25f74j7yin"
+path="res://.godot/imported/wrong answer.mp3-a5f1f40da07445f61477d7b44dd85c55.mp3str"
+
+[deps]
+
+source_file="res://music/wrong answer.mp3"
+dest_files=["res://.godot/imported/wrong answer.mp3-a5f1f40da07445f61477d7b44dd85c55.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

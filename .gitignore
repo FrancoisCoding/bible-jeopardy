@@ -1,0 +1,29 @@
+# Godot generated folders/cache
+.import/
+.godot/
+
+# Export presets (keep if you want to share them)
+export.cfg
+export_presets.cfg
+
+# Godot Mono / crash dumps
+.mono/
+data_*/
+mono_crash.*.json
+
+# Exported builds / platforms
+export/
+android/
+ios/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.bak
+*.orig
+*.log
