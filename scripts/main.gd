@@ -133,6 +133,7 @@ var category_deck: Array = []
 var loading_settings: bool = false
 var verse_data := VerseData.new()
 var question_panel_base_style: StyleBox = null
+var music_volume_tween: Tween = null
 const SETTINGS_PATH := "user://settings.cfg"
 
 
@@ -390,6 +391,7 @@ func _apply_bible_theme() -> void:
 		settings_language_label,
 		music_label,
 		settings_back_button,
+		settings_exit_button,
 		player_select_title,
 		player_count_option,
 		player_info_label,
@@ -412,6 +414,10 @@ func _apply_bible_theme() -> void:
 		if ctrl and ctrl is Control:
 			_apply_body_color(ctrl)
 			(ctrl as Control).add_theme_font_size_override("font_size", 28)
+	if settings_language_label:
+		settings_language_label.add_theme_font_size_override("font_size", 32)
+	if music_label:
+		music_label.add_theme_font_size_override("font_size", 32)
 
 	_style_timer_bar()
 
@@ -861,11 +867,22 @@ func _on_player_start_pressed() -> void:
 
 
 func _on_music_slider_changed(value: float) -> void:
-	if not loading_settings:
-		_play_select_sfx()
-	var bus_idx := AudioServer.get_bus_index("Master")
-	AudioServer.set_bus_volume_db(bus_idx, value)
+	_set_music_volume_db(value)
 	_save_settings()
+
+
+func _set_music_volume_db(target_db: float) -> void:
+	var bus_idx := AudioServer.get_bus_index("Master")
+	var current_db := AudioServer.get_bus_volume_db(bus_idx)
+	if music_volume_tween and is_instance_valid(music_volume_tween):
+		music_volume_tween.kill()
+	music_volume_tween = create_tween()
+	music_volume_tween.tween_method(
+		func(db: float) -> void: AudioServer.set_bus_volume_db(bus_idx, db),
+		current_db,
+		target_db,
+		0.08
+	)
 
 
 func _setup_players(count: int) -> void:
