@@ -9257,21 +9257,6 @@ static func _prepare_base_list(base_list: Array, lang: String) -> Array:
 		var qa: Dictionary = _normalize_qa_language(base_list[i] as Dictionary, lang)
 		if not qa.has("tier"):
 			qa["tier"] = 1 + (i % 3)
-		if not qa.has("decoys") or (qa["decoys"] as Array).is_empty():
-			var others: Array[String] = []
-			for j in range(base_list.size()):
-				if j == i:
-					continue
-				var other_ans := str((base_list[j] as Dictionary).get("answer", ""))
-				if other_ans != "":
-					others.append(other_ans)
-			others.shuffle()
-			var decoys: Array[String] = []
-			for d in others:
-				if decoys.size() >= 3:
-					break
-				decoys.append(d)
-			qa["decoys"] = decoys
 		prepared.append(qa)
 	return prepared
 
