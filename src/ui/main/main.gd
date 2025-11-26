@@ -1074,10 +1074,9 @@ func _on_answer_selected(answer_text: String) -> void:
 			turn_label.text = _t("Wrong. Waiting for buzz...", "Errado. Aguardando outro buzzer...")
 			_update_turn_label_waiting()
 			_disable_answer_buttons()
-			for i in range(players.size()):
-				if players[i].get("is_ai", false) and not attempted_players.has(i):
-					_start_ai_buzz_timer(0.75)
-					break
+			var eligible_ai := _get_eligible_ai_players()
+			if not eligible_ai.is_empty():
+				_start_ai_buzz_timer(0.75)
 
 
 func _update_turn_label_waiting() -> void:
@@ -1407,20 +1406,28 @@ func _player_from_event(event: InputEvent) -> int:
 	return -1
 
 
+func _get_eligible_ai_players() -> Array[int]:
+	var candidates: Array[int] = []
+	for i in range(players.size()):
+		var p: Dictionary = players[i] as Dictionary
+		if not p.get("is_ai", false):
+			continue
+		if attempted_players.has(i):
+			continue
+		candidates.append(i)
+	return candidates
+
+
 func _on_ai_try_buzz() -> void:
 	if current_clue.is_empty():
 		return
 	if buzzed_player != -1:
 		return
-	# Pick first AI that hasn't tried yet
-	for i in range(players.size()):
-		var p: Dictionary = players[i] as Dictionary
-		if not p["is_ai"]:
-			continue
-		if attempted_players.has(i):
-			continue
-		_on_player_buzz(i)
-		break
+	var candidates := _get_eligible_ai_players()
+	if candidates.is_empty():
+		return
+	var pick_index := rng.randi_range(0, candidates.size() - 1)
+	_on_player_buzz(candidates[pick_index])
 
 
 func _flip_card(button: Button) -> void:
