@@ -97,6 +97,58 @@ var player_count_option: OptionButton = get_node_or_null("PlayerSelectPanel/VBox
 )
 @onready
 var controller_connect_content: PanelContainer = get_node_or_null("ControllerConnectPanel/Content")
+@onready var online_panel: Control = get_node_or_null("OnlinePanel")
+@onready var title_online_button: Button = get_node_or_null("TitlePanel/VBox/OnlineButton")
+@onready
+var online_title_label: Label = get_node_or_null("OnlinePanel/OnlineContent/VBox/OnlineTitle")
+@onready var online_host_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/ActionRow/HostButton"
+)
+@onready var online_join_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/ActionRow/JoinButton"
+)
+@onready var online_back_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/ActionRow/OnlineBackButton"
+)
+@onready
+var online_host_lobby: PanelContainer = get_node_or_null("OnlinePanel/OnlineContent/VBox/HostLobby")
+@onready
+var online_join_panel: PanelContainer = get_node_or_null("OnlinePanel/OnlineContent/VBox/JoinPanel")
+@onready var online_code_label: Label = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/CodeLabel"
+)
+@onready var online_code_value: Label = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/CodeValue"
+)
+@onready var online_slot_labels: Array[Label] = [
+	get_node_or_null("OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/PlayerList/Slot1"),
+	get_node_or_null("OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/PlayerList/Slot2"),
+	get_node_or_null("OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/PlayerList/Slot3")
+]
+@onready var online_status_label: Label = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/HostStatus"
+)
+@onready var online_host_start_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/HostButtons/HostStartButton"
+)
+@onready var online_host_leave_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/HostButtons/HostLeaveButton"
+)
+@onready var online_join_code_input: LineEdit = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinCodeInput"
+)
+@onready var online_join_ip_input: LineEdit = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinIPInput"
+)
+@onready var online_join_status: Label = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinStatus"
+)
+@onready var online_join_connect_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinButtons/JoinConnectButton"
+)
+@onready var online_join_cancel_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinButtons/JoinCancelButton"
+)
 
 # Game UI
 @onready var game_root: Control = get_node_or_null("RootVBox")
@@ -162,6 +214,15 @@ var nav_focus_enabled: bool = false  # Only grab focus highlights when a control
 var settings_opened_from_pause: bool = false
 var ai_difficulty: String = "normal"
 var ai_correct_rate: float = AI_DIFFICULTY_RATES["normal"]
+var online_peer: ENetMultiplayerPeer
+var online_is_host: bool = false
+var online_room_code: String = ""
+var online_host_peer_id: int = -1
+var online_players: Array[Dictionary] = []  # [{id,name}]
+const ONLINE_MAX_PLAYERS := 3
+const ONLINE_MIN_PLAYERS := 2
+var online_active: bool = false
+var local_player_index: int = -1
 var round_index: int = 0
 var final_round: bool = false
 var hidden_double_key: String = ""
@@ -239,6 +300,8 @@ func _ready() -> void:
 	_update_verse_of_day()
 	# Hook up UI
 	title_play_button.pressed.connect(_on_play_pressed)
+	if title_online_button:
+		title_online_button.pressed.connect(_on_online_pressed)
 	title_settings_button.pressed.connect(_on_settings_pressed)
 	settings_back_button.pressed.connect(_on_settings_back_pressed)
 	player_start_button.pressed.connect(_on_player_start_pressed)
@@ -259,6 +322,24 @@ func _ready() -> void:
 		controller_ai_option.item_selected.connect(
 			func(idx: int) -> void: _on_ai_difficulty_selected(idx)
 		)
+	if online_host_button:
+		online_host_button.pressed.connect(_on_online_host_pressed)
+	if online_join_button:
+		online_join_button.pressed.connect(_on_online_join_pressed)
+	if online_back_button:
+		online_back_button.pressed.connect(_on_online_back_pressed)
+	if online_host_start_button:
+		online_host_start_button.pressed.connect(_on_online_start_pressed)
+	if online_host_leave_button:
+		online_host_leave_button.pressed.connect(_on_online_leave_pressed)
+	if online_join_connect_button:
+		online_join_connect_button.pressed.connect(_on_online_join_connect_pressed)
+	if online_join_cancel_button:
+		online_join_cancel_button.pressed.connect(_on_online_back_pressed)
+	if online_join_code_input:
+		online_join_code_input.text_submitted.connect(
+			func(_t: String) -> void: _on_online_join_connect_pressed()
+		)
 	if title_texture:
 		if title_logo:
 			title_logo.texture = title_texture
@@ -272,6 +353,18 @@ func _ready() -> void:
 			title_logo_main.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 
 	rng.randomize()
+	var mp := get_tree().get_multiplayer()
+	if mp:
+		if not mp.peer_connected.is_connected(_on_peer_connected):
+			mp.peer_connected.connect(_on_peer_connected)
+		if not mp.peer_disconnected.is_connected(_on_peer_disconnected):
+			mp.peer_disconnected.connect(_on_peer_disconnected)
+		if not mp.connected_to_server.is_connected(_on_connected_to_server):
+			mp.connected_to_server.connect(_on_connected_to_server)
+		if not mp.connection_failed.is_connected(_on_connection_failed):
+			mp.connection_failed.connect(_on_connection_failed)
+		if not mp.server_disconnected.is_connected(_on_server_disconnected):
+			mp.server_disconnected.connect(_on_server_disconnected)
 	_ensure_default_input_actions()
 	_setup_pause_menu_focus()
 	set_process_input(true)
@@ -331,6 +424,7 @@ func _apply_language_texts() -> void:
 		)
 	_update_player_info_label()
 	_apply_controller_connect_text()
+	_apply_online_texts()
 
 	_update_verse_of_day()
 
@@ -377,6 +471,38 @@ func _apply_controller_connect_text() -> void:
 	if controller_cancel_button:
 		controller_cancel_button.text = _t("Back", "Voltar")
 	_refresh_controller_join_ui()
+
+
+func _apply_online_texts() -> void:
+	if title_online_button:
+		title_online_button.text = _t("Online", "Online")
+	if online_title_label:
+		online_title_label.text = _t("Online Multiplayer", "Multijogador Online")
+	if online_host_button:
+		online_host_button.text = _t("Host Room", "Hospedar Sala")
+	if online_join_button:
+		online_join_button.text = _t("Join Room", "Entrar na Sala")
+	if online_back_button:
+		online_back_button.text = _t("Back", "Voltar")
+	if online_code_label:
+		online_code_label.text = _t("Room Code", "Codigo da sala")
+	if online_status_label:
+		online_status_label.text = _t("Waiting for players...", "Aguardando jogadores...")
+	if online_host_start_button:
+		online_host_start_button.text = _t("Start Game", "Iniciar jogo")
+	if online_host_leave_button:
+		online_host_leave_button.text = _t("Leave Room", "Sair da sala")
+	if online_join_code_input:
+		online_join_code_input.placeholder_text = _t("Enter room code", "Digite o codigo")
+	if online_join_ip_input:
+		online_join_ip_input.placeholder_text = "127.0.0.1"
+	if online_join_status:
+		online_join_status.text = ""
+	if online_join_connect_button:
+		online_join_connect_button.text = _t("Join", "Entrar")
+	if online_join_cancel_button:
+		online_join_cancel_button.text = _t("Cancel", "Cancelar")
+	_update_online_panel_visibility(false, false)
 	_refresh_controller_join_ui()
 
 
@@ -405,6 +531,7 @@ func _apply_theme_styles() -> void:
 		final_wager_panel,
 		final_wager_input,
 		title_play_button,
+		title_online_button,
 		title_settings_button,
 		settings_back_button,
 		settings_exit_button,
@@ -421,7 +548,19 @@ func _apply_theme_styles() -> void:
 		controller_status_label,
 		controller_slot_labels[0] if controller_slot_labels.size() > 0 else null,
 		controller_slot_labels[1] if controller_slot_labels.size() > 1 else null,
-		controller_slot_labels[2] if controller_slot_labels.size() > 2 else null
+		controller_slot_labels[2] if controller_slot_labels.size() > 2 else null,
+		controller_ai_label,
+		controller_ai_option,
+		online_title_label,
+		online_code_label,
+		online_code_value,
+		online_status_label,
+		online_slot_labels[0] if online_slot_labels.size() > 0 else null,
+		online_slot_labels[1] if online_slot_labels.size() > 1 else null,
+		online_slot_labels[2] if online_slot_labels.size() > 2 else null,
+		online_join_status,
+		online_join_code_input,
+		online_join_ip_input
 	]
 	theme_styler.apply_game_font(game_font, font_controls)
 
@@ -429,6 +568,7 @@ func _apply_theme_styles() -> void:
 
 	var primary_controls: Array = [
 		title_play_button,
+		title_online_button,
 		title_settings_button,
 		verse_title_label,
 		verse_text_label,
@@ -463,11 +603,22 @@ func _apply_theme_styles() -> void:
 		controller_ai_label,
 		controller_ai_option,
 		controller_start_button,
-		controller_cancel_button
+		controller_cancel_button,
+		online_title_label,
+		online_code_label,
+		online_code_value,
+		online_status_label,
+		online_slot_labels[0] if online_slot_labels.size() > 0 else null,
+		online_slot_labels[1] if online_slot_labels.size() > 1 else null,
+		online_slot_labels[2] if online_slot_labels.size() > 2 else null,
+		online_join_status,
+		online_join_code_input,
+		online_join_ip_input
 	]
 
 	var button_controls := [
 		title_play_button,
+		title_online_button,
 		title_settings_button,
 		settings_back_button,
 		settings_exit_button,
@@ -478,7 +629,14 @@ func _apply_theme_styles() -> void:
 		final_wager_button,
 		final_clue_button,
 		controller_start_button,
-		controller_cancel_button
+		controller_cancel_button,
+		online_host_button,
+		online_join_button,
+		online_back_button,
+		online_host_start_button,
+		online_host_leave_button,
+		online_join_connect_button,
+		online_join_cancel_button
 	]
 
 	var pause_panel := (
@@ -556,11 +714,16 @@ func _play_select_sfx() -> void:
 
 
 func _show_title() -> void:
+	_shutdown_online_session()
 	if main_menu_screen:
 		main_menu_screen.show_title()
 	if controller_connect_panel:
 		controller_connect_panel.visible = false
+	if online_panel:
+		online_panel.visible = false
 	controller_join_active = false
+	online_active = false
+	local_player_index = -1
 	_close_pause_menu()
 	if title_play_button and nav_focus_enabled:
 		title_play_button.grab_focus()
@@ -580,6 +743,11 @@ func _on_settings_pressed() -> void:
 		language_option.grab_focus()
 
 
+func _on_online_pressed() -> void:
+	_play_select_sfx()
+	_show_online_menu()
+
+
 func _on_settings_back_pressed() -> void:
 	_play_select_sfx()
 	if settings_opened_from_pause:
@@ -588,6 +756,46 @@ func _on_settings_back_pressed() -> void:
 			settings_screen.back_to_pause()
 	else:
 		_show_title()
+
+
+func _show_online_menu() -> void:
+	title_panel.visible = false
+	settings_panel.visible = false
+	player_select_panel.visible = false
+	_close_pause_menu()
+	if controller_connect_panel:
+		controller_connect_panel.visible = false
+	if online_panel:
+		online_panel.visible = true
+	_update_online_panel_visibility(false, false)
+	_update_online_status("", false)
+	if nav_focus_enabled and online_host_button:
+		online_host_button.grab_focus()
+
+
+func _update_online_panel_visibility(show_host: bool, show_join: bool) -> void:
+	if online_host_lobby:
+		online_host_lobby.visible = show_host
+	if online_join_panel:
+		online_join_panel.visible = show_join
+
+
+func _update_online_status(text: String, is_error: bool = false) -> void:
+	if online_status_label:
+		online_status_label.text = text
+		online_status_label.add_theme_color_override(
+			"font_color", Color(0.8, 0.2, 0.2) if is_error else Color(0.1, 0.1, 0.1)
+		)
+	if online_join_status:
+		online_join_status.text = text
+		online_join_status.add_theme_color_override(
+			"font_color", Color(0.8, 0.2, 0.2) if is_error else Color(0.1, 0.1, 0.1)
+		)
+
+
+func _on_online_back_pressed() -> void:
+	_shutdown_online_session()
+	_show_title()
 
 
 func _open_controller_connect() -> void:
@@ -632,6 +840,65 @@ func _on_controller_connect_cancel_pressed() -> void:
 	join_inputs.clear()
 	_close_controller_connect()
 	_show_title()
+
+
+func _on_online_host_pressed() -> void:
+	_play_select_sfx()
+	_update_online_panel_visibility(true, false)
+	_create_host_room()
+
+
+func _on_online_join_pressed() -> void:
+	_play_select_sfx()
+	_update_online_panel_visibility(false, true)
+	_update_online_status("", false)
+	if online_join_code_input:
+		online_join_code_input.clear()
+	if online_join_ip_input:
+		online_join_ip_input.text = (
+			online_join_ip_input.text if online_join_ip_input.text != "" else "127.0.0.1"
+		)
+	if nav_focus_enabled and online_join_code_input:
+		online_join_code_input.grab_focus()
+
+
+func _on_online_join_connect_pressed() -> void:
+	_play_select_sfx()
+	if online_join_code_input == null or online_join_ip_input == null:
+		return
+	var code := online_join_code_input.text.strip_edges()
+	if code == "":
+		_update_online_status(_t("Enter a room code.", "Digite um codigo de sala."), true)
+		return
+	var port := int(code)
+	if port <= 0:
+		_update_online_status(_t("Invalid room code.", "Codigo invalido."), true)
+		return
+	var ip := online_join_ip_input.text.strip_edges()
+	if ip == "":
+		ip = "127.0.0.1"
+	_update_online_status(_t("Connecting...", "Conectando..."), false)
+	_connect_to_room(ip, port, code)
+
+
+func _on_online_start_pressed() -> void:
+	_play_select_sfx()
+	if not online_is_host:
+		return
+	if online_players.size() < ONLINE_MIN_PLAYERS:
+		_update_online_status(
+			_t("Need at least 2 players to start.", "Precisa de pelo menos 2 jogadores."), true
+		)
+		return
+	_rpc_start_online_game.rpc(online_players)
+	_begin_online_game(online_players, true)
+
+
+func _on_online_leave_pressed() -> void:
+	_play_select_sfx()
+	_shutdown_online_session()
+	_update_online_panel_visibility(false, false)
+	_update_online_status("", false)
 
 
 func _on_ai_difficulty_selected(idx: int) -> void:
@@ -915,7 +1182,8 @@ func _on_set_wager_pressed() -> void:
 		final_clue_button.disabled = false
 	_show_result(
 		_t("Wager set: %d" % current_wager, "Aposta definida: %d" % current_wager),
-		Color(0.2, 0.8, 0.4)
+		Color(0.2, 0.8, 0.4),
+		true
 	)
 	_open_answer_buttons_for(final_wager_player)
 	_start_answer_timer()
@@ -945,7 +1213,7 @@ func _on_final_clue_pressed() -> void:
 		)
 	else:
 		hint = _t("Clue used.", "Dica usada.")
-	_show_result(hint + _t(" (-10% wager)", " (-10% da aposta)"), Color(0.9, 0.7, 0.1))
+	_show_result(hint + _t(" (-10% wager)", " (-10% da aposta)"), Color(0.9, 0.7, 0.1), true)
 
 
 func _on_player_start_pressed() -> void:
@@ -1083,6 +1351,22 @@ func _set_score_label(idx: int) -> void:
 		)
 
 
+func _set_team_name_label(idx: int, name: String) -> void:
+	if idx < 0 or idx >= team_cards.size():
+		return
+	var card := team_cards[idx]
+	if card == null or not is_instance_valid(card):
+		return
+	if card.get_child_count() == 0:
+		return
+	var vbox := card.get_child(0)
+	if vbox == null or vbox.get_child_count() == 0:
+		return
+	var maybe_label := vbox.get_child(0)
+	if maybe_label is Label:
+		(maybe_label as Label).text = name
+
+
 func _build_board() -> void:
 	if round_index >= ROUND_VALUES.size():
 		_start_final_round()
@@ -1090,7 +1374,7 @@ func _build_board() -> void:
 
 	question_panel.visible = false
 	_set_header_visible(true)
-	_show_result("", Color(0.1, 0.1, 0.1))
+	_show_result("", Color(0.1, 0.1, 0.1), true)
 	turn_label.text = ""
 
 	if board_grid == null or not is_instance_valid(board_grid):
@@ -1159,6 +1443,11 @@ func _on_clue_button_pressed(button: Button) -> void:
 
 	if answered_map.has(key):
 		return  # Already used
+	if online_active and not online_is_host:
+		if online_host_peer_id <= 0:
+			return
+		_rpc_request_clue.rpc_id(online_host_peer_id, cat_index, clue_index)
+		return
 	_play_select_sfx()
 	_reset_question_panel_color()
 	await _flip_card(button)
@@ -1185,9 +1474,9 @@ func _on_clue_button_pressed(button: Button) -> void:
 	var is_double := hidden_double_key != "" and hidden_double_key == key
 	if is_double:
 		score_value *= 2
-		_show_result(_t("Double points!", "Pontos em dobro!"), Color(0.9, 0.7, 0.1))
+		_show_result(_t("Double points!", "Pontos em dobro!"), Color(0.9, 0.7, 0.1), true)
 	else:
-		_show_result("", Color(1, 1, 1))
+		_show_result("", Color(1, 1, 1), true)
 	current_wager = 0
 
 	current_clue = {
@@ -1216,6 +1505,19 @@ func _on_clue_button_pressed(button: Button) -> void:
 	if final_wager_panel:
 		final_wager_panel.visible = final_round and final_wager_player != -1
 	_build_answer_options(clue)
+	if online_active and online_is_host:
+		_rpc_remote_start_clue.rpc(
+			{
+				"cat_index": cat_index,
+				"clue_index": clue_index,
+				"value": score_value,
+				"is_double": is_double,
+				"answer": clue["answer"],
+				"question": question_text,
+				"options": current_options.duplicate(true),
+				"cat_name": str(cat_data["name"])
+			}
+		)
 	_begin_question_audio()
 	_start_question_flow(question_text)
 
@@ -1327,6 +1629,10 @@ func _on_player_buzz(player_index: int) -> void:
 		return
 	if attempted_players.has(player_index):
 		return
+	if online_active and not online_is_host:
+		if player_index == local_player_index and online_host_peer_id > 0:
+			_rpc_request_buzz.rpc_id(online_host_peer_id, player_index)
+		return
 
 	buzzed_player = player_index
 	answering_player = player_index
@@ -1339,6 +1645,8 @@ func _on_player_buzz(player_index: int) -> void:
 	if final_round:
 		# ... your existing final round wager logic ...
 		return
+	if online_active and online_is_host:
+		_rpc_remote_buzz.rpc(player_index)
 
 	if is_ai:
 		_disable_answer_buttons()
@@ -1361,8 +1669,14 @@ func _on_answer_selected(answer_text: String) -> void:
 	_play_select_sfx()
 	if buzzed_player == -1:
 		return
+	if online_active and not online_is_host:
+		if online_host_peer_id > 0:
+			_rpc_request_answer.rpc_id(online_host_peer_id, answer_text)
+		return
 	if final_round and not final_wager_set:
-		_show_result(_t("Set your wager first.", "Defina sua aposta antes."), Color(0.9, 0.3, 0.3))
+		_show_result(
+			_t("Set your wager first.", "Defina sua aposta antes."), Color(0.9, 0.3, 0.3), true
+		)
 		return
 	var correct_answer: String = str(current_clue["answer"]).strip_edges().to_lower()
 	var given: String = str(answer_text).strip_edges().to_lower()
@@ -1381,7 +1695,8 @@ func _on_answer_selected(answer_text: String) -> void:
 				_t("Correct! %s +%d", "Correto! %s +%d")
 				% [players[buzzed_player].get("name", "Player"), value]
 			),
-			Color(0.2, 0.7, 0.2)
+			Color(0.2, 0.7, 0.2),
+			true
 		)
 		turn_label.text = (
 			_t("Correct: %s", "Correto: %s") % players[buzzed_player].get("name", "Player")
@@ -1389,6 +1704,11 @@ func _on_answer_selected(answer_text: String) -> void:
 		_mark_clue_answered()
 		question_panel.visible = false
 		_set_board_input_enabled(true)
+		if online_active and online_is_host:
+			_rpc_remote_scores.rpc(team_scores)
+			_rpc_remote_mark_answered.rpc(
+				current_clue.get("cat_index", -1), current_clue.get("clue_index", -1)
+			)
 	else:
 		attempted_players.append(buzzed_player)
 		team_scores[buzzed_player] -= value
@@ -1402,7 +1722,8 @@ func _on_answer_selected(answer_text: String) -> void:
 		else:
 			_show_result(
 				_t("Wrong answer. Others may buzz in.", "Resposta errada. Outros podem tentar."),
-				Color(0.8, 0.2, 0.2)
+				Color(0.8, 0.2, 0.2),
+				true
 			)
 			turn_label.text = _t("Wrong. Waiting for buzz...", "Errado. Aguardando outro buzzer...")
 			_update_turn_label_waiting()
@@ -1411,6 +1732,8 @@ func _on_answer_selected(answer_text: String) -> void:
 			if not eligible_ai.is_empty():
 				var wait_delay := AI_BUZZ_DELAY if _human_player_count() >= 2 else 0.75
 				_start_ai_buzz_timer(wait_delay)
+		if online_active and online_is_host:
+			_rpc_remote_scores.rpc(team_scores)
 
 
 func _update_turn_label_waiting() -> void:
@@ -1424,7 +1747,7 @@ func _disable_answer_buttons() -> void:
 
 
 func _handle_all_attempted() -> void:
-	_show_result("", Color(0.1, 0.1, 0.1))
+	_show_result("", Color(0.1, 0.1, 0.1), true)
 	_end_question_audio()
 	_disable_answer_buttons()
 	_mark_clue_answered()
@@ -1445,15 +1768,30 @@ func _is_answer_timer_active() -> bool:
 
 
 func _start_answer_timer() -> void:
+	_start_answer_timer_internal(false)
+
+
+func _start_answer_timer_internal(force_all: bool) -> void:
+	if (
+		online_active
+		and not online_is_host
+		and not force_all
+		and buzzed_player != local_player_index
+	):
+		return
 	if (
 		answer_timer_bar
 		and is_instance_valid(answer_timer_bar)
 		and answer_timer_bar.has_method("restart")
 	):
 		answer_timer_bar.restart(ANSWER_TIME)  # full 30s, from scratch
+	if online_active and online_is_host and not force_all:
+		_rpc_remote_timer_start.rpc(ANSWER_TIME)
 
 
 func _on_answer_timer_timeout() -> void:
+	if online_active and not online_is_host:
+		return
 	if (
 		answer_timer_bar
 		and is_instance_valid(answer_timer_bar)
@@ -1461,7 +1799,11 @@ func _on_answer_timer_timeout() -> void:
 	):
 		answer_timer_bar.stop()
 	# Time up, nobody got it right
-	_show_result(_t("Time's up!", "Tempo esgotado!"), Color(0.8, 0.4, 0.0))
+	_show_result(_t("Time's up!", "Tempo esgotado!"), Color(0.8, 0.4, 0.0), true)
+	if online_active and online_is_host:
+		_rpc_remote_mark_answered.rpc(
+			current_clue.get("cat_index", -1), current_clue.get("clue_index", -1)
+		)
 	_end_question_audio()
 	_mark_clue_answered()
 	turn_label.text = _t("Time's up. Choose another clue.", "Tempo esgotado. Escolha outra pista.")
@@ -1507,6 +1849,8 @@ func _mark_clue_answered() -> void:
 		_set_header_visible(true)
 		turn_label.text = ""
 		_advance_round_if_needed()
+	if online_active and online_is_host:
+		_rpc_remote_mark_answered.rpc(cat_index, clue_index)
 		_maybe_trigger_ai_board_choice()
 
 
@@ -1514,6 +1858,7 @@ func _restart_to_main_menu() -> void:
 	_end_question_audio()
 	_stop_timers()
 	settings_opened_from_pause = false
+	_shutdown_online_session()
 	current_clue.clear()
 	current_options.clear()
 	current_categories.clear()
@@ -1568,6 +1913,8 @@ func _stop_timers(preserve_result: bool = false) -> void:
 	if not preserve_result:
 		result_label.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1))
 		result_label.text = ""
+	if online_active and online_is_host:
+		_rpc_remote_timer_stop.rpc(preserve_result)
 
 
 func _set_board_input_enabled(enabled: bool) -> void:
@@ -1585,15 +1932,22 @@ func _set_board_input_enabled(enabled: bool) -> void:
 				btn.disabled = true
 				btn.text = ""
 			else:
-				btn.disabled = not enabled
+				var should_enable := enabled
+				if online_active and not online_is_host:
+					should_enable = false
+				btn.disabled = not should_enable
 	board_grid.visible = enabled
 	if enabled:
 		_focus_first_board_button()
 
 
-func _show_result(text: String, color: Color = Color(0.1, 0.1, 0.1)) -> void:
+func _show_result(
+	text: String, color: Color = Color(0.1, 0.1, 0.1), broadcast: bool = false
+) -> void:
 	result_label.text = text
 	result_label.add_theme_color_override("font_color", color)
+	if broadcast and online_active and online_is_host:
+		_rpc_remote_result.rpc(text, color)
 
 
 func _focus_first_board_button() -> void:
@@ -1629,6 +1983,9 @@ func _maybe_focus_for_nav() -> void:
 		return
 	if board_grid and board_grid.visible:
 		_focus_first_board_button()
+	if online_panel and online_panel.visible:
+		if online_host_button:
+			online_host_button.grab_focus()
 
 
 func _lock_answering_input(player_index: int) -> void:
@@ -1709,6 +2066,437 @@ func _maybe_trigger_ai_board_choice() -> void:
 	_on_clue_button_pressed(pick)
 
 
+func _generate_room_code() -> String:
+	return str(rng.randi_range(20000, 60000))
+
+
+func _create_host_room() -> void:
+	_shutdown_online_session()
+	var port := int(_generate_room_code())
+	var peer := ENetMultiplayerPeer.new()
+	var err := peer.create_server(port, ONLINE_MAX_PLAYERS - 1)
+	if err != OK:
+		_update_online_status(_t("Failed to host room.", "Falha ao criar sala."), true)
+		return
+	online_peer = peer
+	var mp := get_tree().get_multiplayer()
+	if mp:
+		if mp.has_method("set_unique_id") and mp.multiplayer_peer == null:
+			mp.set_unique_id(rng.randi_range(1000, 999999))
+		mp.multiplayer_peer = peer
+		online_host_peer_id = mp.get_unique_id()
+	else:
+		online_host_peer_id = rng.randi_range(1000, 999999)
+	online_is_host = true
+	online_room_code = str(port)
+	online_players.clear()
+	var self_id := mp.get_unique_id() if mp else online_host_peer_id
+	online_players.append({"id": self_id, "name": _t("Host", "Anfitriao")})
+	_update_online_status(
+		_t("Room created. Share the code.", "Sala criada. Compartilhe o codigo."), false
+	)
+	if online_code_value:
+		online_code_value.text = online_room_code
+	_update_online_lobby_labels()
+	_broadcast_lobby()
+
+
+func _connect_to_room(ip: String, port: int, code: String) -> void:
+	_shutdown_online_session()
+	var peer := ENetMultiplayerPeer.new()
+	var err := peer.create_client(ip, port)
+	if err != OK:
+		_update_online_status(_t("Unable to connect.", "Nao foi possivel conectar."), true)
+		return
+	online_peer = peer
+	online_is_host = false
+	online_host_peer_id = -1  # Will be updated on lobby sync
+	online_room_code = code
+	var mp := get_tree().get_multiplayer()
+	if mp:
+		mp.multiplayer_peer = peer
+	_update_online_status(_t("Connecting...", "Conectando..."), false)
+
+
+func _shutdown_online_session() -> void:
+	var mp := get_tree().get_multiplayer()
+	if mp and mp.multiplayer_peer:
+		mp.multiplayer_peer.close()
+		mp.multiplayer_peer = null
+	online_peer = null
+	online_is_host = false
+	online_active = false
+	local_player_index = -1
+	online_room_code = ""
+	online_host_peer_id = -1
+	online_players.clear()
+	_update_online_lobby_labels()
+	_update_online_status("", false)
+
+
+func _update_online_lobby_labels() -> void:
+	if online_code_value:
+		online_code_value.text = online_room_code if online_room_code != "" else "----"
+	for i in range(ONLINE_MAX_PLAYERS):
+		if i < online_slot_labels.size() and online_slot_labels[i]:
+			var label := online_slot_labels[i]
+			if i < online_players.size():
+				var p := online_players[i]
+				label.text = _t("Slot %d: %s", "Vaga %d: %s") % [i + 1, str(p.get("name", "--"))]
+			else:
+				label.text = _t("Slot %d: --", "Vaga %d: --") % (i + 1)
+	if online_host_start_button:
+		online_host_start_button.disabled = online_players.size() < ONLINE_MIN_PLAYERS
+
+
+func _broadcast_lobby() -> void:
+	_rpc_lobby_update.rpc(online_players, online_host_peer_id)
+
+
+@rpc("any_peer", "reliable", "call_local")
+func _rpc_lobby_update(lobby: Array, host_id: int) -> void:
+	online_host_peer_id = host_id
+	online_players = lobby.duplicate(true)
+	_update_online_lobby_labels()
+
+
+@rpc("any_peer", "reliable", "call_local")
+func _rpc_start_online_game(lobby: Array) -> void:
+	_begin_online_game(lobby, online_is_host)
+
+
+func _begin_online_game(lobby: Array, is_host: bool) -> void:
+	online_is_host = is_host
+	online_players = lobby.duplicate(true)
+	online_active = true
+	_update_online_status("", false)
+	title_panel.visible = false
+	settings_panel.visible = false
+	player_select_panel.visible = false
+	if online_panel:
+		online_panel.visible = false
+	_close_pause_menu()
+	controller_join_active = false
+	_reset_round_state()
+	team_names.clear()
+	players.clear()
+	team_scores.clear()
+	team_score_labels.clear()
+	team_cards.clear()
+	var mp := get_tree().get_multiplayer()
+	var my_id := mp.get_unique_id() if mp else 1
+	local_player_index = -1
+	for entry in online_players:
+		var pid := int((entry as Dictionary).get("id", -1))
+		var name := str((entry as Dictionary).get("name", "Player"))
+		var is_local := pid == my_id
+		if is_local:
+			local_player_index = players.size()
+		players.append(
+			{
+				"name": name + (" (You)" if is_local else ""),
+				"is_ai": false,
+				"device_id": null,
+				"uses_keyboard": is_local,
+				"net_id": pid
+			}
+		)
+	while players.size() < ONLINE_MAX_PLAYERS:
+		var idx := players.size() + 1
+		players.append(
+			{
+				"name": "AI %d" % idx,
+				"is_ai": true,
+				"device_id": null,
+				"uses_keyboard": false,
+				"net_id": -1
+			}
+		)
+	for p in players:
+		team_names.append(p.get("name", "Player"))
+	team_scores.resize(players.size())
+	for i in range(team_scores.size()):
+		team_scores[i] = 0
+	game_root.visible = true
+	question_panel.visible = false
+	_build_teams()
+	_build_board()
+	_set_header_visible(true)
+	_play_background_music()
+
+
+func _on_peer_connected(id: int) -> void:
+	if online_peer == null:
+		return
+	if not online_is_host:
+		return
+	if online_players.size() >= ONLINE_MAX_PLAYERS:
+		online_peer.disconnect_peer(id)
+		return
+	var idx := online_players.size() + 1
+	online_players.append({"id": id, "name": _t("Player %d", "Jogador %d") % idx})
+	_update_online_lobby_labels()
+	_broadcast_lobby()
+	_update_online_status(_t("Player joined.", "Jogador entrou."), false)
+
+
+func _on_peer_disconnected(id: int) -> void:
+	if online_peer == null:
+		return
+	var removed := false
+	for i in range(online_players.size() - 1, -1, -1):
+		if int((online_players[i] as Dictionary).get("id", -1)) == id:
+			online_players.remove_at(i)
+			removed = true
+	if online_active:
+		var p_idx := _player_index_from_peer(id)
+		if p_idx != -1 and p_idx < players.size():
+			var trigger_choice := p_idx == current_turn_team
+			var ai_name := _set_player_to_ai(p_idx, "", trigger_choice)
+			if online_is_host:
+				_rpc_remote_swap_to_ai.rpc(p_idx, ai_name, trigger_choice)
+		_update_online_status(
+			_t("Player disconnected; swapped to AI.", "Jogador saiu; trocado por IA."), true
+		)
+	else:
+		if removed:
+			_update_online_lobby_labels()
+	if online_is_host:
+		_broadcast_lobby()
+
+
+func _on_connected_to_server() -> void:
+	_update_online_status(
+		_t("Connected. Waiting for lobby...", "Conectado. Aguardando sala..."), false
+	)
+
+
+func _on_connection_failed() -> void:
+	_update_online_status(_t("Connection failed.", "Conexao falhou."), true)
+	_shutdown_online_session()
+
+
+func _on_server_disconnected() -> void:
+	_update_online_status(_t("Disconnected from host.", "Desconectado do anfitriao."), true)
+	_shutdown_online_session()
+
+
+@rpc("any_peer", "reliable")
+func _rpc_request_clue(cat_index: int, clue_index: int) -> void:
+	if not online_is_host:
+		return
+	var sender := get_tree().get_multiplayer().get_remote_sender_id()
+	var idx := _player_index_from_peer(sender)
+	if idx == -1:
+		return
+	var btn := _find_board_button(cat_index, clue_index)
+	if btn:
+		_on_clue_button_pressed(btn)
+
+
+@rpc("any_peer", "reliable")
+func _rpc_request_buzz(player_index: int) -> void:
+	if not online_is_host:
+		return
+	var sender := get_tree().get_multiplayer().get_remote_sender_id()
+	var idx := _player_index_from_peer(sender)
+	if idx != player_index:
+		return
+	_on_player_buzz(player_index)
+
+
+@rpc("any_peer", "reliable")
+func _rpc_request_answer(answer_text: String) -> void:
+	if not online_is_host:
+		return
+	_on_answer_selected(answer_text)
+
+
+@rpc("authority", "reliable")
+func _rpc_remote_start_clue(data: Dictionary) -> void:
+	if online_is_host:
+		return
+	_apply_remote_clue(data)
+
+
+@rpc("authority", "reliable")
+func _rpc_remote_buzz(player_index: int) -> void:
+	if online_is_host:
+		return
+	_apply_remote_buzz(player_index)
+
+
+@rpc("authority", "reliable")
+func _rpc_remote_scores(scores: Array) -> void:
+	if online_is_host:
+		return
+	if scores.size() != team_scores.size():
+		return
+	for i in range(scores.size()):
+		team_scores[i] = int(scores[i])
+		_set_score_label(i)
+
+
+@rpc("authority", "reliable")
+func _rpc_remote_swap_to_ai(player_index: int, name: String, trigger_turn_choice: bool) -> void:
+	if online_is_host:
+		return
+	_set_player_to_ai(player_index, name, trigger_turn_choice)
+
+
+func forced_set_score_label(idx: int) -> void:
+	if idx < 0 or idx >= team_scores.size():
+		return
+	if idx < team_score_labels.size():
+		team_score_labels[idx].text = _t("Points: %s", "Pontos: %s") % team_scores[idx]
+
+
+@rpc("authority", "reliable")
+func _rpc_remote_mark_answered(cat_index: int, clue_index: int) -> void:
+	if online_is_host:
+		return
+	var key := "%d-%d" % [cat_index, clue_index]
+	answered_map[key] = true
+	var btn := _find_board_button(cat_index, clue_index)
+	if btn:
+		btn.disabled = true
+		btn.text = ""
+	board_grid.visible = true
+	_set_header_visible(true)
+
+
+func _find_board_button(cat_index: int, clue_index: int) -> Button:
+	if board_grid == null or not is_instance_valid(board_grid):
+		return null
+	for child in board_grid.get_children():
+		if child is Button:
+			var btn := child as Button
+			if (
+				btn.get_meta("cat_index", -1) == cat_index
+				and btn.get_meta("clue_index", -1) == clue_index
+			):
+				return btn
+	return null
+
+
+func _apply_remote_clue(data: Dictionary) -> void:
+	_reset_question_panel_color()
+	var cat_index: int = data.get("cat_index", -1)
+	var clue_index: int = data.get("clue_index", -1)
+	var score_value: int = data.get("value", 0)
+	var is_double: bool = data.get("is_double", false)
+	var question_text := str(data.get("question", ""))
+	var cat_name := str(data.get("cat_name", ""))
+	current_options = (data.get("options", []) as Array).duplicate(true)
+	current_clue = {
+		"cat_index": cat_index,
+		"clue_index": clue_index,
+		"value": score_value,
+		"button": null,
+		"answer": data.get("answer", ""),
+		"is_double": is_double
+	}
+	q_category_label.text = _t("Category: %s", "Categoria: %s") % cat_name
+	q_value_label.text = _t("Value: %s", "Valor: %s") % str(score_value)
+	q_text_label.text = question_text
+	current_wager = 0
+	buzzed_player = -1
+	attempted_players.clear()
+	if answer_timer_bar:
+		answer_timer_bar.stop()
+	_disable_answer_buttons()
+	_build_answers_from_options(current_options)
+	question_panel.visible = true
+	board_grid.visible = false
+	_set_header_visible(false)
+
+
+func _build_answers_from_options(options: Array) -> void:
+	if options.is_empty():
+		return
+	current_options.clear()
+	for opt in options:
+		current_options.append(str(opt))
+	_clear_children(answer_buttons)
+	answer_button_nodes.clear()
+	answer_buttons.visible = false
+	answer_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	answer_buttons.size_flags_vertical = Control.SIZE_EXPAND_FILL
+
+	var center := CenterContainer.new()
+	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	center.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	center.anchor_right = 1.0
+	center.anchor_bottom = 1.0
+	answer_buttons.add_child(center)
+
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 24)
+	grid.add_theme_constant_override("v_separation", 24)
+	center.add_child(grid)
+
+	for opt in options:
+		var btn := Button.new()
+		btn.text = str(opt)
+		btn.disabled = true
+		btn.focus_mode = Control.FOCUS_ALL
+		btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		btn.custom_minimum_size = Vector2(320, 160)
+		btn.add_theme_font_size_override("font_size", 28)
+		if theme_styler:
+			theme_styler.apply_font_override(btn, game_font)
+			theme_styler.apply_body_color(btn)
+		btn.pressed.connect(func() -> void: _on_answer_selected(str(opt)))
+		answer_button_nodes.append(btn)
+		grid.add_child(btn)
+
+
+func _apply_remote_buzz(player_index: int) -> void:
+	buzzed_player = player_index
+	answering_player = player_index
+	_set_active_team(player_index)
+	if theme_styler:
+		_set_question_panel_color(theme_styler.team_color(player_index))
+	if player_index == local_player_index:
+		_open_answer_buttons_for(player_index)
+		_start_answer_timer_internal(true)
+	else:
+		_disable_answer_buttons()
+		turn_label.text = (
+			_t("Buzzed: %s", "Buzzer: %s") % players[player_index].get("name", "Player")
+		)
+
+
+@rpc("authority", "reliable")
+func _rpc_remote_result(text: String, color: Color) -> void:
+	if online_is_host:
+		return
+	_show_result(text, color)
+
+
+@rpc("authority", "reliable")
+func _rpc_remote_timer_stop(preserve_result: bool) -> void:
+	if online_is_host:
+		return
+	_stop_timers(preserve_result)
+
+
+@rpc("authority", "reliable")
+func _rpc_remote_timer_start(duration: float) -> void:
+	if online_is_host:
+		return
+	if (
+		answer_timer_bar
+		and is_instance_valid(answer_timer_bar)
+		and answer_timer_bar.has_method("restart")
+	):
+		answer_timer_bar.restart(duration)
+
+
 func _reset_round_state() -> void:
 	round_index = 0
 	final_round = false
@@ -1754,7 +2542,9 @@ func _advance_round_if_needed() -> void:
 		if round_index >= ROUND_VALUES.size():
 			_start_final_round()
 		else:
-			_show_result(_t("Round %d!", "Rodada %d!") % (round_index + 1), Color(0.6, 0.8, 1.0))
+			_show_result(
+				_t("Round %d!", "Rodada %d!") % (round_index + 1), Color(0.6, 0.8, 1.0), true
+			)
 			_build_board()
 
 
@@ -1806,8 +2596,10 @@ func _start_final_round() -> void:
 	q_category_label.text = _t("Final Round: %s", "Rodada final: %s") % str(cat_data["name"])
 	q_value_label.text = _t("Wager your points!", "Aposte seus pontos!")
 	q_text_label.text = ""
-	result_label.text = _t(
-		"Final round! Buzz to set your wager.", "Rodada final! Aperte para definir sua aposta."
+	_show_result(
+		_t("Final round! Buzz to set your wager.", "Rodada final! Aperte para definir sua aposta."),
+		Color(0.1, 0.1, 0.1),
+		true
 	)
 	if final_wager_panel:
 		final_wager_panel.visible = false
@@ -1850,6 +2642,10 @@ func _unhandled_input(event: InputEvent) -> void:
 func _player_from_event(event: InputEvent) -> int:
 	if event.is_echo():
 		return -1
+	if online_active and not online_is_host:
+		if local_player_index >= 0:
+			return local_player_index
+		return local_player_index
 	if event is InputEventKey and event.pressed:
 		var key_event := event as InputEventKey
 		if (
@@ -1895,6 +2691,37 @@ func _human_player_count() -> int:
 		if not (p as Dictionary).get("is_ai", false):
 			count += 1
 	return count
+
+
+func _player_index_from_peer(peer_id: int) -> int:
+	for i in range(players.size()):
+		var p := players[i]
+		if int((p as Dictionary).get("net_id", -1)) == peer_id:
+			return i
+	return -1
+
+
+func _set_player_to_ai(
+	idx: int, override_name: String = "", trigger_turn_choice: bool = true
+) -> String:
+	if idx < 0 or idx >= players.size():
+		return ""
+	var name := override_name.strip_edges()
+	if name == "":
+		name = str(players[idx].get("name", "Player"))
+	if not name.to_lower().contains("(ai"):
+		name = "%s (AI)" % name
+	players[idx]["is_ai"] = true
+	players[idx]["uses_keyboard"] = false
+	players[idx]["net_id"] = -1
+	players[idx]["name"] = name
+	if team_names.size() > idx:
+		team_names[idx] = name
+	_set_team_name_label(idx, name)
+	_set_score_label(idx)
+	if trigger_turn_choice and idx == current_turn_team and (not online_active or online_is_host):
+		_maybe_trigger_ai_board_choice()
+	return name
 
 
 func _on_ai_try_buzz() -> void:
@@ -2094,6 +2921,10 @@ func _handle_escape_input(event: InputEvent) -> bool:
 	if esc_pressed:
 		if controller_connect_panel and controller_connect_panel.visible:
 			_on_controller_connect_cancel_pressed()
+			get_viewport().set_input_as_handled()
+			return true
+		if online_panel and online_panel.visible:
+			_on_online_back_pressed()
 			get_viewport().set_input_as_handled()
 			return true
 		if settings_panel.visible and settings_opened_from_pause:

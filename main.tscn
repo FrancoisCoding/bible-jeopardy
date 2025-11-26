@@ -53,6 +53,12 @@ text = "Play"
 custom_minimum_size = Vector2(0, 70)
 margin_top = 12.0
 
+[node name="OnlineButton" type="Button" parent="TitlePanel/VBox"]
+layout_mode = 2
+text = "Online"
+custom_minimum_size = Vector2(0, 70)
+margin_top = 8.0
+
 [node name="SettingsButton" type="Button" parent="TitlePanel/VBox"]
 layout_mode = 2
 text = "Settings"
@@ -311,6 +317,177 @@ custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 text = "Back"
 custom_minimum_size = Vector2(160, 0)
+
+[node name="OnlinePanel" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OnlineContent" type="MarginContainer" parent="OnlinePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 200
+theme_override_constants/margin_right = 200
+theme_override_constants/margin_top = 120
+theme_override_constants/margin_bottom = 120
+
+[node name="VBox" type="VBoxContainer" parent="OnlinePanel/OnlineContent"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+theme_override_constants/separation = 20
+
+[node name="OnlineTitle" type="Label" parent="OnlinePanel/OnlineContent/VBox"]
+layout_mode = 2
+text = "Online Multiplayer"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 46
+
+[node name="ActionRow" type="HBoxContainer" parent="OnlinePanel/OnlineContent/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="HostButton" type="Button" parent="OnlinePanel/OnlineContent/VBox/ActionRow"]
+layout_mode = 2
+text = "Host Room"
+custom_minimum_size = Vector2(220, 70)
+
+[node name="JoinButton" type="Button" parent="OnlinePanel/OnlineContent/VBox/ActionRow"]
+layout_mode = 2
+text = "Join Room"
+custom_minimum_size = Vector2(220, 70)
+
+[node name="OnlineBackButton" type="Button" parent="OnlinePanel/OnlineContent/VBox/ActionRow"]
+layout_mode = 2
+text = "Back"
+custom_minimum_size = Vector2(160, 70)
+
+[node name="HostLobby" type="PanelContainer" parent="OnlinePanel/OnlineContent/VBox"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="HostVBox" type="VBoxContainer" parent="OnlinePanel/OnlineContent/VBox/HostLobby"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="CodeLabel" type="Label" parent="OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox"]
+layout_mode = 2
+text = "Room Code"
+horizontal_alignment = 1
+
+[node name="CodeValue" type="Label" parent="OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox"]
+layout_mode = 2
+text = "----"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 42
+
+[node name="PlayerList" type="VBoxContainer" parent="OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="Slot1" type="Label" parent="OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/PlayerList"]
+layout_mode = 2
+text = "Slot 1: --"
+horizontal_alignment = 1
+
+[node name="Slot2" type="Label" parent="OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/PlayerList"]
+layout_mode = 2
+text = "Slot 2: --"
+horizontal_alignment = 1
+
+[node name="Slot3" type="Label" parent="OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/PlayerList"]
+layout_mode = 2
+text = "Slot 3: --"
+horizontal_alignment = 1
+
+[node name="HostStatus" type="Label" parent="OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox"]
+layout_mode = 2
+text = "Waiting for players..."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="HostButtons" type="HBoxContainer" parent="OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="HostStartButton" type="Button" parent="OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/HostButtons"]
+layout_mode = 2
+text = "Start Game"
+custom_minimum_size = Vector2(200, 60)
+
+[node name="HostLeaveButton" type="Button" parent="OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/HostButtons"]
+layout_mode = 2
+text = "Leave Room"
+custom_minimum_size = Vector2(200, 60)
+
+[node name="JoinPanel" type="PanelContainer" parent="OnlinePanel/OnlineContent/VBox"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="JoinVBox" type="VBoxContainer" parent="OnlinePanel/OnlineContent/VBox/JoinPanel"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="JoinCodeLabel" type="Label" parent="OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox"]
+layout_mode = 2
+text = "Room Code"
+horizontal_alignment = 1
+
+[node name="JoinCodeInput" type="LineEdit" parent="OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox"]
+layout_mode = 2
+placeholder_text = "Enter room code"
+custom_minimum_size = Vector2(320, 0)
+
+[node name="JoinIPLabel" type="Label" parent="OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox"]
+layout_mode = 2
+text = "Host IP"
+horizontal_alignment = 1
+
+[node name="JoinIPInput" type="LineEdit" parent="OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox"]
+layout_mode = 2
+placeholder_text = "127.0.0.1"
+text = "127.0.0.1"
+custom_minimum_size = Vector2(320, 0)
+
+[node name="JoinStatus" type="Label" parent="OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox"]
+layout_mode = 2
+text = ""
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="JoinButtons" type="HBoxContainer" parent="OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="JoinConnectButton" type="Button" parent="OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinButtons"]
+layout_mode = 2
+text = "Join"
+custom_minimum_size = Vector2(200, 60)
+
+[node name="JoinCancelButton" type="Button" parent="OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinButtons"]
+layout_mode = 2
+text = "Cancel"
+custom_minimum_size = Vector2(200, 60)
 
 [node name="RootVBox" type="VBoxContainer" parent="."]
 visible = false
