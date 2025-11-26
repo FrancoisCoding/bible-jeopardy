@@ -23,6 +23,7 @@ const QUESTION_CHAR_DELAY := 0.03
 const AI_BUZZ_DELAY := 5.0
 const AI_BOARD_PICK_DELAY := 5.0
 const ANSWER_TIME := 30.0
+const AI_DIFFICULTY_RATES := {"easy": 0.2, "normal": 0.4, "hard": 0.7}
 const ROUND_VALUES := [[400, 800, 1200], [800, 1200, 2000]]
 const ROUND_CLUE_COUNT := 3
 # UI references
@@ -81,6 +82,12 @@ var player_count_option: OptionButton = get_node_or_null("PlayerSelectPanel/VBox
 ]
 @onready var controller_status_label: Label = get_node_or_null(
 	"ControllerConnectPanel/Content/VBox/StatusLabel"
+)
+@onready var controller_ai_label: Label = get_node_or_null(
+	"ControllerConnectPanel/Content/VBox/AIDifficultyLabel"
+)
+@onready var controller_ai_option: OptionButton = get_node_or_null(
+	"ControllerConnectPanel/Content/VBox/AIDifficultyOption"
 )
 @onready var controller_start_button: Button = get_node_or_null(
 	"ControllerConnectPanel/Content/VBox/ButtonRow/StartButton"
@@ -153,6 +160,8 @@ var controller_join_active: bool = false
 var answering_input_lock: Dictionary = {}
 var nav_focus_enabled: bool = false  # Only grab focus highlights when a controller/keyboard joins
 var settings_opened_from_pause: bool = false
+var ai_difficulty: String = "normal"
+var ai_correct_rate: float = AI_DIFFICULTY_RATES["normal"]
 var round_index: int = 0
 var final_round: bool = false
 var hidden_double_key: String = ""
@@ -246,6 +255,10 @@ func _ready() -> void:
 		controller_start_button.pressed.connect(_on_controller_connect_confirm_pressed)
 	if controller_cancel_button:
 		controller_cancel_button.pressed.connect(_on_controller_connect_cancel_pressed)
+	if controller_ai_option:
+		controller_ai_option.item_selected.connect(
+			func(idx: int) -> void: _on_ai_difficulty_selected(idx)
+		)
 	if title_texture:
 		if title_logo:
 			title_logo.texture = title_texture
@@ -260,6 +273,7 @@ func _ready() -> void:
 
 	rng.randomize()
 	_ensure_default_input_actions()
+	_setup_pause_menu_focus()
 	set_process_input(true)
 	_populate_player_count()
 	_show_title()
@@ -350,6 +364,14 @@ func _apply_controller_connect_text() -> void:
 			"Press any button to claim Players 1-3. Remaining slots become AI.",
 			"Aperte qualquer botao para assumir os Jogadores 1-3. Vagas restantes viram IA."
 		)
+	if controller_ai_label:
+		controller_ai_label.text = _t("AI Difficulty", "Dificuldade da IA")
+	if controller_ai_option:
+		controller_ai_option.clear()
+		controller_ai_option.add_item(_t("Easy (20%)", "Facil (20%)"), 0)
+		controller_ai_option.add_item(_t("Normal (40%)", "Normal (40%)"), 1)
+		controller_ai_option.add_item(_t("Hard (70%)", "Dificil (70%)"), 2)
+		controller_ai_option.select(1)
 	if controller_start_button:
 		controller_start_button.text = _t("Continue", "Continuar")
 	if controller_cancel_button:
@@ -438,6 +460,8 @@ func _apply_theme_styles() -> void:
 		controller_slot_labels[0] if controller_slot_labels.size() > 0 else null,
 		controller_slot_labels[1] if controller_slot_labels.size() > 1 else null,
 		controller_slot_labels[2] if controller_slot_labels.size() > 2 else null,
+		controller_ai_label,
+		controller_ai_option,
 		controller_start_button,
 		controller_cancel_button
 	]
@@ -583,6 +607,7 @@ func _open_controller_connect() -> void:
 		controller_start_button.disabled = false
 		if nav_focus_enabled:
 			controller_start_button.grab_focus()
+	_update_ai_difficulty_visibility()
 
 
 func _close_controller_connect() -> void:
@@ -607,6 +632,20 @@ func _on_controller_connect_cancel_pressed() -> void:
 	join_inputs.clear()
 	_close_controller_connect()
 	_show_title()
+
+
+func _on_ai_difficulty_selected(idx: int) -> void:
+	match idx:
+		0:
+			ai_difficulty = "easy"
+		1:
+			ai_difficulty = "normal"
+		2:
+			ai_difficulty = "hard"
+		_:
+			ai_difficulty = "normal"
+	ai_correct_rate = AI_DIFFICULTY_RATES.get(ai_difficulty, AI_DIFFICULTY_RATES["normal"])
+	_refresh_controller_join_ui()
 
 
 func _start_game(selected_inputs: Array = [], allow_keyboard_fallback: bool = true) -> void:
@@ -669,12 +708,24 @@ func _refresh_controller_join_ui() -> void:
 		controller_status_label.text = (
 			_t("Connected controllers: %d", "Controles conectados: %d") % connected
 		)
+	if controller_ai_option:
+		var hide_ai := _human_player_count_planned() >= 3
+		controller_ai_option.visible = not hide_ai
+		controller_ai_option.disabled = hide_ai
+		if controller_ai_option.visible and controller_ai_option.selected < 0:
+			controller_ai_option.select(1)
+	if controller_ai_label:
+		controller_ai_label.visible = controller_ai_option and controller_ai_option.visible
 	for i in range(controller_slot_panels.size()):
 		var panel := controller_slot_panels[i]
 		if panel and theme_styler:
 			var color := theme_styler.team_color(i)
 			var has_join := i < join_inputs.size()
 			theme_styler.apply_team_card_style(panel, color, has_join)
+
+
+func _update_ai_difficulty_visibility() -> void:
+	_refresh_controller_join_ui()
 
 
 func _controller_slot_text(slot_index: int) -> String:
@@ -691,9 +742,15 @@ func _controller_slot_text(slot_index: int) -> String:
 	return _t("Player %d: Press any button", "Jogador %d: Aperte qualquer botao") % slot_index
 
 
+func _human_player_count_planned() -> int:
+	return min(3, join_inputs.size())
+
+
 func _input(event: InputEvent) -> void:
 	# Handle Escape/UI cancel to toggle pause/menu return.
 	if _handle_escape_input(event):
+		return
+	if pause_menu.visible:
 		return
 	if buzzed_player != -1 and not _event_matches_active_answerer(event):
 		if not event.is_action_pressed("ui_cancel"):
@@ -744,18 +801,21 @@ func _open_pause_menu() -> void:
 		settings_panel.visible = false
 	if pause_menu:
 		pause_menu.visible = true
-	pause_resume_button.grab_focus()
+	if pause_resume_button:
+		pause_resume_button.grab_focus()
 	_maybe_focus_for_nav()
 
 
 func _close_pause_menu() -> void:
 	if pause_menu:
 		pause_menu.visible = false
+	get_viewport().set_input_as_handled()
 
 
 func _on_pause_resume_pressed() -> void:
 	_play_select_sfx()
 	_close_pause_menu()
+	_maybe_focus_for_nav()
 
 
 func _on_pause_main_menu_pressed() -> void:
@@ -1919,7 +1979,7 @@ func _ai_answer_current() -> void:
 		if opt_norm != correct_norm:
 			wrong_choices.append(str(opt))
 
-	var pick_correct := rng.randf() < 0.7
+	var pick_correct := rng.randf() < ai_correct_rate
 	var choice := correct_raw
 	if not pick_correct and not wrong_choices.is_empty():
 		choice = wrong_choices[rng.randi_range(0, wrong_choices.size() - 1)]
@@ -1939,6 +1999,15 @@ func _ensure_default_input_actions() -> void:
 	)
 	_ensure_action_with_events(
 		"ui_cancel", [_make_key_event(KEY_ESCAPE), _make_joypad_button_event(JOY_BUTTON_B)]
+	)
+	_ensure_action_with_events(
+		"pause",
+		[
+			_make_key_event(KEY_ESCAPE),
+			_make_key_event(KEY_P),
+			_make_joypad_button_event(JOY_BUTTON_START),
+			_make_joypad_button_event(JOY_BUTTON_BACK)
+		]
 	)
 	_ensure_action_with_events(
 		"ui_up",
@@ -2018,7 +2087,7 @@ func _t(en_text: String, pt_text: String) -> String:
 func _handle_escape_input(event: InputEvent) -> bool:
 	if pause_menu == null:
 		return false
-	var esc_pressed := event.is_action_pressed("ui_cancel")
+	var esc_pressed := event.is_action_pressed("ui_cancel") or event.is_action_pressed("pause")
 	if not esc_pressed and event is InputEventKey:
 		var key_event := event as InputEventKey
 		esc_pressed = key_event.pressed and not key_event.echo and key_event.keycode == KEY_ESCAPE
@@ -2045,3 +2114,41 @@ func _handle_escape_input(event: InputEvent) -> bool:
 		get_viewport().set_input_as_handled()
 		return true
 	return false
+
+
+func _setup_pause_menu_focus() -> void:
+	var btns := [pause_resume_button, pause_main_menu_button, pause_settings_button]
+	for b in btns:
+		if b:
+			b.focus_mode = Control.FOCUS_ALL
+	_set_pause_focus_chain()
+
+
+func _set_pause_focus_chain() -> void:
+	if pause_resume_button and pause_main_menu_button and pause_settings_button:
+		var resume_path := pause_resume_button.get_path()
+		var settings_path := pause_settings_button.get_path()
+		var main_path := pause_main_menu_button.get_path()
+
+		# Order matches visual stack: Resume -> Settings -> Main Menu (wraps)
+		pause_resume_button.focus_neighbor_top = main_path
+		pause_resume_button.focus_neighbor_bottom = settings_path
+
+		pause_settings_button.focus_neighbor_top = resume_path
+		pause_settings_button.focus_neighbor_bottom = main_path
+
+		pause_main_menu_button.focus_neighbor_top = settings_path
+		pause_main_menu_button.focus_neighbor_bottom = resume_path
+
+		# Keep left/right on the same button to avoid jumping elsewhere
+		pause_resume_button.focus_neighbor_left = resume_path
+		pause_resume_button.focus_neighbor_right = resume_path
+		pause_settings_button.focus_neighbor_left = settings_path
+		pause_settings_button.focus_neighbor_right = settings_path
+		pause_main_menu_button.focus_neighbor_left = main_path
+		pause_main_menu_button.focus_neighbor_right = main_path
+
+		# Tab order follows the same downward flow
+		pause_resume_button.focus_next = settings_path
+		pause_settings_button.focus_next = main_path
+		pause_main_menu_button.focus_next = resume_path
