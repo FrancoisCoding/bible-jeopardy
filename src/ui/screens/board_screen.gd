@@ -23,8 +23,8 @@ func update_player_info_label(player_info_label: Label, t_func: Callable) -> voi
 	)
 	info += str(
 		t_func.call(
-			"Connected controllers fill Player 2 and 3; remaining slots become AI.",
-			"Controles conectados preenchem Jogador 2 e 3; vagas restantes viram IA."
+			"Press Play to join with controllers or keyboard (max 3); empty slots become AI.",
+			"Aperte Jogar para entrar com controles ou teclado (ate 3); vagas vazias viram IA."
 		)
 	)
 	player_info_label.text = info
