@@ -12,7 +12,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
-mouse_filter = 2
+mouse_filter = 0
 
 [node name="TitlePanel" type="Control" parent="."]
 layout_mode = 1
@@ -189,6 +189,118 @@ autowrap_mode = 2
 [node name="StartButton" type="Button" parent="PlayerSelectPanel/VBox"]
 layout_mode = 2
 text = "Start Game"
+
+[node name="ControllerConnectPanel" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Dimmer" type="ColorRect" parent="ControllerConnectPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.32)
+mouse_filter = 2
+
+[node name="Content" type="PanelContainer" parent="ControllerConnectPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.18
+anchor_top = 0.18
+anchor_right = 0.82
+anchor_bottom = 0.82
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="VBox" type="VBoxContainer" parent="ControllerConnectPanel/Content"]
+layout_mode = 0
+anchor_left = 0.05
+anchor_top = 0.05
+anchor_right = 0.95
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="ConnectTitle" type="Label" parent="ControllerConnectPanel/Content/VBox"]
+layout_mode = 2
+text = "Connect Controllers"
+horizontal_alignment = 1
+
+[node name="ConnectSubtitle" type="Label" parent="ControllerConnectPanel/Content/VBox"]
+layout_mode = 2
+text = "Press any button to join Player 2 or 3. Remaining slots become AI."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Slots" type="HBoxContainer" parent="ControllerConnectPanel/Content/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+size_flags_horizontal = 4
+
+[node name="Slot1" type="PanelContainer" parent="ControllerConnectPanel/Content/VBox/Slots"]
+layout_mode = 2
+custom_minimum_size = Vector2(220, 90)
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="ControllerConnectPanel/Content/VBox/Slots/Slot1"]
+layout_mode = 2
+text = "Player 1: Keyboard"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Slot2" type="PanelContainer" parent="ControllerConnectPanel/Content/VBox/Slots"]
+layout_mode = 2
+custom_minimum_size = Vector2(220, 90)
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="ControllerConnectPanel/Content/VBox/Slots/Slot2"]
+layout_mode = 2
+text = "Player 2: Press any button"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Slot3" type="PanelContainer" parent="ControllerConnectPanel/Content/VBox/Slots"]
+layout_mode = 2
+custom_minimum_size = Vector2(220, 90)
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="ControllerConnectPanel/Content/VBox/Slots/Slot3"]
+layout_mode = 2
+text = "Player 3: Press any button"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="StatusLabel" type="Label" parent="ControllerConnectPanel/Content/VBox"]
+layout_mode = 2
+text = "Connected controllers: 0"
+horizontal_alignment = 1
+
+[node name="ButtonRow" type="HBoxContainer" parent="ControllerConnectPanel/Content/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="StartButton" type="Button" parent="ControllerConnectPanel/Content/VBox/ButtonRow"]
+layout_mode = 2
+text = "Continue"
+custom_minimum_size = Vector2(160, 0)
+
+[node name="CancelButton" type="Button" parent="ControllerConnectPanel/Content/VBox/ButtonRow"]
+layout_mode = 2
+text = "Back"
+custom_minimum_size = Vector2(160, 0)
 
 [node name="RootVBox" type="VBoxContainer" parent="."]
 visible = false

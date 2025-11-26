@@ -21,6 +21,7 @@ const TEAM_COLORS := [Color(0.9, 0.2, 0.2), Color(0.2, 0.45, 0.95), Color(0.15, 
 
 const QUESTION_CHAR_DELAY := 0.03
 const AI_BUZZ_DELAY := 5.0
+const AI_BOARD_PICK_DELAY := 5.0
 const ANSWER_TIME := 30.0
 const ROUND_VALUES := [[400, 800, 1200], [800, 1200, 2000]]
 const ROUND_CLUE_COUNT := 3
@@ -61,6 +62,34 @@ var player_count_option: OptionButton = get_node_or_null("PlayerSelectPanel/VBox
 @onready var pause_resume_button: Button = get_node_or_null("PauseMenu/Panel/VBox/ResumeButton")
 @onready var pause_main_menu_button: Button = get_node_or_null("PauseMenu/Panel/VBox/MainMenuButton")
 @onready var pause_settings_button: Button = get_node_or_null("PauseMenu/Panel/VBox/SettingsButton")
+@onready var controller_connect_panel: Control = get_node_or_null("ControllerConnectPanel")
+@onready var controller_title_label: Label = get_node_or_null(
+	"ControllerConnectPanel/Content/VBox/ConnectTitle"
+)
+@onready var controller_subtitle_label: Label = get_node_or_null(
+	"ControllerConnectPanel/Content/VBox/ConnectSubtitle"
+)
+@onready var controller_slot_labels: Array[Label] = [
+	get_node_or_null("ControllerConnectPanel/Content/VBox/Slots/Slot1/Label"),
+	get_node_or_null("ControllerConnectPanel/Content/VBox/Slots/Slot2/Label"),
+	get_node_or_null("ControllerConnectPanel/Content/VBox/Slots/Slot3/Label")
+]
+@onready var controller_slot_panels: Array[PanelContainer] = [
+	get_node_or_null("ControllerConnectPanel/Content/VBox/Slots/Slot1"),
+	get_node_or_null("ControllerConnectPanel/Content/VBox/Slots/Slot2"),
+	get_node_or_null("ControllerConnectPanel/Content/VBox/Slots/Slot3")
+]
+@onready var controller_status_label: Label = get_node_or_null(
+	"ControllerConnectPanel/Content/VBox/StatusLabel"
+)
+@onready var controller_start_button: Button = get_node_or_null(
+	"ControllerConnectPanel/Content/VBox/ButtonRow/StartButton"
+)
+@onready var controller_cancel_button: Button = get_node_or_null(
+	"ControllerConnectPanel/Content/VBox/ButtonRow/CancelButton"
+)
+@onready
+var controller_connect_content: PanelContainer = get_node_or_null("ControllerConnectPanel/Content")
 
 # Game UI
 @onready var game_root: Control = get_node_or_null("RootVBox")
@@ -119,6 +148,10 @@ var ai_buzz_timer: SceneTreeTimer
 var rng := RandomNumberGenerator.new()
 var current_language: String = "en"
 var bible_data: LoadedBibleData = LoadedBibleData.new()
+var join_inputs: Array[Dictionary] = []  # Ordered join list of controllers/keyboard
+var controller_join_active: bool = false
+var answering_input_lock: Dictionary = {}
+var nav_focus_enabled: bool = false  # Only grab focus highlights when a controller/keyboard joins
 var settings_opened_from_pause: bool = false
 var round_index: int = 0
 var final_round: bool = false
@@ -209,6 +242,10 @@ func _ready() -> void:
 	settings_exit_button.pressed.connect(_on_exit_pressed)
 	final_wager_button.pressed.connect(_on_set_wager_pressed)
 	final_clue_button.pressed.connect(_on_final_clue_pressed)
+	if controller_start_button:
+		controller_start_button.pressed.connect(_on_controller_connect_confirm_pressed)
+	if controller_cancel_button:
+		controller_cancel_button.pressed.connect(_on_controller_connect_cancel_pressed)
 	if title_texture:
 		if title_logo:
 			title_logo.texture = title_texture
@@ -222,6 +259,7 @@ func _ready() -> void:
 			title_logo_main.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 
 	rng.randomize()
+	_ensure_default_input_actions()
 	set_process_input(true)
 	_populate_player_count()
 	_show_title()
@@ -278,6 +316,7 @@ func _apply_language_texts() -> void:
 			current_language, func(lang: String) -> void: LoadedBibleData.set_language(lang)
 		)
 	_update_player_info_label()
+	_apply_controller_connect_text()
 
 	_update_verse_of_day()
 
@@ -301,6 +340,22 @@ func _setup_accessible_text() -> void:
 	answer_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if main_menu_screen:
 		main_menu_screen.setup_accessible_text()
+
+
+func _apply_controller_connect_text() -> void:
+	if controller_title_label:
+		controller_title_label.text = _t("Connect Controllers", "Conecte os controles")
+	if controller_subtitle_label:
+		controller_subtitle_label.text = _t(
+			"Press any button to claim Players 1-3. Remaining slots become AI.",
+			"Aperte qualquer botao para assumir os Jogadores 1-3. Vagas restantes viram IA."
+		)
+	if controller_start_button:
+		controller_start_button.text = _t("Continue", "Continuar")
+	if controller_cancel_button:
+		controller_cancel_button.text = _t("Back", "Voltar")
+	_refresh_controller_join_ui()
+	_refresh_controller_join_ui()
 
 
 func _apply_theme_styles() -> void:
@@ -338,7 +393,13 @@ func _apply_theme_styles() -> void:
 		language_option,
 		player_count_option,
 		final_wager_button,
-		final_clue_button
+		final_clue_button,
+		controller_title_label,
+		controller_subtitle_label,
+		controller_status_label,
+		controller_slot_labels[0] if controller_slot_labels.size() > 0 else null,
+		controller_slot_labels[1] if controller_slot_labels.size() > 1 else null,
+		controller_slot_labels[2] if controller_slot_labels.size() > 2 else null
 	]
 	theme_styler.apply_game_font(game_font, font_controls)
 
@@ -370,7 +431,15 @@ func _apply_theme_styles() -> void:
 		pause_settings_button,
 		language_option,
 		music_slider,
-		answer_timer_label
+		answer_timer_label,
+		controller_title_label,
+		controller_subtitle_label,
+		controller_status_label,
+		controller_slot_labels[0] if controller_slot_labels.size() > 0 else null,
+		controller_slot_labels[1] if controller_slot_labels.size() > 1 else null,
+		controller_slot_labels[2] if controller_slot_labels.size() > 2 else null,
+		controller_start_button,
+		controller_cancel_button
 	]
 
 	var button_controls := [
@@ -383,7 +452,9 @@ func _apply_theme_styles() -> void:
 		pause_main_menu_button,
 		pause_settings_button,
 		final_wager_button,
-		final_clue_button
+		final_clue_button,
+		controller_start_button,
+		controller_cancel_button
 	]
 
 	var pause_panel := (
@@ -403,6 +474,12 @@ func _apply_theme_styles() -> void:
 		answer_timer_bar,
 		ANSWER_TIME
 	)
+
+	if controller_connect_content and question_panel_base_style:
+		controller_connect_content.add_theme_stylebox_override(
+			"panel", question_panel_base_style.duplicate()
+		)
+	_refresh_controller_join_ui()
 
 
 func _set_active_team(idx: int) -> void:
@@ -457,23 +534,17 @@ func _play_select_sfx() -> void:
 func _show_title() -> void:
 	if main_menu_screen:
 		main_menu_screen.show_title()
+	if controller_connect_panel:
+		controller_connect_panel.visible = false
+	controller_join_active = false
 	_close_pause_menu()
+	if title_play_button and nav_focus_enabled:
+		title_play_button.grab_focus()
 
 
 func _on_play_pressed() -> void:
 	_play_select_sfx()
-	title_panel.visible = false
-	settings_panel.visible = false
-	player_select_panel.visible = false
-	_start_game()
-
-	# Auto-detect controllers and set player count (min 2, max 3).
-	var joypads := Input.get_connected_joypads()
-	var count: int = clamp(joypads.size() + 1, 2, 3)  # keyboard + controllers
-	var idx: int = count - 2
-	if idx >= 0 and idx < player_count_option.item_count:
-		player_count_option.select(idx)
-	_update_player_info_label()
+	_open_controller_connect()
 
 
 func _on_settings_pressed() -> void:
@@ -481,6 +552,8 @@ func _on_settings_pressed() -> void:
 	settings_opened_from_pause = false
 	if settings_screen:
 		settings_screen.show_settings_from_title()
+	if language_option and nav_focus_enabled:
+		language_option.grab_focus()
 
 
 func _on_settings_back_pressed() -> void:
@@ -493,10 +566,58 @@ func _on_settings_back_pressed() -> void:
 		_show_title()
 
 
-func _start_game() -> void:
-	_reset_round_state()
-	_setup_players(3)
+func _open_controller_connect() -> void:
+	title_panel.visible = false
+	settings_panel.visible = false
 	player_select_panel.visible = false
+	controller_join_active = true
+	join_inputs.clear()
+	if controller_connect_panel == null:
+		controller_join_active = false
+		_start_game([], true)
+		return
+	_refresh_controller_join_ui()
+	if controller_connect_panel:
+		controller_connect_panel.visible = true
+	if controller_start_button:
+		controller_start_button.disabled = false
+		if nav_focus_enabled:
+			controller_start_button.grab_focus()
+
+
+func _close_controller_connect() -> void:
+	controller_join_active = false
+	if controller_connect_panel:
+		controller_connect_panel.visible = false
+
+
+func _on_controller_connect_confirm_pressed() -> void:
+	_play_select_sfx()
+	var devices := join_inputs.duplicate()
+	if devices.is_empty():
+		_register_keyboard_join(false)
+		devices = join_inputs.duplicate()
+	_close_controller_connect()
+	join_inputs.clear()
+	_start_game(devices, false)
+
+
+func _on_controller_connect_cancel_pressed() -> void:
+	_play_select_sfx()
+	join_inputs.clear()
+	_close_controller_connect()
+	_show_title()
+
+
+func _start_game(selected_inputs: Array = [], allow_keyboard_fallback: bool = true) -> void:
+	title_panel.visible = false
+	settings_panel.visible = false
+	player_select_panel.visible = false
+	if controller_connect_panel:
+		controller_connect_panel.visible = false
+	controller_join_active = false
+	_reset_round_state()
+	_setup_players(3, selected_inputs, allow_keyboard_fallback)
 	game_root.visible = true
 	question_panel.visible = false
 	_build_teams()
@@ -504,10 +625,113 @@ func _start_game() -> void:
 	_set_header_visible(true)
 
 
+func _register_joined_controller(device_id: int) -> bool:
+	if device_id < 0:
+		return false
+	if not Input.get_connected_joypads().has(device_id):
+		return false
+	for entry in join_inputs:
+		if entry.get("type", "") == "joypad" and int(entry.get("device_id", -1)) == device_id:
+			return false
+	if join_inputs.size() >= 3:
+		return false
+	join_inputs.append({"type": "joypad", "device_id": device_id})
+	nav_focus_enabled = true
+	_refresh_controller_join_ui()
+	_play_select_sfx()
+	return true
+
+
+func _register_keyboard_join(enable_focus: bool = false) -> bool:
+	var has_keyboard := false
+	for entry in join_inputs:
+		if entry.get("type", "") == "keyboard":
+			has_keyboard = true
+			break
+	if has_keyboard:
+		return false
+	if join_inputs.size() >= 3:
+		return false
+	join_inputs.append({"type": "keyboard", "device_id": null})
+	if enable_focus:
+		nav_focus_enabled = true
+	_refresh_controller_join_ui()
+	_play_select_sfx()
+	return true
+
+
+func _refresh_controller_join_ui() -> void:
+	for i in range(3):
+		if controller_slot_labels.size() > i and controller_slot_labels[i]:
+			controller_slot_labels[i].text = _controller_slot_text(i + 1)
+	var connected := Input.get_connected_joypads().size()
+	if controller_status_label:
+		controller_status_label.text = (
+			_t("Connected controllers: %d", "Controles conectados: %d") % connected
+		)
+	for i in range(controller_slot_panels.size()):
+		var panel := controller_slot_panels[i]
+		if panel and theme_styler:
+			var color := theme_styler.team_color(i)
+			var has_join := i < join_inputs.size()
+			theme_styler.apply_team_card_style(panel, color, has_join)
+
+
+func _controller_slot_text(slot_index: int) -> String:
+	if slot_index - 1 < join_inputs.size():
+		var entry := join_inputs[slot_index - 1]
+		var type := str(entry.get("type", ""))
+		if type == "keyboard":
+			return _t("Player %d: Keyboard", "Jogador %d: Teclado") % slot_index
+		var dev_id := int(entry.get("device_id", -1))
+		var joy_name := Input.get_joy_name(dev_id)
+		if joy_name.strip_edges() == "":
+			joy_name = _t("Controller %d", "Controle %d") % slot_index
+		return _t("Player %d: %s", "Jogador %d: %s") % [slot_index, joy_name]
+	return _t("Player %d: Press any button", "Jogador %d: Aperte qualquer botao") % slot_index
+
+
 func _input(event: InputEvent) -> void:
 	# Handle Escape/UI cancel to toggle pause/menu return.
 	if _handle_escape_input(event):
 		return
+	if buzzed_player != -1 and not _event_matches_active_answerer(event):
+		if not event.is_action_pressed("ui_cancel"):
+			get_viewport().set_input_as_handled()
+			return
+	if controller_join_active:
+		if event is InputEventJoypadButton and event.pressed:
+			nav_focus_enabled = true
+			_maybe_focus_for_nav()
+			if _register_joined_controller((event as InputEventJoypadButton).device):
+				get_viewport().set_input_as_handled()
+				return
+		elif event is InputEventJoypadMotion:
+			var motion := event as InputEventJoypadMotion
+			if abs(motion.axis_value) > 0.6:
+				nav_focus_enabled = true
+				_maybe_focus_for_nav()
+				if _register_joined_controller(motion.device):
+					get_viewport().set_input_as_handled()
+					return
+		elif event is InputEventKey and event.pressed and not event.is_echo():
+			var key_event := event as InputEventKey
+			if key_event.keycode != KEY_ESCAPE and key_event.physical_keycode != KEY_ESCAPE:
+				if _register_keyboard_join():
+					get_viewport().set_input_as_handled()
+					return
+		return
+
+	if current_clue.is_empty() and not _event_is_for_current_turn(event):
+		if not event.is_action_pressed("ui_cancel"):
+			if (
+				event is InputEventMouseButton
+				or event is InputEventJoypadButton
+				or event is InputEventJoypadMotion
+				or event is InputEventKey
+			):
+				get_viewport().set_input_as_handled()
+				return
 
 
 func _can_open_pause_menu() -> bool:
@@ -515,11 +739,13 @@ func _can_open_pause_menu() -> bool:
 
 
 func _open_pause_menu() -> void:
+	nav_focus_enabled = true
 	if settings_panel:
 		settings_panel.visible = false
 	if pause_menu:
 		pause_menu.visible = true
 	pause_resume_button.grab_focus()
+	_maybe_focus_for_nav()
 
 
 func _close_pause_menu() -> void:
@@ -543,6 +769,8 @@ func _on_pause_settings_pressed() -> void:
 	_close_pause_menu()
 	if settings_screen:
 		settings_screen.show_settings_from_pause()
+	if language_option and nav_focus_enabled:
+		language_option.grab_focus()
 
 
 func _populate_languages() -> void:
@@ -662,7 +890,7 @@ func _on_final_clue_pressed() -> void:
 
 func _on_player_start_pressed() -> void:
 	_play_select_sfx()
-	_start_game()
+	_open_controller_connect()
 
 
 func _on_music_slider_changed(value: float) -> void:
@@ -671,37 +899,77 @@ func _on_music_slider_changed(value: float) -> void:
 	_save_settings()
 
 
-func _setup_players(count: int) -> void:
+func _setup_players(
+	count: int, join_order: Array = [], allow_keyboard_fallback: bool = true
+) -> void:
 	players.clear()
 	current_turn_team = 0
-	var joypads := Input.get_connected_joypads()
-	var required_players: int = 3
-	var joypad_index := 0
-
-	# Player 1 is always keyboard if available.
-	players.append({"name": "Player 1", "is_ai": false, "device_id": null, "uses_keyboard": true})
-
-	for i in range(1, required_players):
-		if joypad_index < joypads.size():
-			var dev_id := joypads[joypad_index]
-			players.append(
-				{
-					"name": "Player %d" % (i + 1),
-					"is_ai": false,
-					"device_id": dev_id,
-					"uses_keyboard": false
-				}
-			)
-			joypad_index += 1
+	var required_players: int = clamp(count, 1, 3)
+	var resolved_inputs: Array[Dictionary] = []
+	for entry in join_order:
+		if resolved_inputs.size() >= required_players:
+			break
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var type := str(entry.get("type", ""))
+		if type != "joypad" and type != "keyboard":
+			continue
+		if type == "joypad":
+			var dev_id := int(entry.get("device_id", -1))
+			if dev_id < 0:
+				continue
+			var duplicate := false
+			for e in resolved_inputs:
+				if e.get("type", "") == "joypad" and int(e.get("device_id", -1)) == dev_id:
+					duplicate = true
+					break
+			if duplicate:
+				continue
+			resolved_inputs.append({"type": "joypad", "device_id": dev_id})
 		else:
-			players.append(
-				{
-					"name": "Player %d (AI)" % (i + 1),
-					"is_ai": true,
-					"device_id": null,
-					"uses_keyboard": false
-				}
-			)
+			var has_keyboard := false
+			for e in resolved_inputs:
+				if e.get("type", "") == "keyboard":
+					has_keyboard = true
+					break
+			if has_keyboard:
+				continue
+			resolved_inputs.append({"type": "keyboard", "device_id": null})
+
+	if resolved_inputs.is_empty() and allow_keyboard_fallback:
+		resolved_inputs.append({"type": "keyboard", "device_id": null})
+
+	var slot := 0
+	for input_entry in resolved_inputs:
+		if players.size() >= required_players:
+			break
+		slot += 1
+		var input_type := str(input_entry.get("type", "keyboard"))
+		var dev_id: Variant = input_entry.get("device_id", null)
+		var uses_keyboard := input_type == "keyboard"
+		if uses_keyboard:
+			dev_id = null
+		elif dev_id != null:
+			dev_id = int(dev_id)
+		players.append(
+			{
+				"name": "Player %d" % slot,
+				"is_ai": false,
+				"device_id": dev_id,
+				"uses_keyboard": uses_keyboard
+			}
+		)
+
+	while players.size() < required_players:
+		var idx := players.size() + 1
+		players.append(
+			{
+				"name": "Player %d (AI)" % idx,
+				"is_ai": true,
+				"device_id": null,
+				"uses_keyboard": false
+			}
+		)
 
 	_update_player_info_label()
 
@@ -807,6 +1075,7 @@ func _build_board() -> void:
 			btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			btn.custom_minimum_size = Vector2(300, 160)
 			btn.pivot_offset = btn.custom_minimum_size * 0.5
+			btn.focus_mode = Control.FOCUS_ALL
 			if theme_styler:
 				theme_styler.apply_font_override(btn, game_font)
 				theme_styler.apply_body_color(btn)
@@ -986,6 +1255,8 @@ func _open_answer_buttons_for(player_index: int) -> void:
 	answer_buttons.visible = true
 	for btn in answer_button_nodes:
 		btn.disabled = false
+	if nav_focus_enabled and not answer_button_nodes.is_empty() and answer_button_nodes[0]:
+		answer_button_nodes[0].grab_focus()
 	turn_label.text = "Buzzed: %s" % players[player_index]["name"]
 
 
@@ -999,6 +1270,7 @@ func _on_player_buzz(player_index: int) -> void:
 
 	buzzed_player = player_index
 	answering_player = player_index
+	_lock_answering_input(player_index)
 	_set_active_team(player_index)
 	if theme_styler:
 		_set_question_panel_color(theme_styler.team_color(player_index))
@@ -1062,6 +1334,7 @@ func _on_answer_selected(answer_text: String) -> void:
 		team_scores[buzzed_player] -= value
 		_set_score_label(buzzed_player)
 		buzzed_player = -1
+		answering_input_lock.clear()
 		_reset_question_panel_color()
 		_play_wrong_sfx()
 		if attempted_players.size() >= players.size():
@@ -1076,7 +1349,8 @@ func _on_answer_selected(answer_text: String) -> void:
 			_disable_answer_buttons()
 			var eligible_ai := _get_eligible_ai_players()
 			if not eligible_ai.is_empty():
-				_start_ai_buzz_timer(0.75)
+				var wait_delay := AI_BUZZ_DELAY if _human_player_count() >= 2 else 0.75
+				_start_ai_buzz_timer(wait_delay)
 
 
 func _update_turn_label_waiting() -> void:
@@ -1094,6 +1368,7 @@ func _handle_all_attempted() -> void:
 	_end_question_audio()
 	_disable_answer_buttons()
 	_mark_clue_answered()
+	answering_input_lock.clear()
 	turn_label.text = ""
 	if question_panel:
 		question_panel.visible = false
@@ -1156,6 +1431,7 @@ func _mark_clue_answered() -> void:
 	current_options.clear()
 	_stop_timers()
 	_reset_question_panel_color()
+	answering_input_lock.clear()
 	answering_player = -1
 	current_clue.clear()
 	if final_round:
@@ -1171,6 +1447,7 @@ func _mark_clue_answered() -> void:
 		_set_header_visible(true)
 		turn_label.text = ""
 		_advance_round_if_needed()
+		_maybe_trigger_ai_board_choice()
 
 
 func _restart_to_main_menu() -> void:
@@ -1183,6 +1460,12 @@ func _restart_to_main_menu() -> void:
 	answered_map.clear()
 	attempted_players.clear()
 	buzzed_player = -1
+	answering_input_lock.clear()
+	join_inputs.clear()
+	controller_join_active = false
+	nav_focus_enabled = false
+	if controller_connect_panel:
+		controller_connect_panel.visible = false
 	final_round = false
 	hidden_double_key = ""
 	current_wager = 0
@@ -1244,11 +1527,126 @@ func _set_board_input_enabled(enabled: bool) -> void:
 			else:
 				btn.disabled = not enabled
 	board_grid.visible = enabled
+	if enabled:
+		_focus_first_board_button()
 
 
 func _show_result(text: String, color: Color = Color(0.1, 0.1, 0.1)) -> void:
 	result_label.text = text
 	result_label.add_theme_color_override("font_color", color)
+
+
+func _focus_first_board_button() -> void:
+	if board_grid == null or not is_instance_valid(board_grid):
+		return
+	if not board_grid.visible:
+		return
+	if not nav_focus_enabled:
+		return
+	for child in board_grid.get_children():
+		if child is Button:
+			var btn := child as Button
+			if btn.disabled:
+				continue
+			btn.grab_focus()
+			return
+
+
+func _maybe_focus_for_nav() -> void:
+	if not nav_focus_enabled:
+		return
+	var current_focus := get_viewport().gui_get_focus_owner()
+	if current_focus and current_focus.visible:
+		return
+	if controller_connect_panel and controller_connect_panel.visible and controller_start_button:
+		controller_start_button.grab_focus()
+		return
+	if settings_panel and settings_panel.visible and language_option:
+		language_option.grab_focus()
+		return
+	if title_panel and title_panel.visible and title_play_button:
+		title_play_button.grab_focus()
+		return
+	if board_grid and board_grid.visible:
+		_focus_first_board_button()
+
+
+func _lock_answering_input(player_index: int) -> void:
+	answering_input_lock.clear()
+	if player_index < 0 or player_index >= players.size():
+		return
+	var p := players[player_index]
+	if p.get("is_ai", false):
+		answering_input_lock = {"type": "ai"}
+		return
+	if p.get("uses_keyboard", false):
+		answering_input_lock = {"type": "keyboard"}
+		return
+	answering_input_lock = {"type": "joypad", "device_id": int(p.get("device_id", -1))}
+
+
+func _event_matches_active_answerer(event: InputEvent) -> bool:
+	if answering_input_lock.is_empty():
+		return true
+	var t := str(answering_input_lock.get("type", ""))
+	if t == "keyboard":
+		return (
+			event is InputEventKey
+			or event is InputEventMouseButton
+			or event is InputEventMouseMotion
+		)
+	if t == "joypad":
+		var dev := int(answering_input_lock.get("device_id", -999))
+		if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+			return int(event.device) == dev
+		return false
+	return false
+
+
+func _event_is_for_current_turn(event: InputEvent) -> bool:
+	if current_turn_team < 0 or current_turn_team >= players.size():
+		return true
+	return _event_for_player(current_turn_team, event)
+
+
+func _event_for_player(idx: int, event: InputEvent) -> bool:
+	if idx < 0 or idx >= players.size():
+		return false
+	var p: Dictionary = players[idx] as Dictionary
+	var uses_keyboard: bool = p.get("uses_keyboard", false)
+	var is_ai: bool = p.get("is_ai", false)
+	if is_ai:
+		return false
+	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		if uses_keyboard:
+			return false
+		return int(event.device) == int(p.get("device_id", -1))
+	if event is InputEventKey or event is InputEventMouseButton or event is InputEventMouseMotion:
+		return uses_keyboard
+	return true
+
+
+func _maybe_trigger_ai_board_choice() -> void:
+	if final_round:
+		return
+	if current_turn_team < 0 or current_turn_team >= players.size():
+		return
+	var p := players[current_turn_team]
+	if not p.get("is_ai", false):
+		return
+	await get_tree().create_timer(AI_BOARD_PICK_DELAY).timeout
+	var available: Array[Button] = []
+	if board_grid and is_instance_valid(board_grid):
+		for child in board_grid.get_children():
+			if child is Button:
+				var btn := child as Button
+				if btn.disabled:
+					continue
+				available.append(btn)
+	if available.is_empty():
+		return
+	var pick := available[rng.randi_range(0, available.size() - 1)]
+	_on_clue_button_pressed(pick)
 
 
 func _reset_round_state() -> void:
@@ -1371,6 +1769,11 @@ func _set_header_visible(visible: bool) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if pause_menu.visible:
 		return
+	if controller_join_active:
+		return
+	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		nav_focus_enabled = true
+		_maybe_focus_for_nav()
 	if current_clue.is_empty():
 		return
 	if buzzed_player != -1:
@@ -1389,10 +1792,18 @@ func _player_from_event(event: InputEvent) -> int:
 		return -1
 	if event is InputEventKey and event.pressed:
 		var key_event := event as InputEventKey
-		if key_event.keycode == KEY_SPACE:
-			# Keyboard is always players[0] if present and human
-			if players.size() > 0 and players[0]["uses_keyboard"] and not players[0]["is_ai"]:
-				return 0
+		if (
+			key_event.keycode == KEY_SPACE
+			or key_event.keycode == KEY_ENTER
+			or key_event.keycode == KEY_KP_ENTER
+		):
+			for i in range(players.size()):
+				var p: Dictionary = players[i] as Dictionary
+				if p.get("is_ai", false):
+					continue
+				if not p.get("uses_keyboard", false):
+					continue
+				return i
 	if event is InputEventJoypadButton and event.pressed:
 		var joy_event := event as InputEventJoypadButton
 		for i in range(players.size()):
@@ -1416,6 +1827,14 @@ func _get_eligible_ai_players() -> Array[int]:
 			continue
 		candidates.append(i)
 	return candidates
+
+
+func _human_player_count() -> int:
+	var count := 0
+	for p in players:
+		if not (p as Dictionary).get("is_ai", false):
+			count += 1
+	return count
 
 
 func _on_ai_try_buzz() -> void:
@@ -1508,6 +1927,90 @@ func _ai_answer_current() -> void:
 	_on_answer_selected(choice)
 
 
+func _ensure_default_input_actions() -> void:
+	_ensure_action_with_events(
+		"ui_accept",
+		[
+			_make_key_event(KEY_ENTER),
+			_make_key_event(KEY_KP_ENTER),
+			_make_key_event(KEY_SPACE),
+			_make_joypad_button_event(JOY_BUTTON_A)
+		]
+	)
+	_ensure_action_with_events(
+		"ui_cancel", [_make_key_event(KEY_ESCAPE), _make_joypad_button_event(JOY_BUTTON_B)]
+	)
+	_ensure_action_with_events(
+		"ui_up",
+		[
+			_make_key_event(KEY_UP),
+			_make_key_event(KEY_W),
+			_make_joypad_button_event(JOY_BUTTON_DPAD_UP),
+			_make_joypad_axis_event(JOY_AXIS_LEFT_Y, -1.0)
+		]
+	)
+	_ensure_action_with_events(
+		"ui_down",
+		[
+			_make_key_event(KEY_DOWN),
+			_make_key_event(KEY_S),
+			_make_joypad_button_event(JOY_BUTTON_DPAD_DOWN),
+			_make_joypad_axis_event(JOY_AXIS_LEFT_Y, 1.0)
+		]
+	)
+	_ensure_action_with_events(
+		"ui_left",
+		[
+			_make_key_event(KEY_LEFT),
+			_make_key_event(KEY_A),
+			_make_joypad_button_event(JOY_BUTTON_DPAD_LEFT),
+			_make_joypad_axis_event(JOY_AXIS_LEFT_X, -1.0)
+		]
+	)
+	_ensure_action_with_events(
+		"ui_right",
+		[
+			_make_key_event(KEY_RIGHT),
+			_make_key_event(KEY_D),
+			_make_joypad_button_event(JOY_BUTTON_DPAD_RIGHT),
+			_make_joypad_axis_event(JOY_AXIS_LEFT_X, 1.0)
+		]
+	)
+
+
+func _ensure_action_with_events(action: String, events: Array) -> void:
+	if not InputMap.has_action(action):
+		InputMap.add_action(action, 0.5)
+	for ev in events:
+		if ev == null:
+			continue
+		if not InputMap.action_has_event(action, ev):
+			InputMap.action_add_event(action, ev)
+
+
+func _make_key_event(keycode: int) -> InputEventKey:
+	var ev := InputEventKey.new()
+	ev.device = -1
+	ev.physical_keycode = keycode
+	ev.keycode = keycode
+	return ev
+
+
+func _make_joypad_button_event(button_index: int) -> InputEventJoypadButton:
+	var ev := InputEventJoypadButton.new()
+	ev.device = -1
+	ev.button_index = button_index
+	return ev
+
+
+func _make_joypad_axis_event(axis: int, value: float) -> InputEventJoypadMotion:
+	var ev := InputEventJoypadMotion.new()
+	ev.device = -1
+	ev.axis = axis
+	ev.axis_value = value
+	return ev
+
+
 func _t(en_text: String, pt_text: String) -> String:
 	return pt_text if current_language == "pt" else en_text
 
@@ -1520,6 +2023,10 @@ func _handle_escape_input(event: InputEvent) -> bool:
 		var key_event := event as InputEventKey
 		esc_pressed = key_event.pressed and not key_event.echo and key_event.keycode == KEY_ESCAPE
 	if esc_pressed:
+		if controller_connect_panel and controller_connect_panel.visible:
+			_on_controller_connect_cancel_pressed()
+			get_viewport().set_input_as_handled()
+			return true
 		if settings_panel.visible and settings_opened_from_pause:
 			_play_select_sfx()
 			settings_opened_from_pause = false
@@ -1534,6 +2041,7 @@ func _handle_escape_input(event: InputEvent) -> bool:
 		elif _can_open_pause_menu():
 			_play_select_sfx()
 			_open_pause_menu()
+			_maybe_focus_for_nav()
 		get_viewport().set_input_as_handled()
 		return true
 	return false
