@@ -78,7 +78,7 @@ var q_category_label: Label = get_node_or_null("QuestionPanel/QuestionVBox/Quest
 @onready var result_label: Label = get_node_or_null("QuestionPanel/QuestionVBox/ResultLabel")
 @onready var answer_timer_label: Label = get_node_or_null("QuestionPanel/AnswerTimer")
 @onready var answer_buttons: Control = get_node_or_null("QuestionPanel/QuestionVBox/AnswerButtons")
-@onready var answer_timer_bar = get_node_or_null("QuestionPanel/TimerBar")
+@onready var answer_timer_bar = get_node_or_null("QuestionPanel/QuestionVBox/TimerBar")
 @onready var final_wager_panel: Control = get_node_or_null("QuestionPanel/FinalWager")
 @onready var final_wager_label: Label = get_node_or_null("QuestionPanel/FinalWager/WagerLabel")
 @onready var final_wager_input: LineEdit = get_node_or_null("QuestionPanel/FinalWager/WagerInput")
@@ -523,7 +523,7 @@ func _style_timer_bar() -> void:
 	if answer_timer_bar is TimerBar:
 		answer_timer_bar.duration_seconds = ANSWER_TIME
 		answer_timer_bar.set_time_left(ANSWER_TIME)
-		answer_timer_bar.visible = false
+		answer_timer_bar.visible = true
 
 
 func _refresh_team_highlight() -> void:
