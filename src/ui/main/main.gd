@@ -4,8 +4,13 @@ extends Control
 @export var title_texture: Texture2D = preload("res://game title.png")
 @export var bible_character_textures: Array[Texture2D] = []
 
-const LoadedBibleData = preload("res://scripts/bible_data.gd")
-const VerseData = preload("res://scripts/verse_data.gd")
+const LoadedBibleData = preload("res://src/data/bible_data.gd")
+const VerseData = preload("res://src/data/verse_data.gd")
+const ThemeStyler = preload("res://src/ui/main/theme_styler.gd")
+const AudioController = preload("res://src/ui/main/audio_controller.gd")
+const MainMenuScreen = preload("res://src/ui/screens/main_menu_screen.gd")
+const BoardScreen = preload("res://src/ui/screens/board_screen.gd")
+const SettingsScreen = preload("res://src/ui/screens/settings_screen.gd")
 const MUSIC_BACKGROUND := preload("res://music/background music.mp3")
 const MUSIC_QUESTION := preload("res://music/question music.mp3")
 const SFX_CORRECT := preload("res://music/correct.mp3")
@@ -131,11 +136,64 @@ var category_deck: Array = []
 var loading_settings: bool = false
 var verse_data := VerseData.new()
 var question_panel_base_style: StyleBox = null
-var music_volume_tween: Tween = null
+var theme_styler: ThemeStyler
+var audio_controller: AudioController
+var main_menu_screen: MainMenuScreen
+var board_screen: BoardScreen
+var settings_screen: SettingsScreen
 const SETTINGS_PATH := "user://settings.cfg"
 
 
 func _ready() -> void:
+	theme_styler = ThemeStyler.new(theme_body_color, TEAM_COLORS)
+	audio_controller = AudioController.new(
+		self,
+		music_player,
+		question_music_player,
+		sfx_correct_player,
+		sfx_wrong_player,
+		sfx_select_player,
+		music_slider
+	)
+	main_menu_screen = MainMenuScreen.new(
+		title_panel,
+		settings_panel,
+		player_select_panel,
+		verse_panel,
+		verse_title_label,
+		verse_text_label,
+		verse_reference_label,
+		title_play_button,
+		title_settings_button,
+		settings_language_label,
+		music_label,
+		settings_back_button,
+		settings_exit_button,
+		player_select_title,
+		player_count_option,
+		player_info_label,
+		player_start_button,
+		pause_title_label,
+		pause_resume_button,
+		pause_main_menu_button,
+		pause_settings_button,
+		language_option,
+		music_slider,
+		answer_timer_label,
+		final_wager_label,
+		final_wager_input,
+		final_wager_button,
+		final_clue_button,
+		game_root,
+		question_panel,
+		verse_data,
+		func(en_text: String, pt_text: String) -> String: return _t(en_text, pt_text)
+	)
+	board_screen = BoardScreen.new(theme_styler, game_font)
+	settings_screen = SettingsScreen.new(
+		title_panel, settings_panel, player_select_panel, pause_menu, game_root, question_panel
+	)
+
 	_update_verse_of_day()
 	# Hook up UI
 	title_play_button.pressed.connect(_on_play_pressed)
@@ -167,7 +225,11 @@ func _ready() -> void:
 	set_process_input(true)
 	_populate_player_count()
 	_show_title()
-	_init_music()
+	audio_controller.configure_streams(
+		MUSIC_BACKGROUND, MUSIC_QUESTION, SFX_CORRECT, SFX_WRONG, SFX_SELECT
+	)
+	audio_controller.sync_slider_from_bus()
+	audio_controller.play_background_music()
 	_populate_languages()
 	_load_settings()
 	_apply_language_texts()
@@ -181,9 +243,7 @@ func _ready() -> void:
 				answer_timer_bar.timeout.connect(_on_answer_timer_timeout)
 	if final_wager_panel:
 		final_wager_panel.visible = false
-	_apply_game_font()
-	_setup_background()
-	_apply_bible_theme()
+	_apply_theme_styles()
 	_reset_round_state()
 
 
@@ -199,27 +259,8 @@ func _get_verse_for_today() -> Dictionary:
 
 
 func _update_verse_of_day():
-	if (
-		verse_panel == null
-		or verse_title_label == null
-		or verse_text_label == null
-		or verse_reference_label == null
-	):
-		return
-	var verse := _get_verse_for_today()
-	if verse.is_empty():
-		verse_panel.visible = false
-		return
-	verse_panel.visible = true
-	verse_title_label.text = _t("Verse of the Day", "Verso do dia")
-	var localized_text := ""
-	if verse.has("text") and typeof(verse["text"]) == TYPE_DICTIONARY:
-		var t := verse["text"] as Dictionary
-		localized_text = str(t.get(current_language, t.get("en", "")))
-	else:
-		localized_text = str(verse.get("text", ""))
-	verse_text_label.text = localized_text
-	verse_reference_label.text = str(verse.get("reference", ""))
+	if main_menu_screen:
+		main_menu_screen.update_verse_of_day(current_language, _get_today_key())
 
 
 func _populate_player_count() -> void:
@@ -232,33 +273,12 @@ func _populate_player_count() -> void:
 
 
 func _apply_language_texts() -> void:
-	var is_pt := current_language == "pt"
-	LoadedBibleData.set_language(current_language)
-	title_play_button.text = _t("Play", "Jogar")
-	title_settings_button.text = _t("Settings", "Configuracoes")
-	if verse_title_label:
-		verse_title_label.text = _t("Verse of the Day", "Verso do dia")
-
-	settings_language_label.text = _t("Language", "Idioma")
-	music_label.text = _t("Music Volume", "Volume da musica")
-	settings_back_button.text = _t("Back", "Voltar")
-	settings_exit_button.text = _t("Exit Game", "Sair do jogo")
-	final_wager_label.text = _t("Set Final Wager", "Definir aposta final")
-	final_wager_input.placeholder_text = _t("Enter wager", "Digite a aposta")
-	final_wager_button.text = _t("Set Wager", "Confirmar aposta")
-	final_clue_button.text = _t("Get Clue (-10%)", "Dica (-10%)")
-
-	player_select_title.text = _t("Select Players", "Selecionar jogadores")
-	player_start_button.text = _t("Start Game", "Iniciar jogo")
+	if main_menu_screen:
+		main_menu_screen.apply_language_texts(
+			current_language, func(lang: String) -> void: LoadedBibleData.set_language(lang)
+		)
 	_update_player_info_label()
 
-	# Sync dropdown selection to current language
-	language_option.select(1 if is_pt else 0)
-
-	pause_title_label.text = _t("Paused", "Pausado")
-	pause_resume_button.text = _t("Resume", "Retomar")
-	pause_main_menu_button.text = _t("Main Menu", "Menu principal")
-	pause_settings_button.text = _t("Settings", "Configuracoes")
 	_update_verse_of_day()
 
 
@@ -279,25 +299,15 @@ func _setup_accessible_text() -> void:
 	q_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	result_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	answer_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if main_menu_screen:
+		main_menu_screen.setup_accessible_text()
 
 
-func _apply_font_override(control: Control) -> void:
-	if game_font == null or control == null:
-		return
-	control.add_theme_font_override("font", game_font)
-
-
-func _apply_body_color(control: Control) -> void:
-	if control == null:
-		return
-	control.add_theme_color_override("font_color", theme_body_color)
-
-
-func _apply_game_font() -> void:
-	if game_font == null:
+func _apply_theme_styles() -> void:
+	if theme_styler == null:
 		return
 
-	var labels: Array[Control] = [
+	var font_controls: Array[Control] = [
 		verse_title_label,
 		verse_text_label,
 		verse_reference_label,
@@ -316,13 +326,7 @@ func _apply_game_font() -> void:
 		player_info_label,
 		final_wager_label,
 		final_wager_panel,
-		final_wager_input
-	]
-
-	for l in labels:
-		_apply_font_override(l)
-
-	var buttons: Array[BaseButton] = [
+		final_wager_input,
 		title_play_button,
 		title_settings_button,
 		settings_back_button,
@@ -336,50 +340,9 @@ func _apply_game_font() -> void:
 		final_wager_button,
 		final_clue_button
 	]
+	theme_styler.apply_game_font(game_font, font_controls)
 
-	for b in buttons:
-		_apply_font_override(b)
-
-
-func _setup_background() -> void:
-	if background_rect and is_instance_valid(background_rect):
-		return
-	background_rect = TextureRect.new()
-	background_rect.name = "BackgroundGradient"
-	background_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	background_rect.z_index = -100
-	background_rect.anchor_right = 1.0
-	background_rect.anchor_bottom = 1.0
-	background_rect.offset_left = 0
-	background_rect.offset_top = 0
-	background_rect.offset_right = 0
-	background_rect.offset_bottom = 0
-	background_rect.stretch_mode = TextureRect.STRETCH_SCALE
-	background_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-
-	var grad := Gradient.new()
-	grad.colors = PackedColorArray([Color(1.0, 0.85, 0.2), Color(1.0, 0.72, 0.1)])
-	grad.offsets = PackedFloat32Array([0.0, 1.0])
-	var grad_tex := GradientTexture2D.new()
-	grad_tex.gradient = grad
-	grad_tex.width = 1024
-	grad_tex.height = 1024
-	background_rect.texture = grad_tex
-
-	add_child(background_rect)
-	move_child(background_rect, 0)
-
-
-func _apply_bible_theme() -> void:
-	var title_color := Color(0.05, 0.08, 0.2)
-	if title_screen_title:
-		title_screen_title.add_theme_color_override("font_color", title_color)
-		title_screen_title.add_theme_font_size_override("font_size", 48)
-		title_screen_title.visible = false
-	if title_label:
-		title_label.add_theme_color_override("font_color", title_color)
-		title_label.add_theme_font_size_override("font_size", 42)
-		title_label.visible = false
+	background_rect = theme_styler.setup_background(self, background_rect)
 
 	var primary_controls: Array = [
 		title_play_button,
@@ -409,62 +372,6 @@ func _apply_bible_theme() -> void:
 		music_slider,
 		answer_timer_label
 	]
-	for ctrl in primary_controls:
-		if ctrl and ctrl is Control:
-			_apply_body_color(ctrl)
-			(ctrl as Control).add_theme_font_size_override("font_size", 28)
-	if settings_language_label:
-		settings_language_label.add_theme_font_size_override("font_size", 32)
-	if music_label:
-		music_label.add_theme_font_size_override("font_size", 32)
-
-	_style_timer_bar()
-
-	var parchment := StyleBoxFlat.new()
-	parchment.bg_color = Color(1.0, 0.92, 0.65)
-	parchment.border_color = Color(0, 0, 0, 0)
-	parchment.border_width_left = 0
-	parchment.border_width_right = 0
-	parchment.border_width_top = 0
-	parchment.border_width_bottom = 0
-	parchment.shadow_size = 8
-	parchment.shadow_color = Color(0, 0, 0, 0.12)
-	parchment.corner_radius_top_left = 12
-	parchment.corner_radius_top_right = 12
-	parchment.corner_radius_bottom_left = 12
-	parchment.corner_radius_bottom_right = 12
-
-	if question_panel:
-		question_panel_base_style = parchment.duplicate()
-		question_panel.add_theme_stylebox_override("panel", question_panel_base_style.duplicate())
-
-	var pause_panel := (
-		pause_menu.get_node("Panel") if pause_menu and pause_menu.has_node("Panel") else null
-	)
-	if pause_panel:
-		pause_panel.add_theme_stylebox_override("panel", parchment.duplicate())
-
-	var button_normal := StyleBoxFlat.new()
-	button_normal.bg_color = Color(0.92, 0.18, 0.18)
-	button_normal.border_color = Color(0.05, 0.08, 0.2)
-	button_normal.border_width_left = 3
-	button_normal.border_width_right = 3
-	button_normal.border_width_top = 3
-	button_normal.border_width_bottom = 3
-	button_normal.corner_radius_top_left = 10
-	button_normal.corner_radius_top_right = 10
-	button_normal.corner_radius_bottom_left = 10
-	button_normal.corner_radius_bottom_right = 10
-
-	var button_hover := button_normal.duplicate()
-	button_hover.bg_color = Color(1.0, 0.25, 0.25)
-
-	var button_pressed := button_normal.duplicate()
-	button_pressed.bg_color = Color(0.75, 0.12, 0.12)
-
-	var button_disabled := button_normal.duplicate()
-	button_disabled.bg_color = Color(0.7, 0.7, 0.7)
-	button_disabled.border_color = Color(0.4, 0.4, 0.4)
 
 	var button_controls := [
 		title_play_button,
@@ -478,60 +385,24 @@ func _apply_bible_theme() -> void:
 		final_wager_button,
 		final_clue_button
 	]
-	for btn in button_controls:
-		if btn:
-			btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-			btn.custom_minimum_size = Vector2(320, 72)
-			btn.add_theme_stylebox_override("normal", button_normal)
-			btn.add_theme_stylebox_override("hover", button_hover)
-			btn.add_theme_stylebox_override("pressed", button_pressed)
-			btn.add_theme_stylebox_override("disabled", button_disabled)
 
-
-func _team_color(idx: int) -> Color:
-	if idx < TEAM_COLORS.size():
-		return TEAM_COLORS[idx]
-	# Cycle colors if ever needed
-	return TEAM_COLORS[idx % TEAM_COLORS.size()]
-
-
-func _apply_team_card_style(card: PanelContainer, color: Color, highlighted: bool) -> void:
-	if card == null or not is_instance_valid(card):
-		return
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(1, 1, 1)
-	style.border_color = color
-	var border := 4 if highlighted else 2
-	style.border_width_left = border
-	style.border_width_right = border
-	style.border_width_top = border
-	style.border_width_bottom = border
-	style.shadow_size = 14 if highlighted else 6
-	var shadow_alpha := 0.18 if highlighted else 0.08
-	style.shadow_color = Color(0, 0, 0, shadow_alpha)
-	style.corner_radius_top_left = 12
-	style.corner_radius_top_right = 12
-	style.corner_radius_bottom_left = 12
-	style.corner_radius_bottom_right = 12
-	card.add_theme_stylebox_override("panel", style)
-
-
-func _style_timer_bar() -> void:
-	if answer_timer_bar == null or not is_instance_valid(answer_timer_bar):
-		return
-
-	if answer_timer_bar is TimerBar:
-		answer_timer_bar.duration_seconds = ANSWER_TIME
-		answer_timer_bar.set_time_left(ANSWER_TIME)
-		answer_timer_bar.visible = true
-
-
-func _refresh_team_highlight() -> void:
-	for i in range(team_cards.size()):
-		var card := team_cards[i]
-		var color := _team_color(i)
-		var is_active := i == current_turn_team
-		_apply_team_card_style(card, color, is_active)
+	var pause_panel := (
+		pause_menu.get_node("Panel") if pause_menu and pause_menu.has_node("Panel") else null
+	)
+	question_panel_base_style = theme_styler.apply_bible_theme(
+		title_screen_title,
+		title_label,
+		primary_controls,
+		settings_language_label,
+		music_label,
+		answer_timer_label,
+		question_panel,
+		pause_panel,
+		button_controls,
+		game_font,
+		answer_timer_bar,
+		ANSWER_TIME
+	)
 
 
 func _set_active_team(idx: int) -> void:
@@ -539,112 +410,53 @@ func _set_active_team(idx: int) -> void:
 		current_turn_team = clamp(idx, 0, max(0, team_cards.size() - 1))
 	else:
 		current_turn_team = idx
-	_refresh_team_highlight()
+	if theme_styler:
+		theme_styler.refresh_team_highlight(team_cards, current_turn_team)
 
 
 func _set_question_panel_color(color: Color) -> void:
-	if (
-		question_panel == null
-		or not is_instance_valid(question_panel)
-		or question_panel_base_style == null
-	):
-		return
-	var styled := question_panel_base_style.duplicate()
-	styled.shadow_color = Color(color.r, color.g, color.b, 0.28)
-	styled.shadow_size = 20
-	question_panel.add_theme_stylebox_override("panel", styled)
+	if theme_styler and question_panel_base_style:
+		theme_styler.set_question_panel_color(question_panel, question_panel_base_style, color)
 
 
 func _reset_question_panel_color() -> void:
-	if (
-		question_panel == null
-		or not is_instance_valid(question_panel)
-		or question_panel_base_style == null
-	):
-		return
-	question_panel.add_theme_stylebox_override("panel", question_panel_base_style.duplicate())
-
-
-func _init_music() -> void:
-	var bus_idx := AudioServer.get_bus_index("Master")
-	var db := AudioServer.get_bus_volume_db(bus_idx)
-	var half := (music_slider.min_value + music_slider.max_value) * 0.5
-	music_slider.value = clamp(
-		float(db if db != 0 else half), music_slider.min_value, music_slider.max_value
-	)
-	music_player.stream = MUSIC_BACKGROUND
-	if music_player.stream:
-		music_player.stream.loop = true
-
-	question_music_player.stream = MUSIC_QUESTION
-	if question_music_player.stream:
-		question_music_player.stream.loop = true
-	question_music_player.stop()
-
-	sfx_correct_player.stream = SFX_CORRECT
-	sfx_wrong_player.stream = SFX_WRONG
-	sfx_select_player.stream = SFX_SELECT
-
-	_play_background_music()
+	if theme_styler and question_panel_base_style:
+		theme_styler.reset_question_panel_color(question_panel, question_panel_base_style)
 
 
 func _play_background_music() -> void:
-	_stop_question_music()
-	if not music_player.playing:
-		music_player.play()
-
-
-func _stop_background_music() -> void:
-	if music_player.playing:
-		music_player.stop()
-
-
-func _play_question_music() -> void:
-	_stop_background_music()
-	if question_music_player.stream and not question_music_player.playing:
-		question_music_player.play()
-
-
-func _stop_question_music() -> void:
-	if question_music_player.playing:
-		question_music_player.stop()
+	if audio_controller:
+		audio_controller.play_background_music()
 
 
 func _begin_question_audio() -> void:
-	_play_question_music()
+	if audio_controller:
+		audio_controller.begin_question_audio()
 
 
 func _end_question_audio() -> void:
-	_stop_question_music()
-	_play_background_music()
+	if audio_controller:
+		audio_controller.end_question_audio()
 
 
 func _play_correct_sfx() -> void:
-	if sfx_correct_player.stream:
-		sfx_correct_player.stop()
-		sfx_correct_player.play()
+	if audio_controller:
+		audio_controller.play_correct_sfx()
 
 
 func _play_wrong_sfx() -> void:
-	_stop_question_music()
-	if sfx_wrong_player.stream:
-		sfx_wrong_player.stop()
-		sfx_wrong_player.play()
-	_play_question_music()
+	if audio_controller:
+		audio_controller.play_wrong_sfx()
 
 
 func _play_select_sfx() -> void:
-	if sfx_select_player.stream:
-		sfx_select_player.stop()
-		sfx_select_player.play()
+	if audio_controller:
+		audio_controller.play_select_sfx()
 
 
 func _show_title() -> void:
-	title_panel.visible = true
-	settings_panel.visible = false
-	player_select_panel.visible = false
-	game_root.visible = false
-	question_panel.visible = false
+	if main_menu_screen:
+		main_menu_screen.show_title()
 	_close_pause_menu()
 
 
@@ -667,18 +479,16 @@ func _on_play_pressed() -> void:
 func _on_settings_pressed() -> void:
 	_play_select_sfx()
 	settings_opened_from_pause = false
-	title_panel.visible = false
-	settings_panel.visible = true
-	player_select_panel.visible = false
-	pause_menu.visible = false
+	if settings_screen:
+		settings_screen.show_settings_from_title()
 
 
 func _on_settings_back_pressed() -> void:
 	_play_select_sfx()
 	if settings_opened_from_pause:
 		settings_opened_from_pause = false
-		settings_panel.visible = false
-		_open_pause_menu()
+		if settings_screen:
+			settings_screen.back_to_pause()
 	else:
 		_show_title()
 
@@ -705,13 +515,16 @@ func _can_open_pause_menu() -> bool:
 
 
 func _open_pause_menu() -> void:
-	settings_panel.visible = false
-	pause_menu.visible = true
+	if settings_panel:
+		settings_panel.visible = false
+	if pause_menu:
+		pause_menu.visible = true
 	pause_resume_button.grab_focus()
 
 
 func _close_pause_menu() -> void:
-	pause_menu.visible = false
+	if pause_menu:
+		pause_menu.visible = false
 
 
 func _on_pause_resume_pressed() -> void:
@@ -728,7 +541,8 @@ func _on_pause_settings_pressed() -> void:
 	_play_select_sfx()
 	settings_opened_from_pause = true
 	_close_pause_menu()
-	settings_panel.visible = true
+	if settings_screen:
+		settings_screen.show_settings_from_pause()
 
 
 func _populate_languages() -> void:
@@ -852,22 +666,9 @@ func _on_player_start_pressed() -> void:
 
 
 func _on_music_slider_changed(value: float) -> void:
-	_set_music_volume_db(value)
+	if audio_controller:
+		audio_controller.set_music_volume_db(value)
 	_save_settings()
-
-
-func _set_music_volume_db(target_db: float) -> void:
-	var bus_idx := AudioServer.get_bus_index("Master")
-	var current_db := AudioServer.get_bus_volume_db(bus_idx)
-	if music_volume_tween and is_instance_valid(music_volume_tween):
-		music_volume_tween.kill()
-	music_volume_tween = create_tween()
-	music_volume_tween.tween_method(
-		func(db: float) -> void: AudioServer.set_bus_volume_db(bus_idx, db),
-		current_db,
-		target_db,
-		0.08
-	)
 
 
 func _setup_players(count: int) -> void:
@@ -912,15 +713,11 @@ func _setup_players(count: int) -> void:
 
 
 func _update_player_info_label() -> void:
-	var info := _t(
-		"Three players always. Keyboard is Player 1 (Spacebar buzz).\n",
-		"Sempre tres jogadores. Teclado e o Jogador 1 (barra de espaco).\n"
-	)
-	info += _t(
-		"Connected controllers fill Player 2 and 3; remaining slots become AI.",
-		"Controles conectados preenchem Jogador 2 e 3; vagas restantes viram IA."
-	)
-	player_info_label.text = info
+	if board_screen:
+		board_screen.update_player_info_label(
+			player_info_label,
+			func(en_text: String, pt_text: String) -> String: return _t(en_text, pt_text)
+		)
 
 
 func _clear_children(container: Node) -> void:
@@ -931,52 +728,15 @@ func _clear_children(container: Node) -> void:
 
 
 func _build_teams() -> void:
-	if scoreboard == null or not is_instance_valid(scoreboard):
-		push_warning("Scoreboard node missing; cannot build teams.")
-		return
-
-	_clear_children(scoreboard)
-	team_scores.clear()
-	team_score_labels.clear()
-	team_cards.clear()
-
-	for i in range(team_names.size()):
-		var team_name: String = team_names[i].strip_edges()
-		if team_name == "":
-			continue  # Skip empty team names
-
-		team_scores.append(0)
-
-		var card := PanelContainer.new()
-		card.custom_minimum_size = Vector2(260, 140)
-		_apply_team_card_style(card, _team_color(i), false)
-
-		var vbox := VBoxContainer.new()
-		vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-		vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-
-		var name_label := Label.new()
-		name_label.text = team_name
-		_apply_font_override(name_label)
-		_apply_body_color(name_label)
-		name_label.add_theme_font_size_override("font_size", 28)
-		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-
-		var score_label := Label.new()
-		score_label.text = _t("Points: 0", "Pontos: 0")
-		_apply_font_override(score_label)
-		_apply_body_color(score_label)
-		score_label.add_theme_font_size_override("font_size", 26)
-		score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-
-		vbox.add_child(name_label)
-		vbox.add_child(score_label)
-		card.add_child(vbox)
-		scoreboard.add_child(card)
-
-		team_score_labels.append(score_label)
-		team_cards.append(card)
+	if board_screen:
+		board_screen.build_teams(
+			team_names,
+			team_scores,
+			team_score_labels,
+			team_cards,
+			scoreboard,
+			func(en_text: String, pt_text: String) -> String: return _t(en_text, pt_text)
+		)
 
 	if team_score_labels.size() > 0:
 		_set_active_team(current_turn_team)
@@ -986,9 +746,13 @@ func _build_teams() -> void:
 
 
 func _set_score_label(idx: int) -> void:
-	if idx < 0 or idx >= team_score_labels.size():
-		return
-	team_score_labels[idx].text = _t("Points: %d", "Pontos: %d") % team_scores[idx]
+	if board_screen:
+		board_screen.set_score_label(
+			idx,
+			team_scores,
+			team_score_labels,
+			func(en_text: String, pt_text: String) -> String: return _t(en_text, pt_text)
+		)
 
 
 func _build_board() -> void:
@@ -1029,8 +793,9 @@ func _build_board() -> void:
 		var cat_label := Label.new()
 		cat_label.text = str(cat_data["name"])
 		cat_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_apply_font_override(cat_label)
-		_apply_body_color(cat_label)
+		if theme_styler:
+			theme_styler.apply_font_override(cat_label, game_font)
+			theme_styler.apply_body_color(cat_label)
 		cat_label.add_theme_font_size_override("font_size", 32)
 		board_grid.add_child(cat_label)
 
@@ -1042,8 +807,9 @@ func _build_board() -> void:
 			btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			btn.custom_minimum_size = Vector2(300, 160)
 			btn.pivot_offset = btn.custom_minimum_size * 0.5
-			_apply_font_override(btn)
-			_apply_body_color(btn)
+			if theme_styler:
+				theme_styler.apply_font_override(btn, game_font)
+				theme_styler.apply_body_color(btn)
 			btn.add_theme_font_size_override("font_size", 36)
 
 			btn.set_meta("cat_index", cat_index)
@@ -1206,8 +972,9 @@ func _build_answer_options(clue: Dictionary) -> void:
 		btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		btn.add_theme_font_size_override("font_size", 28)
-		_apply_font_override(btn)
-		_apply_body_color(btn)
+		if theme_styler:
+			theme_styler.apply_font_override(btn, game_font)
+			theme_styler.apply_body_color(btn)
 		btn.pressed.connect(func() -> void: _on_answer_selected(opt))
 
 		answer_button_nodes.append(btn)
@@ -1233,7 +1000,8 @@ func _on_player_buzz(player_index: int) -> void:
 	buzzed_player = player_index
 	answering_player = player_index
 	_set_active_team(player_index)
-	_set_question_panel_color(_team_color(player_index))
+	if theme_styler:
+		_set_question_panel_color(theme_styler.team_color(player_index))
 	var is_ai: bool = players[player_index].get("is_ai", false)
 
 	if final_round:
@@ -1748,8 +1516,11 @@ func _handle_escape_input(event: InputEvent) -> bool:
 		if settings_panel.visible and settings_opened_from_pause:
 			_play_select_sfx()
 			settings_opened_from_pause = false
-			settings_panel.visible = false
-			_open_pause_menu()
+			if settings_screen:
+				settings_screen.back_to_pause()
+			else:
+				settings_panel.visible = false
+				_open_pause_menu()
 		elif pause_menu.visible:
 			_play_select_sfx()
 			_close_pause_menu()

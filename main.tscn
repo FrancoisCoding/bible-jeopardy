@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://88jpn26ij3hx"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1"]
+[ext_resource type="Script" path="res://src/ui/main/main.gd" id="1"]
 [ext_resource type="Texture2D" path="res://game title.png" id="2"]
-[ext_resource type="Script" path="res://scripts/timer_bar.gd" id="3"]
+[ext_resource type="Script" path="res://src/ui/components/timer_bar.gd" id="3"]
 
 [node name="Main" type="Control"]
 layout_mode = 3

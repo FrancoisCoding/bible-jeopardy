@@ -1,4 +1,4 @@
-# res://scripts/verse_data.gd
+# res://src/data/verse_data.gd
 class_name VerseData
 extends RefCounted
 
