@@ -2003,6 +2003,8 @@ func _type_out_question(text: String) -> void:
 
 func _start_tts(text: String) -> void:
 	if DisplayServer.has_feature(DisplayServer.FEATURE_TEXT_TO_SPEECH):
+		if current_language == "pt":
+			return
 		DisplayServer.tts_speak(text, "default", _current_tts_volume(), 1.0, 1.0)
 
 
@@ -2017,7 +2019,7 @@ func _current_tts_volume() -> float:
 			0.0,
 			1.0
 		)
-		return norm * 100.0
+		return norm * TTS_VOLUME
 	return TTS_VOLUME
 
 
