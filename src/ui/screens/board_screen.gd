@@ -23,8 +23,8 @@ func update_player_info_label(player_info_label: Label, t_func: Callable) -> voi
 	)
 	info += str(
 		t_func.call(
-			"Press Play to join with controllers or keyboard (max 3); empty slots become AI.",
-			"Aperte Jogar para entrar com controles ou teclado (ate 3); vagas vazias viram IA."
+			"Press Play to join, pick characters, then start; empty slots become AI.",
+			"Aperte Jogar para entrar, escolha personagens e inicie; vagas vazias viram IA."
 		)
 	)
 	player_info_label.text = info
@@ -35,12 +35,15 @@ func build_teams(
 	team_scores: Array,
 	team_score_labels: Array,
 	team_cards: Array,
+	team_portraits: Array,
 	scoreboard: HBoxContainer,
 	t_func: Callable
 ) -> void:
 	if scoreboard == null or not is_instance_valid(scoreboard):
 		push_warning("Scoreboard node missing; cannot build teams.")
 		return
+
+	scoreboard.add_theme_constant_override("separation", 32)
 
 	_clear_children(scoreboard)
 	team_scores.clear()
@@ -72,6 +75,10 @@ func build_teams(
 		name_label.add_theme_font_size_override("font_size", 28)
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
+		var portrait := _make_portrait_panel(
+			team_portraits[i] if team_portraits.size() > i else {}, theme_styler.team_color(i)
+		)
+
 		var score_label := Label.new()
 		score_label.text = t_func.call("Points: 0", "Pontos: 0")
 		if theme_styler:
@@ -80,6 +87,7 @@ func build_teams(
 		score_label.add_theme_font_size_override("font_size", 26)
 		score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
+		vbox.add_child(portrait)
 		vbox.add_child(name_label)
 		vbox.add_child(score_label)
 
@@ -96,6 +104,42 @@ func set_score_label(
 	if idx < 0 or idx >= team_score_labels.size():
 		return
 	team_score_labels[idx].text = t_func.call("Points: %s", "Pontos: %s") % team_scores[idx]
+
+
+func _make_portrait_panel(portrait_data: Dictionary, fallback_color: Color) -> PanelContainer:
+	var bg: Color = portrait_data.get("bg", fallback_color)
+	var accent: Color = portrait_data.get("accent", fallback_color.darkened(0.2))
+	var letter: String = ""
+	if portrait_data.has("name"):
+		var n := str(portrait_data.get("name", ""))
+		if n.length() > 0:
+			letter = n.substr(0, 1).to_upper()
+
+	var portrait := PanelContainer.new()
+	portrait.custom_minimum_size = Vector2(110, 110)
+	var style := StyleBoxFlat.new()
+	style.bg_color = bg
+	style.set_border_width_all(0)
+	style.border_color = accent
+	style.set_corner_radius_all(20)
+	portrait.add_theme_stylebox_override("panel", style)
+
+	var center := CenterContainer.new()
+	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	center.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	portrait.add_child(center)
+
+	var label := Label.new()
+	label.text = letter
+	if theme_styler:
+		theme_styler.apply_font_override(label, game_font)
+		theme_styler.apply_body_color(label)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 44)
+	center.add_child(label)
+
+	return portrait
 
 
 func _clear_children(container: Node) -> void:

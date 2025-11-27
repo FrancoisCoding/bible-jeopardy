@@ -178,12 +178,12 @@ func apply_team_card_style(card: PanelContainer, color: Color, highlighted: bool
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(1, 1, 1)
 	style.border_color = color
-	var border := 4 if highlighted else 2
+	var border := 4 if highlighted else 0
 	style.border_width_left = border
 	style.border_width_right = border
 	style.border_width_top = border
 	style.border_width_bottom = border
-	style.shadow_size = 14 if highlighted else 6
+	style.shadow_size = 12 if highlighted else 8
 	var shadow_alpha := 0.18 if highlighted else 0.08
 	style.shadow_color = Color(0, 0, 0, shadow_alpha)
 	style.corner_radius_top_left = 12

@@ -26,6 +26,22 @@ const ANSWER_TIME := 30.0
 const AI_DIFFICULTY_RATES := {"easy": 0.2, "normal": 0.4, "hard": 0.7}
 const ROUND_VALUES := [[400, 800, 1200], [800, 1200, 2000]]
 const ROUND_CLUE_COUNT := 3
+const CHARACTER_ROSTER := [
+	{"name": "John", "bg": Color(0.95, 0.57, 0.18), "accent": Color(0.2, 0.42, 0.78)},
+	{"name": "Peter", "bg": Color(0.16, 0.69, 0.65), "accent": Color(0.09, 0.47, 0.42)},
+	{"name": "Paul", "bg": Color(0.2, 0.65, 0.22), "accent": Color(0.86, 0.32, 0.32)},
+	{"name": "Mary", "bg": Color(0.78, 0.42, 0.62), "accent": Color(0.22, 0.43, 0.25)},
+	{"name": "Ruth", "bg": Color(0.74, 0.25, 0.59), "accent": Color(0.51, 0.44, 0.18)},
+	{"name": "Abraham", "bg": Color(0.36, 0.64, 0.9), "accent": Color(0.24, 0.47, 0.72)},
+	{"name": "Moses", "bg": Color(0.18, 0.56, 0.2), "accent": Color(0.82, 0.65, 0.33)},
+	{"name": "Deborah", "bg": Color(0.86, 0.64, 0.44), "accent": Color(0.35, 0.31, 0.56)},
+	{"name": "John the Baptist", "bg": Color(0.26, 0.52, 0.23), "accent": Color(0.8, 0.36, 0.19)},
+	{"name": "Solomon", "bg": Color(0.53, 0.49, 0.76), "accent": Color(0.3, 0.25, 0.54)},
+	{"name": "David", "bg": Color(0.19, 0.46, 0.85), "accent": Color(0.9, 0.55, 0.24)},
+	{"name": "Joseph", "bg": Color(0.92, 0.38, 0.16), "accent": Color(0.25, 0.43, 0.78)},
+	{"name": "Noah", "bg": Color(0.92, 0.52, 0.2), "accent": Color(0.15, 0.38, 0.71)},
+	{"name": "Esther", "bg": Color(0.37, 0.62, 0.77), "accent": Color(0.63, 0.36, 0.22)}
+]
 # UI references
 @onready var title_panel: Control = get_node_or_null("TitlePanel")
 @onready var title_play_button: Button = get_node_or_null("TitlePanel/VBox/PlayButton")
@@ -97,6 +113,95 @@ var player_count_option: OptionButton = get_node_or_null("PlayerSelectPanel/VBox
 )
 @onready
 var controller_connect_content: PanelContainer = get_node_or_null("ControllerConnectPanel/Content")
+@onready var character_select_panel: Control = get_node_or_null("CharacterSelectPanel")
+@onready var character_select_title_label: Label = get_node_or_null(
+	"CharacterSelectPanel/Content/VBox/SelectTitle"
+)
+@onready var character_select_subtitle_label: Label = get_node_or_null(
+	"CharacterSelectPanel/Content/VBox/SelectSubtitle"
+)
+@onready
+var character_select_content: PanelContainer = get_node_or_null("CharacterSelectPanel/Content")
+@onready
+var character_prompt_label: Label = get_node_or_null("CharacterSelectPanel/Content/VBox/Prompt")
+@onready var character_option_grid: GridContainer = get_node_or_null(
+	"CharacterSelectPanel/Content/VBox/Options"
+)
+@onready var character_back_button: Button = get_node_or_null(
+	"CharacterSelectPanel/Content/VBox/CharacterButtonRow/CharacterBackButton"
+)
+@onready var character_slot_panels: Array[PanelContainer] = [
+	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot1"),
+	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot2"),
+	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot3")
+]
+@onready var character_slot_portraits: Array[ColorRect] = [
+	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox/Portrait"),
+	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox/Portrait"),
+	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox/Portrait")
+]
+@onready var character_slot_labels: Array[Label] = [
+	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox/SlotLabel"),
+	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox/SlotLabel"),
+	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox/SlotLabel")
+]
+@onready var character_slot_hints: Array[Label] = [
+	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox/SlotHint"),
+	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox/SlotHint"),
+	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox/SlotHint")
+]
+@onready var online_panel: Control = get_node_or_null("OnlinePanel")
+@onready var title_online_button: Button = get_node_or_null("TitlePanel/VBox/OnlineButton")
+@onready
+var online_title_label: Label = get_node_or_null("OnlinePanel/OnlineContent/VBox/OnlineTitle")
+@onready var online_host_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/ActionRow/HostButton"
+)
+@onready var online_join_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/ActionRow/JoinButton"
+)
+@onready var online_back_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/ActionRow/OnlineBackButton"
+)
+@onready
+var online_host_lobby: PanelContainer = get_node_or_null("OnlinePanel/OnlineContent/VBox/HostLobby")
+@onready
+var online_join_panel: PanelContainer = get_node_or_null("OnlinePanel/OnlineContent/VBox/JoinPanel")
+@onready var online_code_label: Label = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/CodeLabel"
+)
+@onready var online_code_value: Label = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/CodeValue"
+)
+@onready var online_slot_labels: Array[Label] = [
+	get_node_or_null("OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/PlayerList/Slot1"),
+	get_node_or_null("OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/PlayerList/Slot2"),
+	get_node_or_null("OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/PlayerList/Slot3")
+]
+@onready var online_status_label: Label = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/HostStatus"
+)
+@onready var online_host_start_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/HostButtons/HostStartButton"
+)
+@onready var online_host_leave_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/HostButtons/HostLeaveButton"
+)
+@onready var online_join_code_input: LineEdit = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinCodeInput"
+)
+@onready var online_join_ip_input: LineEdit = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinIPInput"
+)
+@onready var online_join_status: Label = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinStatus"
+)
+@onready var online_join_connect_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinButtons/JoinConnectButton"
+)
+@onready var online_join_cancel_button: Button = get_node_or_null(
+	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinButtons/JoinCancelButton"
+)
 
 # Game UI
 @onready var game_root: Control = get_node_or_null("RootVBox")
@@ -142,6 +247,7 @@ var players: Array[Dictionary] = []  # {name, is_ai, device_id, uses_keyboard}
 var team_scores: Array[int] = []
 var team_score_labels: Array[Label] = []
 var team_cards: Array[PanelContainer] = []
+var team_card_pulse_tween: Tween = null
 
 var current_clue: Dictionary = {}
 var answered_map: Dictionary = {}  # key: "catIndex-clueIndex" -> true
@@ -156,12 +262,27 @@ var rng := RandomNumberGenerator.new()
 var current_language: String = "en"
 var bible_data: LoadedBibleData = LoadedBibleData.new()
 var join_inputs: Array[Dictionary] = []  # Ordered join list of controllers/keyboard
+var pending_player_inputs: Array[Dictionary] = []
+var selected_player_characters: Array[Dictionary] = []
+var character_selection_index: int = 0
+var character_human_count: int = 0
+var character_option_buttons: Array[Button] = []
+var player_characters: Array[Dictionary] = []
 var controller_join_active: bool = false
 var answering_input_lock: Dictionary = {}
 var nav_focus_enabled: bool = false  # Only grab focus highlights when a controller/keyboard joins
 var settings_opened_from_pause: bool = false
 var ai_difficulty: String = "normal"
 var ai_correct_rate: float = AI_DIFFICULTY_RATES["normal"]
+var online_peer: ENetMultiplayerPeer
+var online_is_host: bool = false
+var online_room_code: String = ""
+var online_host_peer_id: int = -1
+var online_players: Array[Dictionary] = []  # [{id,name}]
+const ONLINE_MAX_PLAYERS := 3
+const ONLINE_MIN_PLAYERS := 2
+var online_active: bool = false
+var local_player_index: int = -1
 var round_index: int = 0
 var final_round: bool = false
 var hidden_double_key: String = ""
@@ -239,6 +360,8 @@ func _ready() -> void:
 	_update_verse_of_day()
 	# Hook up UI
 	title_play_button.pressed.connect(_on_play_pressed)
+	if title_online_button:
+		title_online_button.pressed.connect(_on_online_pressed)
 	title_settings_button.pressed.connect(_on_settings_pressed)
 	settings_back_button.pressed.connect(_on_settings_back_pressed)
 	player_start_button.pressed.connect(_on_player_start_pressed)
@@ -259,6 +382,22 @@ func _ready() -> void:
 		controller_ai_option.item_selected.connect(
 			func(idx: int) -> void: _on_ai_difficulty_selected(idx)
 		)
+	if character_back_button:
+		character_back_button.pressed.connect(_on_character_back_pressed)
+	if online_host_button:
+		online_host_button.pressed.connect(_on_online_host_pressed)
+	if online_join_button:
+		online_join_button.pressed.connect(_on_online_join_pressed)
+	if online_back_button:
+		online_back_button.pressed.connect(_on_online_back_pressed)
+	if online_host_start_button:
+		online_host_start_button.pressed.connect(_on_online_host_pressed)
+	if online_host_leave_button:
+		online_host_leave_button.pressed.connect(_on_online_back_pressed)
+	if online_join_connect_button:
+		online_join_connect_button.pressed.connect(_on_online_join_pressed)
+	if online_join_cancel_button:
+		online_join_cancel_button.pressed.connect(_on_online_back_pressed)
 	if title_texture:
 		if title_logo:
 			title_logo.texture = title_texture
@@ -331,6 +470,8 @@ func _apply_language_texts() -> void:
 		)
 	_update_player_info_label()
 	_apply_controller_connect_text()
+	_apply_character_select_text()
+	_apply_online_texts()
 
 	_update_verse_of_day()
 
@@ -377,6 +518,86 @@ func _apply_controller_connect_text() -> void:
 	if controller_cancel_button:
 		controller_cancel_button.text = _t("Back", "Voltar")
 	_refresh_controller_join_ui()
+
+
+func _apply_character_select_text() -> void:
+	if character_select_title_label:
+		character_select_title_label.text = _t("Choose Your Character", "Escolha seu personagem")
+	if character_select_subtitle_label:
+		character_select_subtitle_label.text = _t(
+			"Each player picks a unique hero. AI players are randomized.",
+			"Cada jogador escolhe um heroi unico. IAs sao aleatorias."
+		)
+	if character_back_button:
+		character_back_button.text = _t("Back", "Voltar")
+	_update_character_prompt()
+
+
+func _apply_online_texts() -> void:
+	if title_online_button:
+		title_online_button.text = _t("Online", "Online")
+	if online_title_label:
+		online_title_label.text = _t("Online Multiplayer", "Multijogador Online")
+	if online_host_button:
+		online_host_button.text = _t("Host Room", "Hospedar Sala")
+	if online_join_button:
+		online_join_button.text = _t("Join Room", "Entrar na Sala")
+	if online_back_button:
+		online_back_button.text = _t("Back", "Voltar")
+	if online_code_label:
+		online_code_label.text = _t("Room Code", "Codigo da sala")
+	if online_status_label:
+		online_status_label.text = _t("Waiting for players...", "Aguardando jogadores...")
+	if online_host_start_button:
+		online_host_start_button.text = _t("Start Game", "Iniciar jogo")
+	if online_host_leave_button:
+		online_host_leave_button.text = _t("Leave Room", "Sair da sala")
+	if online_join_code_input:
+		online_join_code_input.placeholder_text = _t("Enter room code", "Digite o codigo")
+	if online_join_ip_input:
+		online_join_ip_input.placeholder_text = "127.0.0.1"
+	if online_join_status:
+		online_join_status.text = ""
+	if online_join_connect_button:
+		online_join_connect_button.text = _t("Join", "Entrar")
+	if online_join_cancel_button:
+		online_join_cancel_button.text = _t("Cancel", "Cancelar")
+	_update_online_panel_visibility(false, false)
+	_update_online_status("", false)
+
+
+func _update_online_panel_visibility(show_host: bool, show_join: bool) -> void:
+	if online_host_lobby:
+		online_host_lobby.visible = show_host
+	if online_join_panel:
+		online_join_panel.visible = show_join
+
+
+func _update_online_status(text: String, is_error: bool = false) -> void:
+	if online_status_label:
+		online_status_label.text = text
+		online_status_label.add_theme_color_override(
+			"font_color", Color(0.8, 0.2, 0.2) if is_error else Color(0.1, 0.1, 0.1)
+		)
+	if online_join_status:
+		online_join_status.text = text
+		online_join_status.add_theme_color_override(
+			"font_color", Color(0.8, 0.2, 0.2) if is_error else Color(0.1, 0.1, 0.1)
+		)
+
+
+func _shutdown_online_session() -> void:
+	if online_peer:
+		online_peer.close()
+	online_peer = null
+	online_is_host = false
+	online_active = false
+	online_room_code = ""
+	online_host_peer_id = -1
+	local_player_index = -1
+	online_players.clear()
+	_update_online_panel_visibility(false, false)
+	_update_online_status("", false)
 	_refresh_controller_join_ui()
 
 
@@ -463,7 +684,26 @@ func _apply_theme_styles() -> void:
 		controller_ai_label,
 		controller_ai_option,
 		controller_start_button,
-		controller_cancel_button
+		controller_cancel_button,
+		character_select_title_label,
+		character_select_subtitle_label,
+		character_prompt_label,
+		character_slot_labels[0] if character_slot_labels.size() > 0 else null,
+		character_slot_labels[1] if character_slot_labels.size() > 1 else null,
+		character_slot_labels[2] if character_slot_labels.size() > 2 else null,
+		character_slot_hints[0] if character_slot_hints.size() > 0 else null,
+		character_slot_hints[1] if character_slot_hints.size() > 1 else null,
+		character_slot_hints[2] if character_slot_hints.size() > 2 else null,
+		online_title_label,
+		online_code_label,
+		online_code_value,
+		online_status_label,
+		online_slot_labels[0] if online_slot_labels.size() > 0 else null,
+		online_slot_labels[1] if online_slot_labels.size() > 1 else null,
+		online_slot_labels[2] if online_slot_labels.size() > 2 else null,
+		online_join_status,
+		online_join_code_input,
+		online_join_ip_input
 	]
 
 	var button_controls := [
@@ -478,7 +718,15 @@ func _apply_theme_styles() -> void:
 		final_wager_button,
 		final_clue_button,
 		controller_start_button,
-		controller_cancel_button
+		controller_cancel_button,
+		character_back_button,
+		online_host_button,
+		online_join_button,
+		online_back_button,
+		online_host_start_button,
+		online_host_leave_button,
+		online_join_connect_button,
+		online_join_cancel_button
 	]
 
 	var pause_panel := (
@@ -503,7 +751,43 @@ func _apply_theme_styles() -> void:
 		controller_connect_content.add_theme_stylebox_override(
 			"panel", question_panel_base_style.duplicate()
 		)
+	if character_select_content and question_panel_base_style:
+		character_select_content.add_theme_stylebox_override(
+			"panel", question_panel_base_style.duplicate()
+		)
 	_refresh_controller_join_ui()
+
+
+func _stop_team_card_pulse() -> void:
+	if team_card_pulse_tween and is_instance_valid(team_card_pulse_tween):
+		if team_card_pulse_tween.is_running():
+			team_card_pulse_tween.stop()
+		team_card_pulse_tween.kill()
+	team_card_pulse_tween = null
+	for c in team_cards:
+		if c and is_instance_valid(c):
+			(c as Control).scale = Vector2.ONE
+
+
+func _start_team_card_pulse(idx: int) -> void:
+	_stop_team_card_pulse()
+	if idx < 0 or idx >= team_cards.size():
+		return
+	var card := team_cards[idx]
+	if card == null or not is_instance_valid(card):
+		return
+	if theme_styler == null:
+		return
+	var color := theme_styler.team_color(idx)
+	theme_styler.apply_team_card_style(card, color, true)
+	card.scale = Vector2.ONE
+	var tween := create_tween()
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.set_loops()  # Continuous pulse
+	tween.tween_property(card, "scale", Vector2.ONE * 1.04, 0.45)
+	tween.tween_property(card, "scale", Vector2.ONE, 0.45)
+	team_card_pulse_tween = tween
 
 
 func _set_active_team(idx: int) -> void:
@@ -513,6 +797,7 @@ func _set_active_team(idx: int) -> void:
 		current_turn_team = idx
 	if theme_styler:
 		theme_styler.refresh_team_highlight(team_cards, current_turn_team)
+		_start_team_card_pulse(current_turn_team)
 
 
 func _set_question_panel_color(color: Color) -> void:
@@ -556,11 +841,23 @@ func _play_select_sfx() -> void:
 
 
 func _show_title() -> void:
+	_shutdown_online_session()
 	if main_menu_screen:
 		main_menu_screen.show_title()
 	if controller_connect_panel:
 		controller_connect_panel.visible = false
+	if character_select_panel:
+		character_select_panel.visible = false
+	if online_panel:
+		online_panel.visible = false
+	pending_player_inputs.clear()
+	selected_player_characters.clear()
+	player_characters.clear()
+	character_selection_index = 0
+	character_human_count = 0
 	controller_join_active = false
+	online_active = false
+	local_player_index = -1
 	_close_pause_menu()
 	if title_play_button and nav_focus_enabled:
 		title_play_button.grab_focus()
@@ -588,6 +885,47 @@ func _on_settings_back_pressed() -> void:
 			settings_screen.back_to_pause()
 	else:
 		_show_title()
+
+
+func _on_online_pressed() -> void:
+	_play_select_sfx()
+	_show_online_menu()
+
+
+func _on_online_host_pressed() -> void:
+	_play_select_sfx()
+	_update_online_status(
+		_t("Online play is disabled in this build.", "Online desativado nesta versao."), true
+	)
+
+
+func _on_online_join_pressed() -> void:
+	_play_select_sfx()
+	_update_online_status(
+		_t("Online play is disabled in this build.", "Online desativado nesta versao."), true
+	)
+
+
+func _on_online_back_pressed() -> void:
+	_play_select_sfx()
+	_show_title()
+
+
+func _show_online_menu() -> void:
+	title_panel.visible = false
+	settings_panel.visible = false
+	player_select_panel.visible = false
+	_close_pause_menu()
+	if controller_connect_panel:
+		controller_connect_panel.visible = false
+	if online_panel:
+		online_panel.visible = true
+	_update_online_panel_visibility(true, false)
+	_update_online_status(
+		_t("Online play is disabled in this build.", "Online desativado nesta versao."), true
+	)
+	if nav_focus_enabled and online_back_button:
+		online_back_button.grab_focus()
 
 
 func _open_controller_connect() -> void:
@@ -623,8 +961,7 @@ func _on_controller_connect_confirm_pressed() -> void:
 		_register_keyboard_join(false)
 		devices = join_inputs.duplicate()
 	_close_controller_connect()
-	join_inputs.clear()
-	_start_game(devices, false)
+	_open_character_select(devices)
 
 
 func _on_controller_connect_cancel_pressed() -> void:
@@ -632,6 +969,273 @@ func _on_controller_connect_cancel_pressed() -> void:
 	join_inputs.clear()
 	_close_controller_connect()
 	_show_title()
+
+
+func _open_character_select(selected_inputs: Array) -> void:
+	controller_join_active = false
+	pending_player_inputs = selected_inputs.duplicate(true)
+	selected_player_characters.clear()
+	selected_player_characters.resize(3)
+	player_characters.clear()
+	character_selection_index = 0
+	character_human_count = min(3, pending_player_inputs.size())
+	if character_select_panel:
+		character_select_panel.visible = true
+	if character_human_count == 0:
+		character_selection_index = -1
+		_assign_ai_characters()
+		_finalize_character_select()
+		return
+	_refresh_character_slots_ui(true)
+	_build_character_option_grid()
+	_update_character_prompt()
+	if nav_focus_enabled:
+		_maybe_focus_for_nav()
+
+
+func _close_character_select() -> void:
+	if character_select_panel:
+		character_select_panel.visible = false
+
+
+func _on_character_back_pressed() -> void:
+	_play_select_sfx()
+	var restore_inputs := pending_player_inputs.duplicate(true)
+	_close_character_select()
+	_open_controller_connect()
+	join_inputs = restore_inputs
+	_refresh_controller_join_ui()
+
+
+func _build_character_option_grid() -> void:
+	if character_option_grid == null or not is_instance_valid(character_option_grid):
+		return
+	_clear_children(character_option_grid)
+	character_option_buttons.clear()
+	for char_data: Dictionary in CHARACTER_ROSTER:
+		var name := str(char_data.get("name", ""))
+		var btn := Button.new()
+		btn.text = name
+		btn.custom_minimum_size = Vector2(240, 120)
+		btn.focus_mode = Control.FOCUS_ALL
+		var bg: Color = char_data.get("bg", Color(0.25, 0.25, 0.25))
+		var accent: Color = char_data.get("accent", bg.darkened(0.2))
+		var normal := StyleBoxFlat.new()
+		normal.bg_color = bg
+		normal.set_border_width_all(3)
+		normal.border_color = accent
+		normal.set_corner_radius_all(18)
+		var hover := normal.duplicate()
+		hover.bg_color = bg.lightened(0.08)
+		var pressed := normal.duplicate()
+		pressed.bg_color = bg.darkened(0.08)
+		btn.add_theme_stylebox_override("normal", normal)
+		btn.add_theme_stylebox_override("hover", hover)
+		btn.add_theme_stylebox_override("pressed", pressed)
+		btn.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1))
+		btn.add_theme_font_size_override("font_size", 24)
+		if theme_styler:
+			theme_styler.apply_font_override(btn, game_font)
+			theme_styler.apply_body_color(btn)
+		btn.pressed.connect(func() -> void: _on_character_option_pressed(name))
+		character_option_grid.add_child(btn)
+		character_option_buttons.append(btn)
+	_refresh_character_option_states()
+
+
+func _refresh_character_option_states() -> void:
+	for btn in character_option_buttons:
+		if btn == null:
+			continue
+		var taken := _is_character_taken(btn.text)
+		btn.disabled = taken
+
+
+func _on_character_option_pressed(name: String) -> void:
+	if character_selection_index == -1:
+		return
+	if _is_character_taken(name):
+		return
+	var slot := _current_human_slot()
+	if slot == -1:
+		return
+	selected_player_characters[slot] = _character_data_for(name)
+	_refresh_character_slots_ui()
+	character_selection_index = _next_human_slot(slot + 1)
+	if character_selection_index == -1:
+		_assign_ai_characters()
+		_finalize_character_select()
+	else:
+		_update_character_prompt()
+		_refresh_character_option_states()
+		if nav_focus_enabled:
+			_maybe_focus_for_nav()
+
+
+func _current_human_slot() -> int:
+	if character_selection_index < 0:
+		return -1
+	if character_selection_index >= character_human_count:
+		return -1
+	return character_selection_index
+
+
+func _next_human_slot(start_idx: int) -> int:
+	for i in range(start_idx, character_human_count):
+		if (
+			selected_player_characters[i] == null
+			or (selected_player_characters[i] as Dictionary).is_empty()
+		):
+			return i
+	return -1
+
+
+func _assign_ai_characters() -> void:
+	var available := _available_character_names()
+	for i in range(character_human_count, 3):
+		if available.is_empty():
+			available = _available_character_names(true)
+		if available.is_empty():
+			break
+		var pick_idx := rng.randi_range(0, available.size() - 1)
+		var pick := available[pick_idx]
+		available.remove_at(pick_idx)
+		selected_player_characters[i] = _character_data_for(pick)
+	_refresh_character_slots_ui()
+
+
+func _available_character_names(ignore_taken: bool = false) -> Array[String]:
+	var names: Array[String] = []
+	for c in CHARACTER_ROSTER:
+		var n := str((c as Dictionary).get("name", ""))
+		if n == "":
+			continue
+		if not ignore_taken and _is_character_taken(n):
+			continue
+		names.append(n)
+	return names
+
+
+func _is_character_taken(name: String) -> bool:
+	for entry in selected_player_characters:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		if str((entry as Dictionary).get("name", "")).to_lower() == name.to_lower():
+			return true
+	return false
+
+
+func _character_data_for(name: String) -> Dictionary:
+	for c in CHARACTER_ROSTER:
+		if str((c as Dictionary).get("name", "")).to_lower() == name.to_lower():
+			return (c as Dictionary).duplicate(true)
+	return {"name": name, "bg": Color(0.2, 0.2, 0.2), "accent": Color(0.3, 0.3, 0.3)}
+
+
+func _update_character_prompt() -> void:
+	if character_prompt_label == null:
+		return
+	var slot := _current_human_slot()
+	if slot == -1:
+		if character_human_count == 0:
+			character_prompt_label.text = _t(
+				"AI characters will be assigned.", "Personagens IA serao definidos."
+			)
+		else:
+			character_prompt_label.text = _t(
+				"Finalizing characters...", "Finalizando personagens..."
+			)
+		return
+	var input_desc := _human_input_description(slot)
+	character_prompt_label.text = (
+		_t("Player %d (%s): Choose a character", "Jogador %d (%s): Escolha um personagem")
+		% [slot + 1, input_desc]
+	)
+
+
+func _human_input_description(slot: int) -> String:
+	if slot < pending_player_inputs.size():
+		var entry := pending_player_inputs[slot]
+		var t := str((entry as Dictionary).get("type", "keyboard"))
+		if t == "keyboard":
+			return _t("Keyboard", "Teclado")
+		return _t("Controller", "Controle")
+	return _t("Player", "Jogador")
+
+
+func _refresh_character_slots_ui(reset_empty: bool = false) -> void:
+	for i in range(3):
+		var label_text := _t("Player %d", "Jogador %d") % (i + 1)
+		if i < character_human_count:
+			label_text = "%s (%s)" % [label_text, _human_input_description(i)]
+		else:
+			label_text = _t("AI Slot %d", "Slot IA %d") % (i + 1)
+		if character_slot_labels.size() > i and character_slot_labels[i]:
+			character_slot_labels[i].text = label_text
+
+		var has_selection := (
+			i < selected_player_characters.size()
+			and typeof(selected_player_characters[i]) == TYPE_DICTIONARY
+			and not (selected_player_characters[i] as Dictionary).is_empty()
+		)
+		var hint_text := ""
+		if has_selection:
+			hint_text = str((selected_player_characters[i] as Dictionary).get("name", ""))
+			if i >= character_human_count:
+				hint_text += _t(" (AI)", " (IA)")
+		else:
+			hint_text = (
+				_t("Select a character", "Selecione um personagem")
+				if i < character_human_count
+				else _t("Random (AI)", "Aleatorio (IA)")
+			)
+		if character_slot_hints.size() > i and character_slot_hints[i]:
+			character_slot_hints[i].text = hint_text
+
+		var color := Color(0.18, 0.18, 0.18, 1.0)
+		if has_selection:
+			color = (selected_player_characters[i] as Dictionary).get("bg", color)
+		if character_slot_portraits.size() > i and character_slot_portraits[i]:
+			character_slot_portraits[i].color = color
+
+		if character_slot_panels.size() > i and character_slot_panels[i] and theme_styler:
+			var tone := theme_styler.team_color(i)
+			theme_styler.apply_team_card_style(character_slot_panels[i], tone, has_selection)
+	_refresh_character_option_states()
+	_update_character_prompt()
+
+
+func _auto_assign_default_characters() -> void:
+	player_characters.clear()
+	var available := _available_character_names(true)
+	for i in range(players.size()):
+		if available.is_empty():
+			available = _available_character_names(true)
+		if available.is_empty():
+			player_characters.append({})
+			continue
+		var idx := rng.randi_range(0, available.size() - 1)
+		var pick := available[idx]
+		available.remove_at(idx)
+		player_characters.append(_character_data_for(pick))
+
+
+func _finalize_character_select() -> void:
+	player_characters = selected_player_characters.duplicate(true)
+	for i in range(3):
+		var missing := (
+			i >= player_characters.size()
+			or typeof(player_characters[i]) != TYPE_DICTIONARY
+			or (player_characters[i] as Dictionary).is_empty()
+		)
+		if missing:
+			if i >= player_characters.size():
+				player_characters.append(_character_data_for("Player %d" % (i + 1)))
+			else:
+				player_characters[i] = _character_data_for("Player %d" % (i + 1))
+	_close_character_select()
+	_start_game(pending_player_inputs, false)
+	pending_player_inputs.clear()
 
 
 func _on_ai_difficulty_selected(idx: int) -> void:
@@ -654,9 +1258,14 @@ func _start_game(selected_inputs: Array = [], allow_keyboard_fallback: bool = tr
 	player_select_panel.visible = false
 	if controller_connect_panel:
 		controller_connect_panel.visible = false
+	if character_select_panel:
+		character_select_panel.visible = false
 	controller_join_active = false
 	_reset_round_state()
 	_setup_players(3, selected_inputs, allow_keyboard_fallback)
+	if player_characters.is_empty():
+		_auto_assign_default_characters()
+	_apply_player_characters()
 	game_root.visible = true
 	question_panel.visible = false
 	_build_teams()
@@ -1032,12 +1641,7 @@ func _setup_players(
 		)
 
 	_update_player_info_label()
-
-	# Sync team names from players
-	var names: Array[String] = []
-	for p in players:
-		names.append(p["name"])
-	team_names = names
+	_sync_team_names_from_players()
 
 
 func _update_player_info_label() -> void:
@@ -1048,6 +1652,26 @@ func _update_player_info_label() -> void:
 		)
 
 
+func _sync_team_names_from_players() -> void:
+	var names: Array[String] = []
+	for p in players:
+		names.append(str(p.get("name", "Player")))
+	team_names = names
+
+
+func _apply_player_characters() -> void:
+	if player_characters.is_empty():
+		return
+	for i in range(min(players.size(), player_characters.size())):
+		var char_data := player_characters[i]
+		if typeof(char_data) != TYPE_DICTIONARY or char_data.is_empty():
+			continue
+		var display_name := str(char_data.get("name", "Player %d" % (i + 1)))
+		players[i]["character"] = char_data
+		players[i]["name"] = display_name
+	_sync_team_names_from_players()
+
+
 func _clear_children(container: Node) -> void:
 	if container == null or not is_instance_valid(container):
 		return
@@ -1056,12 +1680,14 @@ func _clear_children(container: Node) -> void:
 
 
 func _build_teams() -> void:
+	_stop_team_card_pulse()
 	if board_screen:
 		board_screen.build_teams(
 			team_names,
 			team_scores,
 			team_score_labels,
 			team_cards,
+			player_characters,
 			scoreboard,
 			func(en_text: String, pt_text: String) -> String: return _t(en_text, pt_text)
 		)
@@ -1534,6 +2160,9 @@ func _restart_to_main_menu() -> void:
 	team_scores.clear()
 	team_score_labels.clear()
 	team_cards.clear()
+	player_characters.clear()
+	selected_player_characters.clear()
+	_stop_team_card_pulse()
 	_clear_children(scoreboard)
 	_clear_children(board_grid)
 	board_grid.columns = 1
@@ -1621,6 +2250,13 @@ func _maybe_focus_for_nav() -> void:
 	if controller_connect_panel and controller_connect_panel.visible and controller_start_button:
 		controller_start_button.grab_focus()
 		return
+	if character_select_panel and character_select_panel.visible:
+		if not character_option_buttons.is_empty() and character_option_buttons[0]:
+			character_option_buttons[0].grab_focus()
+			return
+		if character_back_button:
+			character_back_button.grab_focus()
+			return
 	if settings_panel and settings_panel.visible and language_option:
 		language_option.grab_focus()
 		return

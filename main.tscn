@@ -190,6 +190,170 @@ autowrap_mode = 2
 layout_mode = 2
 text = "Start Game"
 
+[node name="CharacterSelectPanel" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Dimmer" type="ColorRect" parent="CharacterSelectPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.32)
+mouse_filter = 2
+
+[node name="Content" type="PanelContainer" parent="CharacterSelectPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.18
+anchor_top = 0.14
+anchor_right = 0.82
+anchor_bottom = 0.86
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="VBox" type="VBoxContainer" parent="CharacterSelectPanel/Content"]
+layout_mode = 0
+anchor_left = 0.05
+anchor_top = 0.05
+anchor_right = 0.95
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+theme_override_constants/separation = 14
+
+[node name="SelectTitle" type="Label" parent="CharacterSelectPanel/Content/VBox"]
+layout_mode = 2
+text = "Choose Your Character"
+horizontal_alignment = 1
+
+[node name="SelectSubtitle" type="Label" parent="CharacterSelectPanel/Content/VBox"]
+layout_mode = 2
+text = "Each player picks a unique hero. AI players are randomized."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Slots" type="HBoxContainer" parent="CharacterSelectPanel/Content/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+size_flags_horizontal = 4
+
+[node name="Slot1" type="PanelContainer" parent="CharacterSelectPanel/Content/VBox/Slots"]
+layout_mode = 2
+custom_minimum_size = Vector2(240, 170)
+size_flags_horizontal = 4
+
+[node name="SlotVBox" type="VBoxContainer" parent="CharacterSelectPanel/Content/VBox/Slots/Slot1"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 6
+
+[node name="Portrait" type="ColorRect" parent="CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 120)
+color = Color(0.18, 0.18, 0.18, 1)
+
+[node name="SlotLabel" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox"]
+layout_mode = 2
+text = "Player 1"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="SlotHint" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox"]
+layout_mode = 2
+text = "Waiting"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Slot2" type="PanelContainer" parent="CharacterSelectPanel/Content/VBox/Slots"]
+layout_mode = 2
+custom_minimum_size = Vector2(240, 170)
+size_flags_horizontal = 4
+
+[node name="SlotVBox" type="VBoxContainer" parent="CharacterSelectPanel/Content/VBox/Slots/Slot2"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 6
+
+[node name="Portrait" type="ColorRect" parent="CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 120)
+color = Color(0.18, 0.18, 0.18, 1)
+
+[node name="SlotLabel" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox"]
+layout_mode = 2
+text = "Player 2"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="SlotHint" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox"]
+layout_mode = 2
+text = "Waiting"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Slot3" type="PanelContainer" parent="CharacterSelectPanel/Content/VBox/Slots"]
+layout_mode = 2
+custom_minimum_size = Vector2(240, 170)
+size_flags_horizontal = 4
+
+[node name="SlotVBox" type="VBoxContainer" parent="CharacterSelectPanel/Content/VBox/Slots/Slot3"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 6
+
+[node name="Portrait" type="ColorRect" parent="CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 120)
+color = Color(0.18, 0.18, 0.18, 1)
+
+[node name="SlotLabel" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox"]
+layout_mode = 2
+text = "Player 3"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="SlotHint" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox"]
+layout_mode = 2
+text = "Waiting"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Prompt" type="Label" parent="CharacterSelectPanel/Content/VBox"]
+layout_mode = 2
+text = "Player 1: Choose a character"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Options" type="GridContainer" parent="CharacterSelectPanel/Content/VBox"]
+layout_mode = 2
+columns = 4
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="CharacterButtonRow" type="HBoxContainer" parent="CharacterSelectPanel/Content/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="CharacterBackButton" type="Button" parent="CharacterSelectPanel/Content/VBox/CharacterButtonRow"]
+layout_mode = 2
+text = "Back"
+custom_minimum_size = Vector2(160, 0)
+
 [node name="ControllerConnectPanel" type="Control" parent="."]
 visible = false
 layout_mode = 1
