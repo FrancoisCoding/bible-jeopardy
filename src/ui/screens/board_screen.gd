@@ -84,7 +84,7 @@ func build_teams(
 		)
 
 		var trophy := Label.new()
-		trophy.text = "Trophy"
+		trophy.text = "Winner"
 		trophy.visible = false
 		trophy.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		if theme_styler:

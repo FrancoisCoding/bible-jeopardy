@@ -209,12 +209,16 @@ var online_join_panel: PanelContainer = get_node_or_null("OnlinePanel/OnlineCont
 @onready var scoreboard: HBoxContainer = get_node_or_null("RootVBox/Scoreboard")
 @onready var turn_label: Label = get_node_or_null("RootVBox/TurnLabel")
 @onready var board_grid: GridContainer = get_node_or_null("RootVBox/BoardMargin/BoardGrid")
+var play_again_button: Button = null
 
-@onready var verse_panel: Control = get_node_or_null("TitlePanel/VBox/VerseOfDay")
-@onready var verse_title_label: Label = get_node_or_null("TitlePanel/VBox/VerseOfDay/VerseTitle")
-@onready var verse_text_label: Label = get_node_or_null("TitlePanel/VBox/VerseOfDay/VerseText")
+@onready var verse_panel: PanelContainer = get_node_or_null("TitlePanel/VBox/VerseOfDay")
 @onready
-var verse_reference_label: Label = get_node_or_null("TitlePanel/VBox/VerseOfDay/VerseReference")
+var verse_title_label: Label = get_node_or_null("TitlePanel/VBox/VerseOfDay/CardVBox/VerseTitle")
+@onready
+var verse_text_label: Label = get_node_or_null("TitlePanel/VBox/VerseOfDay/CardVBox/VerseText")
+@onready var verse_reference_label: Label = get_node_or_null(
+	"TitlePanel/VBox/VerseOfDay/CardVBox/VerseReference"
+)
 
 @onready var question_panel: PanelContainer = get_node_or_null("QuestionPanel")
 @onready
@@ -392,6 +396,41 @@ func _ready() -> void:
 		controller_ai_option.item_selected.connect(
 			func(idx: int) -> void: _on_ai_difficulty_selected(idx)
 		)
+
+	# Add play again button for final screen
+	if game_root and is_instance_valid(game_root):
+		play_again_button = Button.new()
+		play_again_button.text = _t("Play Again", "Jogar novamente")
+		play_again_button.visible = false
+		play_again_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		play_again_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		play_again_button.custom_minimum_size = Vector2(300, 64)
+		play_again_button.focus_mode = Control.FOCUS_ALL
+		play_again_button.pressed.connect(_on_play_again_pressed)
+		if theme_styler:
+			var btns := [play_again_button]
+			theme_styler.apply_game_font(game_font, btns)
+			var body_color := theme_styler.theme_body_color
+			for b in btns:
+				if b:
+					b.add_theme_color_override("font_color", body_color)
+					var normal := StyleBoxFlat.new()
+					normal.bg_color = Color(0.92, 0.18, 0.18)
+					normal.set_border_width_all(3)
+					normal.border_color = Color(0.05, 0.08, 0.2)
+					normal.set_corner_radius_all(10)
+					var hover := normal.duplicate()
+					hover.bg_color = Color(1.0, 0.25, 0.25)
+					var pressed := normal.duplicate()
+					pressed.bg_color = Color(0.75, 0.12, 0.12)
+					var disabled := normal.duplicate()
+					disabled.bg_color = Color(0.7, 0.7, 0.7)
+					disabled.border_color = Color(0.4, 0.4, 0.4)
+					b.add_theme_stylebox_override("normal", normal)
+					b.add_theme_stylebox_override("hover", hover)
+					b.add_theme_stylebox_override("pressed", pressed)
+					b.add_theme_stylebox_override("disabled", disabled)
+		game_root.add_child(play_again_button)
 	if character_back_button:
 		character_back_button.pressed.connect(_on_character_back_pressed)
 	if online_host_button:
@@ -521,9 +560,9 @@ func _apply_controller_connect_text() -> void:
 		controller_ai_label.text = _t("AI Difficulty", "Dificuldade da IA")
 	if controller_ai_option:
 		controller_ai_option.clear()
-		controller_ai_option.add_item(_t("Easy (20%)", "Facil (20%)"), 0)
-		controller_ai_option.add_item(_t("Normal (40%)", "Normal (40%)"), 1)
-		controller_ai_option.add_item(_t("Hard (70%)", "Dificil (70%)"), 2)
+		controller_ai_option.add_item(_t("Easy", "Facil"), 0)
+		controller_ai_option.add_item(_t("Normal", "Normal"), 1)
+		controller_ai_option.add_item(_t("Hard", "Dificil"), 2)
 		controller_ai_option.select(1)
 	if controller_start_button:
 		controller_start_button.text = _t("Continue", "Continuar")
@@ -616,6 +655,22 @@ func _shutdown_online_session() -> void:
 func _apply_theme_styles() -> void:
 	if theme_styler == null:
 		return
+
+	if verse_panel:
+		var card := StyleBoxFlat.new()
+		card.bg_color = Color(1.0, 0.96, 0.88)
+		card.corner_radius_top_left = 18
+		card.corner_radius_top_right = 18
+		card.corner_radius_bottom_left = 18
+		card.corner_radius_bottom_right = 18
+		card.border_color = Color(0.78, 0.6, 0.35)
+		card.border_width_left = 2
+		card.border_width_right = 2
+		card.border_width_top = 2
+		card.border_width_bottom = 2
+		card.shadow_size = 10
+		card.shadow_color = Color(0, 0, 0, 0.12)
+		verse_panel.add_theme_stylebox_override("panel", card)
 
 	var font_controls: Array[Control] = [
 		verse_title_label,
@@ -758,6 +813,17 @@ func _apply_theme_styles() -> void:
 		answer_timer_bar,
 		ANSWER_TIME
 	)
+	if verse_title_label:
+		verse_title_label.add_theme_font_size_override("font_size", 20)
+	if verse_reference_label:
+		verse_reference_label.add_theme_font_size_override("font_size", 20)
+		verse_reference_label.add_theme_color_override("font_color", Color(0.25, 0.22, 0.2))
+		verse_reference_label.add_theme_font_override("font", game_font)
+	verse_reference_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if verse_text_label:
+		verse_text_label.add_theme_font_size_override("font_size", 18)
+		verse_text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		verse_text_label.add_theme_color_override("font_color", Color(0.25, 0.22, 0.2))
 
 	if controller_connect_content and question_panel_base_style:
 		controller_connect_content.add_theme_stylebox_override(
@@ -2073,8 +2139,14 @@ func _on_answer_selected(answer_text: String) -> void:
 			_t("Correct: %s", "Correto: %s") % players[buzzed_player].get("name", "Player")
 		)
 		_mark_clue_answered()
+
+		# If we just transitioned into the final round, don't hide the wager UI.
+		if final_round:
+			return
+
 		question_panel.visible = false
 		_set_board_input_enabled(true)
+
 	else:
 		attempted_players.append(buzzed_player)
 		team_scores[buzzed_player] -= value
@@ -2115,6 +2187,11 @@ func _handle_all_attempted() -> void:
 	_disable_answer_buttons()
 	_mark_clue_answered()
 	answering_input_lock.clear()
+
+	# If we've moved into the final round, the wager UI is now active.
+	if final_round:
+		return
+
 	turn_label.text = ""
 	if question_panel:
 		question_panel.visible = false
@@ -2157,6 +2234,11 @@ func _on_answer_timer_timeout() -> void:
 	_show_result(_t("Time's up!", "Tempo esgotado!"), Color(0.8, 0.4, 0.0))
 	_end_question_audio()
 	_mark_clue_answered()
+
+	# If this timeout was on the very last clue of Round 2, we just started final round.
+	if final_round:
+		return
+
 	turn_label.text = _t("Time's up. Choose another clue.", "Tempo esgotado. Escolha outra pista.")
 	question_panel.visible = false
 	_disable_answer_buttons()
@@ -2260,6 +2342,15 @@ func _restart_to_main_menu() -> void:
 func _on_exit_pressed() -> void:
 	_save_settings()
 	get_tree().quit()
+
+
+func _on_play_again_pressed() -> void:
+	_play_select_sfx()
+	if play_again_button:
+		play_again_button.visible = false
+	_restart_to_main_menu()
+	await get_tree().process_frame
+	_on_play_pressed()
 
 
 func _stop_timers(preserve_result: bool = false) -> void:
@@ -2456,6 +2547,11 @@ func _reset_round_state() -> void:
 	if final_wager_input:
 		final_wager_input.text = ""
 	_reset_question_panel_color()
+	_set_header_visible(true)
+	if scoreboard:
+		scoreboard.visible = true
+	if play_again_button:
+		play_again_button.visible = false
 
 
 func _select_hidden_double(num_categories: int, num_clues: int) -> void:
@@ -2505,6 +2601,7 @@ func _start_final_round() -> void:
 		final_wager_done.append(false)
 		final_answer_choices.append("")
 		final_answered.append(false)
+
 	_stop_timers(true)
 	_end_question_audio()
 	_clear_children(board_grid)
@@ -2514,12 +2611,16 @@ func _start_final_round() -> void:
 	current_clue.clear()
 	current_categories = []
 
-	q_category_label.text = _t("Final Round: Wagers", "Rodada final: Apostas")
-	q_value_label.text = _t("Place your wagers", "Defina suas apostas")
+	# Optional: use the main title for context
+	if title_label:
+		title_label.text = _t("Final Wagers", "Apostas Finais")
+
+	# Clear old question text – we use the cards to show wager info
+	q_category_label.text = ""
+	q_value_label.text = ""
 	q_text_label.text = ""
-	result_label.text = _t(
-		"Choose 30%, 50% or 100% of your points.", "Escolha 30%, 50% ou 100% dos seus pontos."
-	)
+	result_label.text = ""
+
 	_disable_answer_buttons()
 	if final_wager_panel:
 		final_wager_panel.visible = false
@@ -2528,7 +2629,34 @@ func _start_final_round() -> void:
 	question_panel.visible = true
 	game_root.visible = true
 	_set_board_input_enabled(false)
-	_build_parallel_wager_ui()
+
+	# --- NEW: handle the “everyone negative” case explicitly ---
+	var all_negative := true
+	for i in range(players.size()):
+		if i < team_scores.size() and team_scores[i] >= 0:
+			all_negative = false
+			break
+
+	if all_negative:
+		# Automatically wager 10% for every player
+		for i in range(players.size()):
+			var auto_wager := _calculate_auto_wager(i)
+			final_wager_values[i] = auto_wager
+			final_wager_done[i] = true
+
+		# (Optional) text explaining what just happened
+		result_label.text = _t(
+			"All players are negative. Everyone automatically wagers 10% of their points.",
+			"Todos os jogadores estao negativos. Cada um aposta automaticamente 10% dos pontos."
+		)
+
+		# Show “Wager: X” above each player card for 5s, then reveal the Final Jeopardy question
+		_show_wager_labels_then_reveal()
+		return
+	# --- end NEW block ---
+
+	# Normal case: at least one player has >= 0 points → show the wager selection UI
+	_build_parallel_wager_ui_clean()
 
 
 func _calculate_auto_wager(idx: int) -> int:
@@ -2541,9 +2669,17 @@ func _build_parallel_wager_ui() -> void:
 	_cancel_ai_buzz_timer()
 	_cancel_wager_timer()
 	_clear_wager_labels()
+
+	# Hide normal question timer UI during wagers
+	if answer_timer_label:
+		answer_timer_label.visible = false
+	if answer_timer_bar:
+		answer_timer_bar.visible = false
+
 	final_wager_player = -1
 	final_wager_set = false
 	current_wager = 0
+
 	if final_wager_panel:
 		_clear_children(final_wager_panel)
 		final_wager_panel.visible = true
@@ -2572,6 +2708,7 @@ func _build_parallel_wager_ui() -> void:
 	if final_wager_panel:
 		final_wager_panel.add_child(container)
 
+	# Build rows + auto wagers
 	for i in range(players.size()):
 		var row := HBoxContainer.new()
 		row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -2590,9 +2727,11 @@ func _build_parallel_wager_ui() -> void:
 		row.add_child(label)
 
 		if score < 0:
+			# Auto 10%
 			var auto_wager: int = _calculate_auto_wager(i)
 			final_wager_values[i] = auto_wager
 			final_wager_done[i] = true
+
 			var auto_label := Label.new()
 			auto_label.text = _t("Auto 10%: %d", "Auto 10%: %d") % auto_wager
 			if theme_styler:
@@ -2603,9 +2742,11 @@ func _build_parallel_wager_ui() -> void:
 			continue
 
 		if players[i].get("is_ai", false):
+			# Auto 50% for AI
 			var ai_choice: int = int(round(abs(score) * 0.5))
 			final_wager_values[i] = ai_choice
 			final_wager_done[i] = true
+
 			var ai_label := Label.new()
 			ai_label.text = _t("AI wager: %d", "Aposta IA: %d") % ai_choice
 			if theme_styler:
@@ -2615,6 +2756,7 @@ func _build_parallel_wager_ui() -> void:
 			container.add_child(row)
 			continue
 
+		# Human with non-negative score → show 30/50/100 buttons
 		var percents := [
 			{"text": "30%", "pct": 0.3}, {"text": "50%", "pct": 0.5}, {"text": "100%", "pct": 1.0}
 		]
@@ -2632,8 +2774,167 @@ func _build_parallel_wager_ui() -> void:
 
 		container.add_child(row)
 
+	# Start the 30s wager timer
 	_start_wager_timer()
-	_maybe_finish_wagers()
+
+	# NEW: if EVERYONE already has an automatic wager (all_done),
+	# show the 5s summary; DON'T jump straight to the question.
+	var all_done := true
+	for i in range(players.size()):
+		if i >= final_wager_done.size() or not final_wager_done[i]:
+			all_done = false
+			break
+
+	if all_done:
+		_cancel_wager_timer()  # no need for the 30s timer
+		_show_wager_labels_then_reveal()  # shows "Wager: X" above each card, waits 5s
+
+
+func _build_parallel_wager_ui_clean() -> void:
+	_cancel_ai_buzz_timer()
+	_cancel_wager_timer()
+	_clear_wager_labels()
+
+	if answer_timer_label:
+		answer_timer_label.visible = false
+	if answer_timer_bar:
+		answer_timer_bar.visible = false
+
+	final_wager_player = -1
+	final_wager_set = false
+	current_wager = 0
+
+	if final_wager_panel:
+		_clear_children(final_wager_panel)
+		final_wager_panel.visible = true
+	if final_wager_input:
+		final_wager_input.visible = false
+	if final_wager_button:
+		final_wager_button.visible = false
+	if final_clue_button:
+		final_clue_button.disabled = true
+		final_clue_button.visible = false
+
+	var title := Label.new()
+	title.text = _t("Final Wagers", "Apostas Finais")
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	if theme_styler:
+		theme_styler.apply_font_override(title, game_font)
+		theme_styler.apply_body_color(title)
+	title.add_theme_font_size_override("font_size", 32)
+
+	var container := VBoxContainer.new()
+	container.alignment = BoxContainer.ALIGNMENT_CENTER
+	container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	container.add_theme_constant_override("separation", 16)
+
+	if final_wager_panel:
+		final_wager_panel.add_child(title)
+		final_wager_panel.add_child(container)
+
+	for i in range(players.size()):
+		var card := PanelContainer.new()
+		card.custom_minimum_size = Vector2(640, 150)
+		card.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		var style := StyleBoxFlat.new()
+		style.bg_color = Color(1.0, 0.96, 0.88)
+		style.corner_radius_top_left = 14
+		style.corner_radius_top_right = 14
+		style.corner_radius_bottom_left = 14
+		style.corner_radius_bottom_right = 14
+		style.border_color = Color(0.78, 0.6, 0.35)
+		style.border_width_left = 2
+		style.border_width_right = 2
+		style.border_width_top = 2
+		style.border_width_bottom = 2
+		style.shadow_size = 8
+		style.shadow_color = Color(0, 0, 0, 0.08)
+		card.add_theme_stylebox_override("panel", style)
+
+		var inner := VBoxContainer.new()
+		inner.alignment = BoxContainer.ALIGNMENT_CENTER
+		inner.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		inner.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		inner.add_theme_constant_override("separation", 8)
+
+		var name: String = players[i].get("name", "Player %d" % (i + 1))
+		var score: int = team_scores[i] if team_scores.size() > i else 0
+
+		var header := Label.new()
+		header.text = "%s  •  %s" % [name, _t("Points: %d", "Pontos: %d") % score]
+		header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		if theme_styler:
+			theme_styler.apply_font_override(header, game_font)
+			theme_styler.apply_body_color(header)
+		header.add_theme_font_size_override("font_size", 22)
+		inner.add_child(header)
+
+		if score < 0:
+			var auto_wager: int = _calculate_auto_wager(i)
+			final_wager_values[i] = auto_wager
+			final_wager_done[i] = true
+			var auto_label := Label.new()
+			auto_label.text = _t("Auto 10%: %d", "Auto 10%: %d") % auto_wager
+			if theme_styler:
+				theme_styler.apply_font_override(auto_label, game_font)
+				theme_styler.apply_body_color(auto_label)
+			auto_label.add_theme_font_size_override("font_size", 20)
+			inner.add_child(auto_label)
+			card.add_child(inner)
+			container.add_child(card)
+			continue
+
+		if players[i].get("is_ai", false):
+			var ai_choice: int = int(round(abs(score) * 0.5))
+			final_wager_values[i] = ai_choice
+			final_wager_done[i] = true
+			var ai_label := Label.new()
+			ai_label.text = _t("AI wager: %d", "Aposta IA: %d") % ai_choice
+			if theme_styler:
+				theme_styler.apply_font_override(ai_label, game_font)
+				theme_styler.apply_body_color(ai_label)
+			ai_label.add_theme_font_size_override("font_size", 20)
+			inner.add_child(ai_label)
+			card.add_child(inner)
+			container.add_child(card)
+			continue
+
+		var percents := [
+			{"text": "30%", "pct": 0.3}, {"text": "50%", "pct": 0.5}, {"text": "100%", "pct": 1.0}
+		]
+		var btn_row := HBoxContainer.new()
+		btn_row.alignment = BoxContainer.ALIGNMENT_CENTER
+		btn_row.add_theme_constant_override("separation", 16)
+		for p in percents:
+			var btn := Button.new()
+			btn.text = p["text"]
+			btn.custom_minimum_size = Vector2(120, 56)
+			btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+			if theme_styler:
+				theme_styler.apply_font_override(btn, game_font)
+				theme_styler.apply_body_color(btn)
+			btn.add_theme_font_size_override("font_size", 22)
+			var pct_val: float = p["pct"]
+			btn.pressed.connect(func() -> void: _on_wager_choice(i, pct_val))
+			btn_row.add_child(btn)
+		inner.add_child(btn_row)
+
+		card.add_child(inner)
+		container.add_child(card)
+
+	_start_wager_timer()
+
+	var all_done := true
+	for i in range(players.size()):
+		if i >= final_wager_done.size() or not final_wager_done[i]:
+			all_done = false
+			break
+
+	if all_done:
+		_cancel_wager_timer()
+		_show_wager_labels_then_reveal()
 
 
 func _on_wager_choice(idx: int, pct: float) -> void:
@@ -2829,7 +3130,13 @@ func _resolve_final_answers() -> void:
 		title_label.visible = false
 	if question_panel:
 		question_panel.visible = false
+	q_category_label.text = ""
+	q_value_label.text = ""
+	q_text_label.text = ""
+	result_label.text = ""
 	_set_header_visible(true)
+	if play_again_button:
+		play_again_button.visible = true
 	_show_winner_trophies()
 
 
