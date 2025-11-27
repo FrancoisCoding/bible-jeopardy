@@ -305,6 +305,7 @@ var final_answer_choices: Array[String] = []
 var final_answered: Array[bool] = []
 var final_wager_timer: SceneTreeTimer
 var final_answer_index: int = 0
+var final_wager_header_labels: Array[Label] = []
 var current_turn_team: int = 0
 var answering_player: int = -1
 var background_rect: TextureRect
@@ -1523,7 +1524,7 @@ func _on_pause_settings_pressed() -> void:
 func _populate_languages() -> void:
 	language_option.clear()
 	language_option.add_item("English", 0)
-	language_option.add_item("Português (BR)", 1)
+	language_option.add_item("Portuguese (BR)", 1)
 	language_option.selected = 0
 
 
@@ -2312,6 +2313,7 @@ func _restart_to_main_menu() -> void:
 	final_answer_choices.clear()
 	final_answered.clear()
 	final_answer_index = 0
+	final_wager_header_labels.clear()
 	players.clear()
 	team_names.clear()
 	team_scores.clear()
@@ -2615,7 +2617,7 @@ func _start_final_round() -> void:
 	if title_label:
 		title_label.text = _t("Final Wagers", "Apostas Finais")
 
-	# Clear old question text – we use the cards to show wager info
+	# Clear old question text - we use the cards to show wager info
 	q_category_label.text = ""
 	q_value_label.text = ""
 	q_text_label.text = ""
@@ -2630,7 +2632,7 @@ func _start_final_round() -> void:
 	game_root.visible = true
 	_set_board_input_enabled(false)
 
-	# --- NEW: handle the “everyone negative” case explicitly ---
+	# --- NEW: handle the "everyone negative" case explicitly ---
 	var all_negative := true
 	for i in range(players.size()):
 		if i < team_scores.size() and team_scores[i] >= 0:
@@ -2650,13 +2652,13 @@ func _start_final_round() -> void:
 			"Todos os jogadores estao negativos. Cada um aposta automaticamente 10% dos pontos."
 		)
 
-		# Show “Wager: X” above each player card for 5s, then reveal the Final Jeopardy question
+		# Show "Wager: X" above each player card for 5s, then reveal the Final Jeopardy question
 		_show_wager_labels_then_reveal()
 		return
 	# --- end NEW block ---
 
-	# Normal case: at least one player has >= 0 points → show the wager selection UI
-	_build_parallel_wager_ui_clean()
+	# Normal case: at least one player has >= 0 points - show the wager selection UI
+	_build_parallel_wager_ui()
 
 
 func _calculate_auto_wager(idx: int) -> int:
@@ -2669,132 +2671,9 @@ func _build_parallel_wager_ui() -> void:
 	_cancel_ai_buzz_timer()
 	_cancel_wager_timer()
 	_clear_wager_labels()
+	final_wager_header_labels.clear()
 
 	# Hide normal question timer UI during wagers
-	if answer_timer_label:
-		answer_timer_label.visible = false
-	if answer_timer_bar:
-		answer_timer_bar.visible = false
-
-	final_wager_player = -1
-	final_wager_set = false
-	current_wager = 0
-
-	if final_wager_panel:
-		_clear_children(final_wager_panel)
-		final_wager_panel.visible = true
-	if final_wager_input:
-		final_wager_input.visible = false
-	if final_wager_button:
-		final_wager_button.visible = false
-	if final_clue_button:
-		final_clue_button.disabled = true
-		final_clue_button.visible = false
-
-	var title := Label.new()
-	title.text = _t("Final Wagers", "Apostas Finais")
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	if theme_styler:
-		theme_styler.apply_font_override(title, game_font)
-		theme_styler.apply_body_color(title)
-	title.add_theme_font_size_override("font_size", 30)
-	if final_wager_panel:
-		final_wager_panel.add_child(title)
-
-	var container := VBoxContainer.new()
-	container.alignment = BoxContainer.ALIGNMENT_CENTER
-	container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	if final_wager_panel:
-		final_wager_panel.add_child(container)
-
-	# Build rows + auto wagers
-	for i in range(players.size()):
-		var row := HBoxContainer.new()
-		row.alignment = BoxContainer.ALIGNMENT_CENTER
-		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.size_flags_vertical = Control.SIZE_FILL
-		row.add_theme_constant_override("separation", 18)
-
-		var name: String = players[i].get("name", "Player %d" % (i + 1))
-		var score: int = team_scores[i] if team_scores.size() > i else 0
-		var label := Label.new()
-		label.text = "%s (%s)" % [name, _t("Points: %d", "Pontos: %d") % score]
-		if theme_styler:
-			theme_styler.apply_font_override(label, game_font)
-			theme_styler.apply_body_color(label)
-		label.add_theme_font_size_override("font_size", 22)
-		row.add_child(label)
-
-		if score < 0:
-			# Auto 10%
-			var auto_wager: int = _calculate_auto_wager(i)
-			final_wager_values[i] = auto_wager
-			final_wager_done[i] = true
-
-			var auto_label := Label.new()
-			auto_label.text = _t("Auto 10%: %d", "Auto 10%: %d") % auto_wager
-			if theme_styler:
-				theme_styler.apply_font_override(auto_label, game_font)
-				theme_styler.apply_body_color(auto_label)
-			row.add_child(auto_label)
-			container.add_child(row)
-			continue
-
-		if players[i].get("is_ai", false):
-			# Auto 50% for AI
-			var ai_choice: int = int(round(abs(score) * 0.5))
-			final_wager_values[i] = ai_choice
-			final_wager_done[i] = true
-
-			var ai_label := Label.new()
-			ai_label.text = _t("AI wager: %d", "Aposta IA: %d") % ai_choice
-			if theme_styler:
-				theme_styler.apply_font_override(ai_label, game_font)
-				theme_styler.apply_body_color(ai_label)
-			row.add_child(ai_label)
-			container.add_child(row)
-			continue
-
-		# Human with non-negative score → show 30/50/100 buttons
-		var percents := [
-			{"text": "30%", "pct": 0.3}, {"text": "50%", "pct": 0.5}, {"text": "100%", "pct": 1.0}
-		]
-		for p in percents:
-			var btn := Button.new()
-			btn.text = p["text"]
-			btn.custom_minimum_size = Vector2(120, 60)
-			if theme_styler:
-				theme_styler.apply_font_override(btn, game_font)
-				theme_styler.apply_body_color(btn)
-			btn.add_theme_font_size_override("font_size", 22)
-			var pct_val: float = p["pct"]
-			btn.pressed.connect(func() -> void: _on_wager_choice(i, pct_val))
-			row.add_child(btn)
-
-		container.add_child(row)
-
-	# Start the 30s wager timer
-	_start_wager_timer()
-
-	# NEW: if EVERYONE already has an automatic wager (all_done),
-	# show the 5s summary; DON'T jump straight to the question.
-	var all_done := true
-	for i in range(players.size()):
-		if i >= final_wager_done.size() or not final_wager_done[i]:
-			all_done = false
-			break
-
-	if all_done:
-		_cancel_wager_timer()  # no need for the 30s timer
-		_show_wager_labels_then_reveal()  # shows "Wager: X" above each card, waits 5s
-
-
-func _build_parallel_wager_ui_clean() -> void:
-	_cancel_ai_buzz_timer()
-	_cancel_wager_timer()
-	_clear_wager_labels()
-
 	if answer_timer_label:
 		answer_timer_label.visible = false
 	if answer_timer_bar:
@@ -2834,9 +2713,12 @@ func _build_parallel_wager_ui_clean() -> void:
 		final_wager_panel.add_child(title)
 		final_wager_panel.add_child(container)
 
+	var first_focus_button: Button = null
+
 	for i in range(players.size()):
+		var idx_copy := i
 		var card := PanelContainer.new()
-		card.custom_minimum_size = Vector2(640, 150)
+		card.custom_minimum_size = Vector2(640, 200)
 		card.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		var style := StyleBoxFlat.new()
 		style.bg_color = Color(1.0, 0.96, 0.88)
@@ -2863,25 +2745,28 @@ func _build_parallel_wager_ui_clean() -> void:
 		var score: int = team_scores[i] if team_scores.size() > i else 0
 
 		var header := Label.new()
-		header.text = "%s  •  %s" % [name, _t("Points: %d", "Pontos: %d") % score]
+		header.text = ""
 		header.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		if theme_styler:
 			theme_styler.apply_font_override(header, game_font)
 			theme_styler.apply_body_color(header)
 		header.add_theme_font_size_override("font_size", 22)
 		inner.add_child(header)
+		final_wager_header_labels.append(header)
 
 		if score < 0:
 			var auto_wager: int = _calculate_auto_wager(i)
 			final_wager_values[i] = auto_wager
 			final_wager_done[i] = true
+
 			var auto_label := Label.new()
-			auto_label.text = _t("Auto 10%: %d", "Auto 10%: %d") % auto_wager
+			auto_label.text = _t("Auto 10%%: %d", "Auto 10%%: %d") % auto_wager
 			if theme_styler:
 				theme_styler.apply_font_override(auto_label, game_font)
 				theme_styler.apply_body_color(auto_label)
 			auto_label.add_theme_font_size_override("font_size", 20)
 			inner.add_child(auto_label)
+			_update_wager_header_text(idx_copy)
 			card.add_child(inner)
 			container.add_child(card)
 			continue
@@ -2890,6 +2775,7 @@ func _build_parallel_wager_ui_clean() -> void:
 			var ai_choice: int = int(round(abs(score) * 0.5))
 			final_wager_values[i] = ai_choice
 			final_wager_done[i] = true
+
 			var ai_label := Label.new()
 			ai_label.text = _t("AI wager: %d", "Aposta IA: %d") % ai_choice
 			if theme_styler:
@@ -2897,10 +2783,12 @@ func _build_parallel_wager_ui_clean() -> void:
 				theme_styler.apply_body_color(ai_label)
 			ai_label.add_theme_font_size_override("font_size", 20)
 			inner.add_child(ai_label)
+			_update_wager_header_text(idx_copy)
 			card.add_child(inner)
 			container.add_child(card)
 			continue
 
+		# Human with non-negative score -> show 30/50/100 buttons
 		var percents := [
 			{"text": "30%", "pct": 0.3}, {"text": "50%", "pct": 0.5}, {"text": "100%", "pct": 1.0}
 		]
@@ -2912,20 +2800,30 @@ func _build_parallel_wager_ui_clean() -> void:
 			btn.text = p["text"]
 			btn.custom_minimum_size = Vector2(120, 56)
 			btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+			btn.focus_mode = Control.FOCUS_ALL
 			if theme_styler:
 				theme_styler.apply_font_override(btn, game_font)
 				theme_styler.apply_body_color(btn)
 			btn.add_theme_font_size_override("font_size", 22)
 			var pct_val: float = p["pct"]
-			btn.pressed.connect(func() -> void: _on_wager_choice(i, pct_val))
+			btn.pressed.connect(func() -> void: _on_wager_choice(idx_copy, pct_val))
 			btn_row.add_child(btn)
+			if first_focus_button == null:
+				first_focus_button = btn
 		inner.add_child(btn_row)
 
 		card.add_child(inner)
 		container.add_child(card)
+		_update_wager_header_text(idx_copy)
+
+	_refresh_all_wager_headers()
 
 	_start_wager_timer()
 
+	if nav_focus_enabled and first_focus_button:
+		first_focus_button.grab_focus()
+
+	# If everyone already has a wager, skip the 30s timer and show the summary.
 	var all_done := true
 	for i in range(players.size()):
 		if i >= final_wager_done.size() or not final_wager_done[i]:
@@ -2937,6 +2835,11 @@ func _build_parallel_wager_ui_clean() -> void:
 		_show_wager_labels_then_reveal()
 
 
+func _refresh_all_wager_headers() -> void:
+	for i in range(players.size()):
+		_update_wager_header_text(i)
+
+
 func _on_wager_choice(idx: int, pct: float) -> void:
 	if idx < 0 or idx >= players.size():
 		return
@@ -2944,6 +2847,7 @@ func _on_wager_choice(idx: int, pct: float) -> void:
 	var wager: int = int(round(score * pct))
 	final_wager_values[idx] = wager
 	final_wager_done[idx] = true
+	_update_wager_header_text(idx)
 	_maybe_finish_wagers()
 
 
@@ -2956,9 +2860,27 @@ func _maybe_finish_wagers() -> void:
 	_show_wager_labels_then_reveal()
 
 
+func _update_wager_header_text(idx: int) -> void:
+	if idx < 0 or idx >= final_wager_header_labels.size():
+		return
+	var header: Label = final_wager_header_labels[idx] as Label
+	if header == null or not is_instance_valid(header):
+		return
+	var name: String = players[idx].get("name", "Player %d" % (idx + 1))
+	var score_val: int = team_scores[idx] if team_scores.size() > idx else 0
+	var score_text := _t("Points: %d", "Pontos: %d") % score_val
+	var wager_text := _t("Select a wager", "Selecione uma aposta")
+	if idx < final_wager_done.size() and final_wager_done[idx]:
+		var w: int = final_wager_values[idx] if idx < final_wager_values.size() else 0
+		wager_text = _t("Wager: %d", "Aposta: %d") % w
+	header.text = "%s\n%s\n%s" % [name, score_text, wager_text]
+
+
 func _show_wager_labels_then_reveal() -> void:
 	if final_wager_panel:
 		final_wager_panel.visible = false
+	if scoreboard:
+		scoreboard.visible = true
 	for i in range(players.size()):
 		if i >= final_wager_values.size():
 			continue
@@ -2986,6 +2908,7 @@ func _reveal_final_question() -> void:
 	final_question_revealed = true
 	_cancel_ai_buzz_timer()
 	_disable_answer_buttons()
+	_clear_wager_labels()
 	if final_wager_panel:
 		final_wager_panel.visible = false
 	question_panel.visible = true
@@ -3286,6 +3209,8 @@ func _on_final_wager_timeout() -> void:
 		var auto_wager: int = _calculate_auto_wager(i)
 		final_wager_values[i] = auto_wager
 		final_wager_done[i] = true
+		_update_wager_header_text(i)
+	_refresh_all_wager_headers()
 	_maybe_finish_wagers()
 
 
