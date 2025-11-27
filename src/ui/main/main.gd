@@ -1532,6 +1532,12 @@ func _load_settings() -> void:
 	loading_settings = true
 	var cfg := ConfigFile.new()
 	var err := cfg.load(SETTINGS_PATH)
+	if music_slider:
+		music_slider.min_value = -80.0
+		var default_db: float = clamp(-10.0, music_slider.min_value, music_slider.max_value)
+		if err != OK:
+			music_slider.value = default_db
+			_on_music_slider_changed(music_slider.value)
 	if err == OK:
 		current_language = str(cfg.get_value("general", "language", current_language))
 		var saved_db := float(cfg.get_value("audio", "music_db", music_slider.value))
@@ -1645,7 +1651,10 @@ func _on_player_start_pressed() -> void:
 
 func _on_music_slider_changed(value: float) -> void:
 	if audio_controller:
-		audio_controller.set_music_volume_db(value)
+		var db_value := value
+		if music_slider and value <= music_slider.min_value + 0.01:
+			db_value = music_slider.min_value
+		audio_controller.set_music_volume_db(db_value)
 	_save_settings()
 
 
@@ -1994,11 +2003,22 @@ func _type_out_question(text: String) -> void:
 
 func _start_tts(text: String) -> void:
 	if DisplayServer.has_feature(DisplayServer.FEATURE_TEXT_TO_SPEECH):
-		DisplayServer.tts_speak(text, "default", TTS_VOLUME, 1.0, 1.0)
+		DisplayServer.tts_speak(text, "default", _current_tts_volume(), 1.0, 1.0)
 
 
 func _on_question_typed_out() -> void:
 	_start_ai_buzz_timer()
+
+
+func _current_tts_volume() -> float:
+	if music_slider:
+		var norm: float = clamp(
+			inverse_lerp(music_slider.min_value, music_slider.max_value, music_slider.value),
+			0.0,
+			1.0
+		)
+		return norm * 100.0
+	return TTS_VOLUME
 
 
 func _build_answer_options(clue: Dictionary) -> void:
@@ -2672,6 +2692,8 @@ func _build_parallel_wager_ui() -> void:
 	_cancel_wager_timer()
 	_clear_wager_labels()
 	final_wager_header_labels.clear()
+	if final_wager_panel:
+		final_wager_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 
 	# Hide normal question timer UI during wagers
 	if answer_timer_label:
@@ -2848,6 +2870,7 @@ func _on_wager_choice(idx: int, pct: float) -> void:
 	final_wager_values[idx] = wager
 	final_wager_done[idx] = true
 	_update_wager_header_text(idx)
+	result_label.text = _t("Wager set: %d", "Aposta definida: %d") % wager
 	_maybe_finish_wagers()
 
 
@@ -2877,8 +2900,6 @@ func _update_wager_header_text(idx: int) -> void:
 
 
 func _show_wager_labels_then_reveal() -> void:
-	if final_wager_panel:
-		final_wager_panel.visible = false
 	if scoreboard:
 		scoreboard.visible = true
 	for i in range(players.size()):
