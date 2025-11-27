@@ -59,23 +59,36 @@ text = "Settings"
 custom_minimum_size = Vector2(0, 70)
 margin_top = 8.0
 
-[node name="VerseOfDay" type="VBoxContainer" parent="TitlePanel/VBox"]
+[node name="VerseOfDay" type="PanelContainer" parent="TitlePanel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(700, 200)
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="CardVBox" type="VBoxContainer" parent="TitlePanel/VBox/VerseOfDay"]
 layout_mode = 2
 alignment = 1
 theme_override_constants/separation = 6
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="VerseTitle" type="Label" parent="TitlePanel/VBox/VerseOfDay"]
+[node name="VerseTitle" type="Label" parent="TitlePanel/VBox/VerseOfDay/CardVBox"]
 layout_mode = 2
-text = "Verse of the Day"
+text = "SCRIPTURE OF THE DAY"
 horizontal_alignment = 1
 
-[node name="VerseText" type="Label" parent="TitlePanel/VBox/VerseOfDay"]
+[node name="VerseText" type="Label" parent="TitlePanel/VBox/VerseOfDay/CardVBox"]
 layout_mode = 2
 text = "Loading..."
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="VerseReference" type="Label" parent="TitlePanel/VBox/VerseOfDay"]
+[node name="VerseReference" type="Label" parent="TitlePanel/VBox/VerseOfDay/CardVBox"]
 layout_mode = 2
 text = ""
 horizontal_alignment = 1

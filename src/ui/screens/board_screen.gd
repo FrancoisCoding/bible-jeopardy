@@ -35,6 +35,8 @@ func build_teams(
 	team_scores: Array,
 	team_score_labels: Array,
 	team_cards: Array,
+	team_trophies: Array,
+	team_wager_labels: Array,
 	team_portraits: Array,
 	scoreboard: HBoxContainer,
 	t_func: Callable
@@ -49,6 +51,8 @@ func build_teams(
 	team_scores.clear()
 	team_score_labels.clear()
 	team_cards.clear()
+	team_trophies.clear()
+	team_wager_labels.clear()
 
 	for i in range(team_names.size()):
 		var team_name: String = team_names[i].strip_edges()
@@ -58,7 +62,7 @@ func build_teams(
 		team_scores.append(0)
 
 		var card := PanelContainer.new()
-		card.custom_minimum_size = Vector2(260, 140)
+		card.custom_minimum_size = Vector2(220, 150)
 		if theme_styler:
 			theme_styler.apply_team_card_style(card, theme_styler.team_color(i), false)
 
@@ -72,21 +76,41 @@ func build_teams(
 		if theme_styler:
 			theme_styler.apply_font_override(name_label, game_font)
 			theme_styler.apply_body_color(name_label)
-		name_label.add_theme_font_size_override("font_size", 28)
+		name_label.add_theme_font_size_override("font_size", 24)
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 		var portrait := _make_portrait_panel(
 			team_portraits[i] if team_portraits.size() > i else {}, theme_styler.team_color(i)
 		)
 
+		var trophy := Label.new()
+		trophy.text = "Winner"
+		trophy.visible = false
+		trophy.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		if theme_styler:
+			theme_styler.apply_font_override(trophy, game_font)
+			theme_styler.apply_body_color(trophy)
+		trophy.add_theme_font_size_override("font_size", 32)
+
+		var wager_label := Label.new()
+		wager_label.text = ""
+		wager_label.visible = false
+		wager_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		if theme_styler:
+			theme_styler.apply_font_override(wager_label, game_font)
+			theme_styler.apply_body_color(wager_label)
+		wager_label.add_theme_font_size_override("font_size", 18)
+
 		var score_label := Label.new()
 		score_label.text = t_func.call("Points: 0", "Pontos: 0")
 		if theme_styler:
 			theme_styler.apply_font_override(score_label, game_font)
 			theme_styler.apply_body_color(score_label)
-		score_label.add_theme_font_size_override("font_size", 26)
+		score_label.add_theme_font_size_override("font_size", 22)
 		score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
+		vbox.add_child(trophy)
+		vbox.add_child(wager_label)
 		vbox.add_child(portrait)
 		vbox.add_child(name_label)
 		vbox.add_child(score_label)
@@ -94,6 +118,8 @@ func build_teams(
 		card.add_child(vbox)
 		team_score_labels.append(score_label)
 		team_cards.append(card)
+		team_trophies.append(trophy)
+		team_wager_labels.append(wager_label)
 
 		scoreboard.add_child(card)
 
