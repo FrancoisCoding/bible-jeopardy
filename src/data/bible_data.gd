@@ -31,7 +31,17 @@ const CATEGORY_NAMES := [
 	{"en": "Courage & Boldness", "pt": "Coragem e Ousadia"},
 	{"en": "Famous Bible Quotes", "pt": "Frases Famosas da Bíblia"},
 	{"en": "Who Said It?", "pt": "Quem Disse Isso?"},
-	{"en": "Heroes of Faith (Hebrews 11)", "pt": "Heróis da Fé (Hebreus 11)"}
+	{"en": "Heroes of Faith (Hebrews 11)", "pt": "Heróis da Fé (Hebreus 11)"},
+	{"en": "Kings of Israel & Judah", "pt": "Kings of Israel & Judah"},
+	{"en": "Judges & Deliverers", "pt": "Judges & Deliverers"},
+	{"en": "Tabernacle & Temple", "pt": "Tabernacle & Temple"},
+	{"en": "Feasts & Festivals", "pt": "Feasts & Festivals"},
+	{"en": "Covenants & Promises", "pt": "Covenants & Promises"},
+	{"en": "Mountains & Wilderness Moments", "pt": "Mountains & Wilderness Moments"},
+	{"en": "Encounters with Angels", "pt": "Encounters with Angels"},
+	{"en": "Prayer & Fasting", "pt": "Prayer & Fasting"},
+	{"en": "Battles & Warfare", "pt": "Battles & Warfare"},
+	{"en": "Titles & Names of Jesus", "pt": "Titles & Names of Jesus"}
 ]
 
 const VALUES: Array[int] = [100, 200, 300, 400, 500]
@@ -88,7 +98,7 @@ const BASE_QA := {
 				"pt": "Onde Deus confundiu a linguagem humana para que as pessoas se dispersassem?"
 			},
 			"answer": {"en": "Tower of Babel", "pt": "Torre de Babel"},
-			"tier": 2,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Mount Sinai", "pt": "Monte Sinai"},
@@ -148,7 +158,7 @@ const BASE_QA := {
 				"pt": "Qual cidade Deus destruiu com fogo ao lado de Sodoma?"
 			},
 			"answer": {"en": "Gomorrah", "pt": "Gomorra"},
-			"tier": 2,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Admah", "pt": "Admah"},
@@ -205,7 +215,7 @@ const BASE_QA := {
 				"pt": "Quem trocou seu direito de primogenitura por uma tigela de ensopado?"
 			},
 			"answer": {"en": "Esau", "pt": "Esaú"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Jacob", "pt": "Jacó"},
@@ -291,7 +301,7 @@ const BASE_QA := {
 				"pt": "Que terra Deus prometeu à descendência de Abraão?"
 			},
 			"answer": {"en": "Canaan", "pt": "Canaã"},
-			"tier": 1,
+			"tier": 2,
 			"decoys":
 			[
 				{"en": "Goshen", "pt": "Gósen"},
@@ -343,6 +353,156 @@ const BASE_QA := {
 				{"en": "Abraham", "pt": "Abraão"},
 				{"en": "Joseph", "pt": "José"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "What land did Lot choose when he parted from Abram?",
+				"pt": "What land did Lot choose when he parted from Abram?"
+			},
+			"answer": {"en": "The Jordan plain", "pt": "The Jordan plain"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Hebron", "pt": "Hebron"},
+				{"en": "Beersheba", "pt": "Beersheba"},
+				{"en": "Shechem", "pt": "Shechem"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What sign did God give Abraham to mark his covenant?",
+				"pt": "What sign did God give Abraham to mark his covenant?"
+			},
+			"answer": {"en": "Circumcision", "pt": "Circumcision"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "A rainbow", "pt": "A rainbow"},
+				{"en": "Stone tablets", "pt": "Stone tablets"},
+				{"en": "A bronze serpent", "pt": "A bronze serpent"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who bought the cave of Machpelah to bury Sarah?",
+				"pt": "Who bought the cave of Machpelah to bury Sarah?"
+			},
+			"answer": {"en": "Abraham", "pt": "Abraham"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Isaac", "pt": "Isaac"},
+				{"en": "Jacob", "pt": "Jacob"},
+				{"en": "Joseph", "pt": "Joseph"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which king of Salem blessed Abram with bread and wine?",
+				"pt": "Which king of Salem blessed Abram with bread and wine?"
+			},
+			"answer": {"en": "Melchizedek", "pt": "Melchizedek"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Abimelech", "pt": "Abimelech"},
+				{"en": "Pharaoh", "pt": "Pharaoh"},
+				{"en": "Laban", "pt": "Laban"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who unknowingly fathered Perez and Zerah with Tamar?",
+				"pt": "Who unknowingly fathered Perez and Zerah with Tamar?"
+			},
+			"answer": {"en": "Judah", "pt": "Judah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Onan", "pt": "Onan"},
+				{"en": "Shelah", "pt": "Shelah"},
+				{"en": "Reuben", "pt": "Reuben"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What well did Hagar name Beer-lahai-roi after God saw her?",
+				"pt": "What well did Hagar name Beer-lahai-roi after God saw her?"
+			},
+			"answer": {"en": "Beer-lahai-roi", "pt": "Beer-lahai-roi"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Beersheba", "pt": "Beersheba"},
+				{"en": "En-rogel", "pt": "En-rogel"},
+				{"en": "Elim", "pt": "Elim"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "On which mountain did Abraham prepare to sacrifice Isaac?",
+				"pt": "On which mountain did Abraham prepare to sacrifice Isaac?"
+			},
+			"answer": {"en": "Mount Moriah", "pt": "Mount Moriah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Mount Sinai", "pt": "Mount Sinai"},
+				{"en": "Mount Ararat", "pt": "Mount Ararat"},
+				{"en": "Mount Gerizim", "pt": "Mount Gerizim"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which woman died giving birth to Benjamin on the way to Ephrath?",
+				"pt": "Which woman died giving birth to Benjamin on the way to Ephrath?"
+			},
+			"answer": {"en": "Rachel", "pt": "Rachel"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Leah", "pt": "Leah"},
+				{"en": "Rebekah", "pt": "Rebekah"},
+				{"en": "Dinah", "pt": "Dinah"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who found Rebekah at the well to be Isaac's wife?",
+				"pt": "Who found Rebekah at the well to be Isaac's wife?"
+			},
+			"answer": {"en": "Abraham's servant", "pt": "Abraham's servant"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Elkanah", "pt": "Elkanah"},
+				{"en": "Nahor", "pt": "Nahor"},
+				{"en": "Bethuel", "pt": "Bethuel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which city did Simeon and Levi attack after Dinah was wronged?",
+				"pt": "Which city did Simeon and Levi attack after Dinah was wronged?"
+			},
+			"answer": {"en": "Shechem", "pt": "Shechem"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Hebron", "pt": "Hebron"},
+				{"en": "Ai", "pt": "Ai"},
+				{"en": "Bethel", "pt": "Bethel"}
+			]
 		}
 	],
 	"Moses & the Exodus":
@@ -373,7 +533,7 @@ const BASE_QA := {
 				"pt": "Quantas pragas atingiram o Egito antes de Israel partir?"
 			},
 			"answer": {"en": "Ten", "pt": "Dez"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Seven", "pt": "Sete"},
@@ -476,7 +636,7 @@ const BASE_QA := {
 				"pt": "O que Moisés fez para levar água ao Horebe?"
 			},
 			"answer": {"en": "A rock", "pt": "Uma pedra"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "The ground", "pt": "O chão"},
@@ -487,7 +647,7 @@ const BASE_QA := {
 		{
 			"question": {"en": "Who made the golden calf?", "pt": "Quem fez o bezerro de ouro?"},
 			"answer": {"en": "Aaron", "pt": "Aarão"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Hur", "pt": "Hur"},
@@ -609,7 +769,7 @@ const BASE_QA := {
 			"question":
 			{"en": "What was the last plague on Egypt?", "pt": "Qual foi a última praga no Egito?"},
 			"answer": {"en": "Death of the firstborn", "pt": "Morte do primogênito"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Darkness", "pt": "Escuridão"},
@@ -624,12 +784,168 @@ const BASE_QA := {
 				"pt": "Que mar fechou sobre o exército do Faraó?"
 			},
 			"answer": {"en": "The Red Sea", "pt": "O Mar Vermelho"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "The Dead Sea", "pt": "O Mar Morto"},
 				{"en": "The Mediterranean", "pt": "O Mediterrâneo"},
 				{"en": "The Nile", "pt": "O Nilo"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which tribe was set apart to carry the holy objects of the tabernacle?",
+				"pt": "Which tribe was set apart to carry the holy objects of the tabernacle?"
+			},
+			"answer": {"en": "Levites", "pt": "Levites"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Judah", "pt": "Judah"},
+				{"en": "Ephraim", "pt": "Ephraim"},
+				{"en": "Reuben", "pt": "Reuben"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "In which wilderness did manna first appear?",
+				"pt": "In which wilderness did manna first appear?"
+			},
+			"answer": {"en": "Wilderness of Sin", "pt": "Wilderness of Sin"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Wilderness of Paran", "pt": "Wilderness of Paran"},
+				{"en": "Wilderness of Zin", "pt": "Wilderness of Zin"},
+				{"en": "Wilderness of Shur", "pt": "Wilderness of Shur"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"On which day were the Israelites told to gather twice the manna for Sabbath rest?",
+				"pt":
+				"On which day were the Israelites told to gather twice the manna for Sabbath rest?"
+			},
+			"answer": {"en": "The sixth day", "pt": "The sixth day"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "The fifth day", "pt": "The fifth day"},
+				{"en": "The first day", "pt": "The first day"},
+				{"en": "The seventh day", "pt": "The seventh day"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "On what mountain did Aaron die during the journey?",
+				"pt": "On what mountain did Aaron die during the journey?"
+			},
+			"answer": {"en": "Mount Hor", "pt": "Mount Hor"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Mount Nebo", "pt": "Mount Nebo"},
+				{"en": "Mount Sinai", "pt": "Mount Sinai"},
+				{"en": "Mount Carmel", "pt": "Mount Carmel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Where did Moses strike the rock the second time when he was told to speak to it?",
+				"pt":
+				"Where did Moses strike the rock the second time when he was told to speak to it?"
+			},
+			"answer": {"en": "Meribah at Kadesh", "pt": "Meribah at Kadesh"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Rephidim", "pt": "Rephidim"},
+				{"en": "Marah", "pt": "Marah"},
+				{"en": "Elim", "pt": "Elim"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Where did Israel camp between Migdol and the sea before it parted?",
+				"pt": "Where did Israel camp between Migdol and the sea before it parted?"
+			},
+			"answer": {"en": "Pi-hahiroth", "pt": "Pi-hahiroth"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Succoth", "pt": "Succoth"},
+				{"en": "Etham", "pt": "Etham"},
+				{"en": "Penuel", "pt": "Penuel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which midwives feared God and spared Hebrew baby boys?",
+				"pt": "Which midwives feared God and spared Hebrew baby boys?"
+			},
+			"answer": {"en": "Shiphrah and Puah", "pt": "Shiphrah and Puah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Jochebed and Miriam", "pt": "Jochebed and Miriam"},
+				{"en": "Deborah and Jael", "pt": "Deborah and Jael"},
+				{"en": "Zipporah and Elisheba", "pt": "Zipporah and Elisheba"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "On which day of the first month was the Passover lamb to be slain?",
+				"pt": "On which day of the first month was the Passover lamb to be slain?"
+			},
+			"answer": {"en": "Fourteenth day", "pt": "Fourteenth day"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Tenth day", "pt": "Tenth day"},
+				{"en": "Fifteenth day", "pt": "Fifteenth day"},
+				{"en": "First day", "pt": "First day"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who advised Moses to appoint leaders of thousands, hundreds, fifties, and tens?",
+				"pt":
+				"Who advised Moses to appoint leaders of thousands, hundreds, fifties, and tens?"
+			},
+			"answer": {"en": "Jethro", "pt": "Jethro"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Hobab", "pt": "Hobab"},
+				{"en": "Joshua", "pt": "Joshua"},
+				{"en": "Eleazar", "pt": "Eleazar"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What name was later given to the bronze serpent Moses lifted?",
+				"pt": "What name was later given to the bronze serpent Moses lifted?"
+			},
+			"answer": {"en": "Nehushtan", "pt": "Nehushtan"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Leviathan", "pt": "Leviathan"},
+				{"en": "Behemoth", "pt": "Behemoth"},
+				{"en": "Rahab", "pt": "Rahab"}
 			]
 		}
 	],
@@ -699,7 +1015,7 @@ const BASE_QA := {
 				"pt": "Qual batalha incluiu o sol parado?"
 			},
 			"answer": {"en": "Battle of Gibeon", "pt": "Batalha de Gibeão"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Battle of Ai", "pt": "Batalha de Ai"},
@@ -759,7 +1075,7 @@ const BASE_QA := {
 				"pt": "Onde Israel renovou a aliança depois de cruzar o Jordão?"
 			},
 			"answer": {"en": "Gilgal", "pt": "Gilgal"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Shechem", "pt": "Siquém"},
@@ -834,7 +1150,7 @@ const BASE_QA := {
 				"pt": "Onde as bênçãos e maldições foram lidas em Josué?"
 			},
 			"answer": {"en": "Mount Gerizim and Mount Ebal", "pt": "Monte Gerizim e Monte Ebal"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Mount Sinai and Horeb", "pt": "Monte Sinai e Horebe"},
@@ -864,7 +1180,7 @@ const BASE_QA := {
 				"pt": "Quem pediu a Josué a região montanhosa de Hebron?"
 			},
 			"answer": {"en": "Caleb", "pt": "Calebe"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Phinehas", "pt": "Finéias"},
@@ -934,6 +1250,170 @@ const BASE_QA := {
 				{"en": "Caleb", "pt": "Calebe"},
 				{"en": "Phinehas", "pt": "Finéias"},
 				{"en": "Gideon", "pt": "Gideão"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Where did Joshua set up the twelve stones taken from the Jordan?",
+				"pt": "Where did Joshua set up the twelve stones taken from the Jordan?"
+			},
+			"answer": {"en": "Gilgal", "pt": "Gilgal"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Shiloh", "pt": "Shiloh"},
+				{"en": "Bethel", "pt": "Betel"},
+				{"en": "Mizpah", "pt": "MispA?"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which city of refuge was in Galilee of Naphtali?",
+				"pt": "Which city of refuge was in Galilee of Naphtali?"
+			},
+			"answer": {"en": "Kedesh", "pt": "Kedesh"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Shechem", "pt": "Shechem"},
+				{"en": "Hebron", "pt": "Hebron"},
+				{"en": "Golan", "pt": "Golan"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "In which book was the sun standing still recorded?",
+				"pt": "In which book was the sun standing still recorded?"
+			},
+			"answer": {"en": "The Book of Jashar", "pt": "The Book of Jashar"},
+			"tier": 3,
+			"decoys":
+			[
+				{
+					"en": "The Book of the Wars of the Lord",
+					"pt": "The Book of the Wars of the Lord"
+				},
+				{"en": "Chronicles of Samuel", "pt": "Chronicles of Samuel"},
+				{"en": "Chronicles of the kings of Judah", "pt": "Chronicles of the kings of Judah"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What was the name of the valley where Achan was judged?",
+				"pt": "What was the name of the valley where Achan was judged?"
+			},
+			"answer": {"en": "Valley of Achor", "pt": "Valley of Achor"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Valley of Jezreel", "pt": "Valley of Jezreel"},
+				{"en": "Valley of Elah", "pt": "Valley of Elah"},
+				{"en": "Valley of Siddim", "pt": "Valley of Siddim"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What were the Gibeonites assigned to be after their treaty?",
+				"pt": "What were the Gibeonites assigned to be after their treaty?"
+			},
+			"answer":
+			{"en": "Woodcutters and water carriers", "pt": "Woodcutters and water carriers"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Gatekeepers and singers", "pt": "Gatekeepers and singers"},
+				{"en": "Stone masons and scribes", "pt": "Stone masons and scribes"},
+				{"en": "Armor bearers and scouts", "pt": "Armor bearers and scouts"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What happened to Hazor after Joshua defeated it?",
+				"pt": "What happened to Hazor after Joshua defeated it?"
+			},
+			"answer": {"en": "It was burned", "pt": "It was burned"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "It became a tribute city", "pt": "It became a tribute city"},
+				{"en": "It was spared for priests", "pt": "It was spared for priests"},
+				{"en": "It was divided among Reuben", "pt": "It was divided among Reuben"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What name did the eastern tribes give their altar by the Jordan?",
+				"pt": "What name did the eastern tribes give their altar by the Jordan?"
+			},
+			"answer": {"en": "Witness (Ed)", "pt": "Witness (Ed)"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Peace", "pt": "Peace"},
+				{"en": "Remembrance", "pt": "Remembrance"},
+				{"en": "Hope", "pt": "Hope"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who cast lots with Joshua to divide the land among Israel?",
+				"pt": "Who cast lots with Joshua to divide the land among Israel?"
+			},
+			"answer":
+			{
+				"en": "Eleazar the priest with tribal heads",
+				"pt": "Eleazar the priest with tribal heads"
+			},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Phinehas alone", "pt": "Phinehas alone"},
+				{"en": "Caleb and Phinehas", "pt": "Caleb and Phinehas"},
+				{"en": "Joshua alone", "pt": "Joshua alone"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which town was given to Joshua as his inheritance?",
+				"pt": "Which town was given to Joshua as his inheritance?"
+			},
+			"answer": {"en": "Timnath-serah", "pt": "Timnath-serah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Shiloh", "pt": "Shiloh"},
+				{"en": "Hebron", "pt": "Hebron"},
+				{"en": "Bethel", "pt": "Bethel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"What did Joshua do to the five Amorite kings after defeating them at Makkedah?",
+				"pt":
+				"What did Joshua do to the five Amorite kings after defeating them at Makkedah?"
+			},
+			"answer":
+			{
+				"en": "Hanged them on trees and sealed them in the cave",
+				"pt": "Hanged them on trees and sealed them in the cave"
+			},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Sold them into slavery", "pt": "Sold them into slavery"},
+				{"en": "Blinded them and released them", "pt": "Blinded them and released them"},
+				{"en": "Sent them back under tribute", "pt": "Sent them back under tribute"}
 			]
 		}
 	],
@@ -1225,6 +1705,156 @@ const BASE_QA := {
 				{"en": "Psalm 38", "pt": "Salmo 38"},
 				{"en": "Psalm 6", "pt": "Salmo 6"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Which priest gave David holy bread and Goliath's sword?",
+				"pt": "Which priest gave David holy bread and Goliath's sword?"
+			},
+			"answer": {"en": "Ahimelech", "pt": "Ahimelech"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Abiathar", "pt": "Abiathar"},
+				{"en": "Zadok", "pt": "Zadok"},
+				{"en": "Eli", "pt": "Eli"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was the swift nephew of David killed by Abner?",
+				"pt": "Who was the swift nephew of David killed by Abner?"
+			},
+			"answer": {"en": "Asahel", "pt": "Asahel"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Abishai", "pt": "Abishai"},
+				{"en": "Joab", "pt": "Joab"},
+				{"en": "Ithra", "pt": "Ithra"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Where did David cut off Saul's robe instead of killing him?",
+				"pt": "Where did David cut off Saul's robe instead of killing him?"
+			},
+			"answer": {"en": "A cave at En Gedi", "pt": "A cave at En Gedi"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "The cave of Adullam", "pt": "The cave of Adullam"},
+				{"en": "The wilderness of Ziph", "pt": "The wilderness of Ziph"},
+				{"en": "The wilderness of Paran", "pt": "The wilderness of Paran"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who betrayed David by siding with Absalom?",
+				"pt": "Who betrayed David by siding with Absalom?"
+			},
+			"answer": {"en": "Ahithophel", "pt": "Ahithophel"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Hushai", "pt": "Hushai"},
+				{"en": "Doeg", "pt": "Doeg"},
+				{"en": "Shimei", "pt": "Shimei"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which Philistine king gave David the town of Ziklag?",
+				"pt": "Which Philistine king gave David the town of Ziklag?"
+			},
+			"answer": {"en": "Achish of Gath", "pt": "Achish of Gath"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Balak of Moab", "pt": "Balak of Moab"},
+				{"en": "Abimelech of Gerar", "pt": "Abimelech of Gerar"},
+				{"en": "Hadadezer of Zobah", "pt": "Hadadezer of Zobah"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Whose house kept the ark for three months after Uzzah died?",
+				"pt": "Whose house kept the ark for three months after Uzzah died?"
+			},
+			"answer": {"en": "Obed-Edom", "pt": "Obed-Edom"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Abinadab", "pt": "Abinadab"},
+				{"en": "Zadok", "pt": "Zadok"},
+				{"en": "Ithamar", "pt": "Ithamar"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who killed Absalom despite David's command to spare him?",
+				"pt": "Who killed Absalom despite David's command to spare him?"
+			},
+			"answer": {"en": "Joab", "pt": "Joab"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Abishai", "pt": "Abishai"},
+				{"en": "Ittai", "pt": "Ittai"},
+				{"en": "Benaiah", "pt": "Benaiah"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet confronted David over Bathsheba?",
+				"pt": "Which prophet confronted David over Bathsheba?"
+			},
+			"answer": {"en": "Nathan", "pt": "Nathan"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Gad", "pt": "Gad"},
+				{"en": "Samuel", "pt": "Samuel"},
+				{"en": "Ahijah", "pt": "Ahijah"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which giant nearly killed David but was slain by Abishai?",
+				"pt": "Which giant nearly killed David but was slain by Abishai?"
+			},
+			"answer": {"en": "Ishbi-Benob", "pt": "Ishbi-Benob"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Goliath", "pt": "Goliath"},
+				{"en": "Saph", "pt": "Saph"},
+				{"en": "Lahmi", "pt": "Lahmi"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What priestly town did Doeg the Edomite strike down?",
+				"pt": "What priestly town did Doeg the Edomite strike down?"
+			},
+			"answer": {"en": "Nob", "pt": "Nob"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Shiloh", "pt": "Shiloh"},
+				{"en": "Bethel", "pt": "Bethel"},
+				{"en": "Gilgal", "pt": "Gilgal"}
+			]
 		}
 	],
 	"Psalms & Worship":
@@ -1380,7 +2010,7 @@ const BASE_QA := {
 				"pt": "Qual salmo é um acróstico da palavra de Deus?"
 			},
 			"answer": {"en": "Psalm 119", "pt": "Salmo 119"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Psalm 19", "pt": "Salmo 19"},
@@ -1440,7 +2070,7 @@ const BASE_QA := {
 				"pt": "Qual salmo lamenta 'Meu Deus, por que me abandonaste?'?"
 			},
 			"answer": {"en": "Psalm 22", "pt": "Salmo 22"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Psalm 31", "pt": "Salmo 31"},
@@ -1471,7 +2101,7 @@ const BASE_QA := {
 				"Qual salmo agradece a Deus por ter sido feito de maneira assombrosa e maravilhosa?"
 			},
 			"answer": {"en": "Psalm 139", "pt": "Salmo 139"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Psalm 104", "pt": "Salmo 104"},
@@ -1501,7 +2131,7 @@ const BASE_QA := {
 				"pt": "Qual salmo retrata a mesa do Bom Pastor diante dos inimigos?"
 			},
 			"answer": {"en": "Psalm 23", "pt": "Salmo 23"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Psalm 16", "pt": "Salmo 16"},
@@ -1522,6 +2152,161 @@ const BASE_QA := {
 				{"en": "Psalm 62", "pt": "Salmo 62"},
 				{"en": "Psalm 37", "pt": "Salmo 37"},
 				{"en": "Psalm 73", "pt": "Salmo 73"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which psalm begins, 'As the deer pants for streams of water'?",
+				"pt": "Qual salmo começa com 'Como a corsa anseia por águas correntes'?"
+			},
+			"answer": {"en": "Psalm 42", "pt": "Salmo 42"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Psalm 41", "pt": "Salmo 41"},
+				{"en": "Psalm 63", "pt": "Salmo 63"},
+				{"en": "Psalm 84", "pt": "Salmo 84"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which psalm is filled with the refrain, 'His steadfast love endures forever'?",
+				"pt": "Qual salmo está cheio do refrão 'Seu amor dura para sempre'?"
+			},
+			"answer": {"en": "Psalm 136", "pt": "Salmo 136"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Psalm 118", "pt": "Salmo 118"},
+				{"en": "Psalm 100", "pt": "Salmo 100"},
+				{"en": "Psalm 34", "pt": "Salmo 34"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which psalm invites, 'Taste and see that the Lord is good'?",
+				"pt": "Qual salmo convida: 'Provai e vede que o Senhor é bom'?"
+			},
+			"answer": {"en": "Psalm 34", "pt": "Salmo 34"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Psalm 103", "pt": "Salmo 103"},
+				{"en": "Psalm 16", "pt": "Salmo 16"},
+				{"en": "Psalm 84", "pt": "Salmo 84"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which psalm speaks of watchmen waiting for the morning?",
+				"pt": "Qual salmo fala de sentinelas esperando pelo amanhecer?"
+			},
+			"answer": {"en": "Psalm 130", "pt": "Salmo 130"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Psalm 27", "pt": "Salmo 27"},
+				{"en": "Psalm 121", "pt": "Salmo 121"},
+				{"en": "Psalm 91", "pt": "Salmo 91"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which psalm proclaims, 'The heavens declare the glory of God'?",
+				"pt": "Qual salmo proclama: 'Os céus proclamam a glória de Deus'?"
+			},
+			"answer": {"en": "Psalm 19", "pt": "Salmo 19"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Psalm 8", "pt": "Salmo 8"},
+				{"en": "Psalm 33", "pt": "Salmo 33"},
+				{"en": "Psalm 29", "pt": "Salmo 29"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which psalm commands, 'Lift up your heads, O gates'?",
+				"pt": "Qual salmo ordena: 'Levantem-se, ó portas'?"
+			},
+			"answer": {"en": "Psalm 24", "pt": "Salmo 24"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Psalm 15", "pt": "Salmo 15"},
+				{"en": "Psalm 118", "pt": "Salmo 118"},
+				{"en": "Psalm 122", "pt": "Salmo 122"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which psalm begins, 'The Lord says to my Lord: Sit at my right hand'?",
+				"pt": "Qual salmo começa: 'Disse o Senhor ao meu Senhor: Senta-te à minha direita'?"
+			},
+			"answer": {"en": "Psalm 110", "pt": "Salmo 110"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Psalm 2", "pt": "Salmo 2"},
+				{"en": "Psalm 72", "pt": "Salmo 72"},
+				{"en": "Psalm 45", "pt": "Salmo 45"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which psalm says, 'You are a priest forever, after the order of Melchizedek'?",
+				"pt":
+				"Qual salmo diz: 'Tu és sacerdote para sempre, segundo a ordem de Melquisedeque'?"
+			},
+			"answer": {"en": "Psalm 110", "pt": "Salmo 110"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Psalm 132", "pt": "Salmo 132"},
+				{"en": "Psalm 89", "pt": "Salmo 89"},
+				{"en": "Psalm 2", "pt": "Salmo 2"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which psalm urges praise with trumpet, harp, lyre, and cymbals?",
+				"pt": "Qual salmo exorta louvor com trombeta, harpa, lira e címbalos?"
+			},
+			"answer": {"en": "Psalm 150", "pt": "Salmo 150"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Psalm 98", "pt": "Salmo 98"},
+				{"en": "Psalm 33", "pt": "Salmo 33"},
+				{"en": "Psalm 81", "pt": "Salmo 81"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which psalm warns that builders labor in vain unless the Lord builds the house?",
+				"pt":
+				"Qual salmo alerta que os construtores trabalham em vão se o Senhor não edificar a casa?"
+			},
+			"answer": {"en": "Psalm 127", "pt": "Salmo 127"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Psalm 126", "pt": "Salmo 126"},
+				{"en": "Psalm 128", "pt": "Salmo 128"},
+				{"en": "Psalm 133", "pt": "Salmo 133"}
 			]
 		}
 	],
@@ -1816,6 +2601,162 @@ const BASE_QA := {
 				{"en": "Shows humility", "pt": "Mostra humildade"},
 				{"en": "Gains honor", "pt": "Ganha honra"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Which proverb urges, 'Trust in the Lord with all your heart'?",
+				"pt": "Qual provérbio exorta: 'Confia no Senhor de todo o teu coração'?"
+			},
+			"answer": {"en": "Proverbs 3:5", "pt": "Provérbios 3:5"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Proverbs 1:7", "pt": "Provérbios 1:7"},
+				{"en": "Proverbs 16:3", "pt": "Provérbios 16:3"},
+				{"en": "Proverbs 28:26", "pt": "Provérbios 28:26"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which proverb tells the sluggard to learn from the ant?",
+				"pt": "Qual provérbio manda o preguiçoso aprender com a formiga?"
+			},
+			"answer": {"en": "Proverbs 6:6", "pt": "Provérbios 6:6"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Proverbs 24:30", "pt": "Provérbios 24:30"},
+				{"en": "Proverbs 10:4", "pt": "Provérbios 10:4"},
+				{"en": "Proverbs 19:15", "pt": "Provérbios 19:15"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which proverb warns, 'There is a way that seems right... but ends in death'?",
+				"pt":
+				"Qual provérbio alerta: 'Há caminho que ao homem parece direito... mas termina em morte'?"
+			},
+			"answer": {"en": "Proverbs 14:12", "pt": "Provérbios 14:12"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Proverbs 16:25", "pt": "Provérbios 16:25"},
+				{"en": "Proverbs 3:7", "pt": "Provérbios 3:7"},
+				{"en": "Proverbs 26:12", "pt": "Provérbios 26:12"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which proverb says, 'Iron sharpens iron, so one man sharpens another'?",
+				"pt":
+				"Qual provérbio diz: 'Assim como o ferro afia o ferro, o homem afia o seu companheiro'?"
+			},
+			"answer": {"en": "Proverbs 27:17", "pt": "Provérbios 27:17"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Proverbs 18:24", "pt": "Provérbios 18:24"},
+				{"en": "Proverbs 20:5", "pt": "Provérbios 20:5"},
+				{"en": "Proverbs 13:20", "pt": "Provérbios 13:20"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which proverb notes, 'Hope deferred makes the heart sick'?",
+				"pt": "Qual provérbio afirma: 'A esperança adiada faz adoecer o coração'?"
+			},
+			"answer": {"en": "Proverbs 13:12", "pt": "Provérbios 13:12"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Proverbs 12:25", "pt": "Provérbios 12:25"},
+				{"en": "Proverbs 18:14", "pt": "Provérbios 18:14"},
+				{"en": "Proverbs 17:22", "pt": "Provérbios 17:22"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which proverb says, 'A cheerful heart is good medicine'?",
+				"pt": "Qual provérbio diz: 'O coração alegre é bom remédio'?"
+			},
+			"answer": {"en": "Proverbs 17:22", "pt": "Provérbios 17:22"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Proverbs 15:13", "pt": "Provérbios 15:13"},
+				{"en": "Proverbs 12:25", "pt": "Provérbios 12:25"},
+				{"en": "Proverbs 16:24", "pt": "Provérbios 16:24"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which proverb contrasts a dry crust with peace versus feasting with strife?",
+				"pt":
+				"Qual provérbio contrasta uma crosta seca com paz versus banquete com contenda?"
+			},
+			"answer": {"en": "Proverbs 17:1", "pt": "Provérbios 17:1"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Proverbs 15:17", "pt": "Provérbios 15:17"},
+				{"en": "Proverbs 21:9", "pt": "Provérbios 21:9"},
+				{"en": "Proverbs 21:19", "pt": "Provérbios 21:19"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which proverb begins, 'The fear of the Lord is the beginning of knowledge'?",
+				"pt": "Qual provérbio começa: 'O temor do Senhor é o princípio do conhecimento'?"
+			},
+			"answer": {"en": "Proverbs 1:7", "pt": "Provérbios 1:7"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Proverbs 9:10", "pt": "Provérbios 9:10"},
+				{"en": "Proverbs 10:27", "pt": "Provérbios 10:27"},
+				{"en": "Proverbs 3:7", "pt": "Provérbios 3:7"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which chapter describes the noble wife whose worth is far above rubies?",
+				"pt": "Qual capítulo descreve a esposa virtuosa cujo valor excede os rubis?"
+			},
+			"answer": {"en": "Proverbs 31", "pt": "Provérbios 31"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Proverbs 30", "pt": "Provérbios 30"},
+				{"en": "Proverbs 18", "pt": "Provérbios 18"},
+				{"en": "Proverbs 12", "pt": "Provérbios 12"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which proverb says, 'Better a little with righteousness than great revenues with injustice'?",
+				"pt":
+				"Qual provérbio diz: 'Melhor é o pouco com justiça do que grandes rendas com injustiça'?"
+			},
+			"answer": {"en": "Proverbs 16:8", "pt": "Provérbios 16:8"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Proverbs 15:16", "pt": "Provérbios 15:16"},
+				{"en": "Proverbs 11:4", "pt": "Provérbios 11:4"},
+				{"en": "Proverbs 22:1", "pt": "Provérbios 22:1"}
+			]
 		}
 	],
 	"Major Prophets":
@@ -1827,7 +2768,7 @@ const BASE_QA := {
 				"pt": "Qual profeta viu o Senhor no templo e gritou: “Eis-me aqui”?"
 			},
 			"answer": {"en": "Isaiah", "pt": "Isaías"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Jeremiah", "pt": "Jeremias"},
@@ -1869,7 +2810,7 @@ const BASE_QA := {
 				"pt": "Quem interpretou a escrita na parede para o rei Belsazar?"
 			},
 			"answer": {"en": "Daniel", "pt": "Danilo"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Ezekiel", "pt": "Ezequiel"},
@@ -1959,7 +2900,7 @@ const BASE_QA := {
 				"pt": "De quem é o livro que contém a estátua de ouro, prata, bronze, ferro, barro?"
 			},
 			"answer": {"en": "Daniel", "pt": "Danilo"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Ezekiel", "pt": "Ezequiel"},
@@ -2049,7 +2990,7 @@ const BASE_QA := {
 				"pt": "A quem foi dito para comer um pergaminho de sabor doce?"
 			},
 			"answer": {"en": "Ezekiel", "pt": "Ezequiel"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "John", "pt": "John"},
@@ -2116,6 +3057,158 @@ const BASE_QA := {
 				{"en": "Isaiah", "pt": "Isaías"},
 				{"en": "John in Revelation", "pt": "João no Apocalipse"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet spent a night in a den of lions?",
+				"pt": "Qual profeta passou uma noite na cova dos le?es?"
+			},
+			"answer": {"en": "Daniel", "pt": "Daniel"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Jeremiah", "pt": "Jeremias"},
+				{"en": "Ezekiel", "pt": "Ezequiel"},
+				{"en": "Isaiah", "pt": "Isa?as"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet wrote a book of laments over Jerusalem's fall?",
+				"pt": "Qual profeta escreveu um livro de lamenta??es sobre a queda de Jerusal?m?"
+			},
+			"answer": {"en": "Jeremiah", "pt": "Jeremias"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Isaiah", "pt": "Isa?as"},
+				{"en": "Ezekiel", "pt": "Ezequiel"},
+				{"en": "Daniel", "pt": "Daniel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet was told a virgin would conceive a son called Immanuel?",
+				"pt": "Qual profeta ouviu que uma virgem conceberia um filho chamado Emanuel?"
+			},
+			"answer": {"en": "Isaiah", "pt": "Isa?as"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Jeremiah", "pt": "Jeremias"},
+				{"en": "Ezekiel", "pt": "Ezequiel"},
+				{"en": "Malachi", "pt": "Malaquias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet lived among the exiles by the Kebar River?",
+				"pt": "Qual profeta viveu entre os exilados ? beira do rio Quebar?"
+			},
+			"answer": {"en": "Ezekiel", "pt": "Ezequiel"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Isaiah", "pt": "Isa?as"},
+				{"en": "Habakkuk", "pt": "Habacuque"},
+				{"en": "Haggai", "pt": "Ageu"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which chapter foretells the Suffering Servant pierced for our transgressions?",
+				"pt": "Qual cap?tulo prediz o Servo Sofredor traspassado por nossas transgress?es?"
+			},
+			"answer": {"en": "Isaiah 53", "pt": "Isa?as 53"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Isaiah 7", "pt": "Isa?as 7"},
+				{"en": "Jeremiah 31", "pt": "Jeremias 31"},
+				{"en": "Ezekiel 18", "pt": "Ezequiel 18"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet buried a linen belt near the Euphrates as a sign?",
+				"pt": "Qual profeta enterrou um cinto de linho perto do Eufrates como sinal?"
+			},
+			"answer": {"en": "Jeremiah", "pt": "Jeremias"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Isaiah", "pt": "Isa?as"},
+				{"en": "Ezekiel", "pt": "Ezequiel"},
+				{"en": "Amos", "pt": "Am?s"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet saw a boiling pot tilting from the north?",
+				"pt": "Qual profeta viu uma panela fervendo inclinada do norte?"
+			},
+			"answer": {"en": "Jeremiah", "pt": "Jeremias"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ezekiel", "pt": "Ezequiel"},
+				{"en": "Habakkuk", "pt": "Habacuque"},
+				{"en": "Daniel", "pt": "Daniel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet cooked food over cow dung after protesting using human dung?",
+				"pt":
+				"Qual profeta cozinhou comida sobre esterco de vaca ap?s protestar usar esterco humano?"
+			},
+			"answer": {"en": "Ezekiel", "pt": "Ezequiel"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Jeremiah", "pt": "Jeremias"},
+				{"en": "Amos", "pt": "Am?s"},
+				{"en": "Malachi", "pt": "Malaquias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet saw a ram and a goat colliding by the Ulai Canal?",
+				"pt": "Qual profeta viu um carneiro e um bode colidindo junto ao rio Ulai?"
+			},
+			"answer": {"en": "Daniel", "pt": "Daniel"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Isaiah", "pt": "Isa?as"},
+				{"en": "Jeremiah", "pt": "Jeremias"},
+				{"en": "Ezekiel", "pt": "Ezequiel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet received the prophecy of seventy weeks concerning his people?",
+				"pt": "Qual profeta recebeu a profecia das setenta semanas para seu povo?"
+			},
+			"answer": {"en": "Daniel", "pt": "Daniel"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Jeremiah", "pt": "Jeremias"},
+				{"en": "Ezekiel", "pt": "Ezequiel"},
+				{"en": "Haggai", "pt": "Ageu"}
+			]
 		}
 	],
 	"Minor Prophets":
@@ -2142,7 +3235,7 @@ const BASE_QA := {
 				"pt": "Qual profeta predisse Belém como o local de nascimento do Messias?"
 			},
 			"answer": {"en": "Micah", "pt": "Miquéias"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Hosea", "pt": "Oséias"},
@@ -2187,7 +3280,7 @@ const BASE_QA := {
 				"pt": "Qual profeta falou de um mensageiro preparando o caminho?"
 			},
 			"answer": {"en": "Malachi", "pt": "Malaquias"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Zechariah", "pt": "Zacarias"},
@@ -2247,7 +3340,7 @@ const BASE_QA := {
 				"pt": "Quem exortou o povo: ‘Voltem para mim e eu voltarei para vocês’?"
 			},
 			"answer": {"en": "Malachi", "pt": "Malaquias"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Zechariah", "pt": "Zacarias"},
@@ -2420,6 +3513,162 @@ const BASE_QA := {
 				{"en": "Samuel", "pt": "Samuel"},
 				{"en": "Gideon", "pt": "Gideão"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet called the returned exiles to rebuild the temple?",
+				"pt": "Qual profeta chamou os exilados que voltaram para reconstruir o templo?"
+			},
+			"answer": {"en": "Haggai", "pt": "Ageu"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Zechariah", "pt": "Zacarias"},
+				{"en": "Malachi", "pt": "Malaquias"},
+				{"en": "Ezra", "pt": "Esdras"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet declared, 'Not by might nor by power, but by my Spirit'?",
+				"pt": "Qual profeta declarou: 'N?o por for?a nem por poder, mas pelo meu Esp?rito'?"
+			},
+			"answer": {"en": "Zechariah", "pt": "Zacarias"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Haggai", "pt": "Ageu"},
+				{"en": "Malachi", "pt": "Malaquias"},
+				{"en": "Joel", "pt": "Joel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which prophet ran from Nineveh's call and later sat under a plant east of the city?",
+				"pt":
+				"Qual profeta fugiu do chamado a N?nive e depois se sentou sob uma planta a leste da cidade?"
+			},
+			"answer": {"en": "Jonah", "pt": "Jonas"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Nahum", "pt": "Naum"},
+				{"en": "Habakkuk", "pt": "Habacuque"},
+				{"en": "Micah", "pt": "Miqueias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet focused his entire book on judgment against Edom?",
+				"pt": "Qual profeta concentrou seu livro inteiro em ju?zo contra Edom?"
+			},
+			"answer": {"en": "Obadiah", "pt": "Obadias"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Joel", "pt": "Joel"},
+				{"en": "Amos", "pt": "Am?s"},
+				{"en": "Malachi", "pt": "Malaquias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which prophet promised Elijah would come before the great and terrible day of the Lord?",
+				"pt":
+				"Qual profeta prometeu que Elias viria antes do grande e terr?vel dia do Senhor?"
+			},
+			"answer": {"en": "Malachi", "pt": "Malaquias"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Haggai", "pt": "Ageu"},
+				{"en": "Zephaniah", "pt": "Sofonias"},
+				{"en": "Zechariah", "pt": "Zacarias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which prophet saw a basket of summer fruit showing Israel was ripe for judgment?",
+				"pt":
+				"Qual profeta viu um cesto de frutas de ver?o mostrando que Israel estava maduro para o ju?zo?"
+			},
+			"answer": {"en": "Amos", "pt": "Am?s"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Hosea", "pt": "Os?ias"},
+				{"en": "Joel", "pt": "Joel"},
+				{"en": "Micah", "pt": "Miqueias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet named his children Lo-Ruhamah and Lo-Ammi as signs?",
+				"pt": "Qual profeta nomeou seus filhos Lo-Ruama e Lo-Ami como sinais?"
+			},
+			"answer": {"en": "Hosea", "pt": "Os?ias"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Micah", "pt": "Miqueias"},
+				{"en": "Zechariah", "pt": "Zacarias"},
+				{"en": "Habakkuk", "pt": "Habacuque"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet said the Lord would rejoice over Zion with singing?",
+				"pt": "Qual profeta disse que o Senhor se alegraria em Si?o com c?nticos?"
+			},
+			"answer": {"en": "Zephaniah", "pt": "Sofonias"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Haggai", "pt": "Ageu"},
+				{"en": "Joel", "pt": "Joel"},
+				{"en": "Malachi", "pt": "Malaquias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet pictured chariots racing through Nineveh's streets?",
+				"pt": "Qual profeta descreveu carros correndo pelas ruas de N?nive?"
+			},
+			"answer": {"en": "Nahum", "pt": "Naum"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Jonah", "pt": "Jonas"},
+				{"en": "Habakkuk", "pt": "Habacuque"},
+				{"en": "Zechariah", "pt": "Zacarias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet climbed a watchtower to wait for God's answer?",
+				"pt": "Qual profeta subiu a uma torre de vigia para aguardar a resposta de Deus?"
+			},
+			"answer": {"en": "Habakkuk", "pt": "Habacuque"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Haggai", "pt": "Ageu"},
+				{"en": "Micah", "pt": "Miqueias"},
+				{"en": "Malachi", "pt": "Malaquias"}
+			]
 		}
 	],
 	"Women of the Old Testament":
@@ -2431,107 +3680,35 @@ const BASE_QA := {
 			"tier": 1,
 			"decoys":
 			[
+				{"en": "Orpah", "pt": "Orfa"},
 				{"en": "Naomi", "pt": "Noemi"},
-				{"en": "Esther", "pt": "Ester"},
-				{"en": "Deborah", "pt": "Débora"}
+				{"en": "Tamar", "pt": "Tamar"}
 			]
 		},
 		{
 			"question":
 			{
 				"en": "Which queen saved her people from Haman?",
-				"pt": "Qual rainha salvou seu povo de Hamã?"
+				"pt": "Qual rainha salvou seu povo de Haman?"
 			},
 			"answer": {"en": "Esther", "pt": "Ester"},
 			"tier": 1,
 			"decoys":
 			[
 				{"en": "Vashti", "pt": "Vasti"},
-				{"en": "Jezebel", "pt": "Jezabel"},
-				{"en": "Athaliah", "pt": "Atalia"}
+				{"en": "Athaliah", "pt": "Atalia"},
+				{"en": "Bathsheba", "pt": "Bate-Seba"}
 			]
 		},
 		{
-			"question":
-			{
-				"en": "Who judged Israel under the palm tree?",
-				"pt": "Quem julgou Israel debaixo da palmeira?"
-			},
-			"answer": {"en": "Deborah", "pt": "Débora"},
-			"tier": 2,
-			"decoys":
-			[
-				{"en": "Huldah", "pt": "Hulda"},
-				{"en": "Jael", "pt": "Jael"},
-				{"en": "Miriam", "pt": "Míriam"}
-			]
-		},
-		{
-			"question":
-			{
-				"en": "Who prayed for a son and bore Samuel?",
-				"pt": "Quem orou por um filho e deu à luz Samuel?"
-			},
-			"answer": {"en": "Hannah", "pt": "Ana"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "Elizabeth", "pt": "Elisabete"},
-				{"en": "Sarah", "pt": "Sara"},
-				{"en": "Rachel", "pt": "Raquel"}
-			]
-		},
-		{
-			"question": {"en": "Who was Abraham's wife?", "pt": "Quem era a esposa de Abraão?"},
+			"question": {"en": "Who was Abraham's wife?", "pt": "Quem era a esposa de Abraao?"},
 			"answer": {"en": "Sarah", "pt": "Sara"},
 			"tier": 1,
 			"decoys":
 			[
-				{"en": "Rebekah", "pt": "Rebeca"},
-				{"en": "Rachel", "pt": "Raquel"},
-				{"en": "Leah", "pt": "Lia"}
-			]
-		},
-		{
-			"question":
-			{"en": "Who killed Sisera with a tent peg?", "pt": "Quem matou Sísera com uma estaca?"},
-			"answer": {"en": "Jael", "pt": "Jael"},
-			"tier": 2,
-			"decoys":
-			[
-				{"en": "Deborah", "pt": "Débora"},
-				{"en": "Miriam", "pt": "Míriam"},
-				{"en": "Athaliah", "pt": "Atalia"}
-			]
-		},
-		{
-			"question":
-			{
-				"en": "Who hid the Hebrew spies on her roof?",
-				"pt": "Quem escondeu os espiões hebreus no telhado dela?"
-			},
-			"answer": {"en": "Rahab", "pt": "Raabe"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "Ruth", "pt": "Rute"},
-				{"en": "Miriam", "pt": "Míriam"},
-				{"en": "Leah", "pt": "Lia"}
-			]
-		},
-		{
-			"question":
-			{
-				"en": "Who was Lot's wife turned into a pillar of salt?",
-				"pt": "Quem foi a esposa de Ló transformada em estátua de sal?"
-			},
-			"answer": {"en": "Lot's wife", "pt": "A esposa de Ló"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "Naomi", "pt": "Noemi"},
-				{"en": "Tamar", "pt": "Tamar"},
-				{"en": "Zipporah", "pt": "Zípora"}
+				{"en": "Hagar", "pt": "Agar"},
+				{"en": "Keturah", "pt": "Quetura"},
+				{"en": "Rebekah", "pt": "Rebeca"}
 			]
 		},
 		{
@@ -2547,66 +3724,92 @@ const BASE_QA := {
 		},
 		{
 			"question":
-			{"en": "Who was Jacob's first wife?", "pt": "Quem foi a primeira esposa de Jacó?"},
-			"answer": {"en": "Leah", "pt": "Lia"},
+			{"en": "Who was Jacob's beloved wife?", "pt": "Quem era a esposa amada de Jaco?"},
+			"answer": {"en": "Rachel", "pt": "Raquel"},
 			"tier": 1,
 			"decoys":
 			[
-				{"en": "Rachel", "pt": "Raquel"},
-				{"en": "Bilhah", "pt": "Bilá"},
+				{"en": "Leah", "pt": "Lia"},
+				{"en": "Bilhah", "pt": "Bila"},
 				{"en": "Zilpah", "pt": "Zilpa"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "Who anointed Jesus' feet with costly perfume (OT foreshadow)?",
-				"pt": "Quem ungiu os pés de Jesus com perfume caro (prefiguração do AT)?"
+				"en": "Who prayed for a son and bore Samuel?",
+				"pt": "Quem orou por um filho e gerou Samuel?"
 			},
-			"answer": {"en": "Not in OT", "pt": "Não no AT"},
-			"tier": 3,
-			"decoys":
-			[
-				{"en": "Esther", "pt": "Ester"},
-				{"en": "Hannah", "pt": "Ana"},
-				{"en": "Miriam", "pt": "Míriam"}
-			]
-		},
-		{
-			"question":
-			{
-				"en": "Who urged Elisha to stay with her family and built him a room?",
-				"pt": "Quem incentivou Eliseu a ficar com a família e construiu um quarto para ele?"
-			},
-			"answer": {"en": "The Shunammite woman", "pt": "A mulher Sunamita"},
-			"tier": 2,
-			"decoys":
-			[
-				{"en": "The widow of Zarephath", "pt": "A viúva de Sarepta"},
-				{"en": "Hannah", "pt": "Ana"},
-				{"en": "Abigail", "pt": "Abigail"}
-			]
-		},
-		{
-			"question":
-			{
-				"en": "Who married Boaz and became David's great-grandmother?",
-				"pt": "Quem se casou com Boaz e se tornou bisavó de Davi?"
-			},
-			"answer": {"en": "Ruth", "pt": "Rute"},
+			"answer": {"en": "Hannah", "pt": "Ana"},
 			"tier": 1,
 			"decoys":
 			[
+				{"en": "Elizabeth", "pt": "Elisabete"},
 				{"en": "Naomi", "pt": "Noemi"},
-				{"en": "Orpah", "pt": "Orfa"},
+				{"en": "Deborah", "pt": "Debora"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who hid the Hebrew spies on her roof?",
+				"pt": "Quem escondeu os espioes hebreus no telhado?"
+			},
+			"answer": {"en": "Rahab", "pt": "Raabe"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Ruth", "pt": "Rute"},
+				{"en": "Jael", "pt": "Jael"},
+				{"en": "Huldah", "pt": "Hulda"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was the sister of Moses and Aaron?",
+				"pt": "Quem era a irma de Moises e Aarao?"
+			},
+			"answer": {"en": "Miriam", "pt": "Miri?"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Zipporah", "pt": "Zipora"},
+				{"en": "Jochebed", "pt": "Joquebede"},
+				{"en": "Deborah", "pt": "Debora"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was the wife of Uriah and mother of Solomon?",
+				"pt": "Quem foi a esposa de Urias e mae de Salomao?"
+			},
+			"answer": {"en": "Bathsheba", "pt": "Bate-Seba"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Michal", "pt": "Mical"},
+				{"en": "Abigail", "pt": "Abigail"},
 				{"en": "Tamar", "pt": "Tamar"}
 			]
 		},
 		{
+			"question": {"en": "Who was Ruth's mother-in-law?", "pt": "Quem era a sogra de Rute?"},
+			"answer": {"en": "Naomi", "pt": "Noemi"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Orpah", "pt": "Orfa"},
+				{"en": "Mara", "pt": "Mara"},
+				{"en": "Milcah", "pt": "Milca"}
+			]
+		},
+		{
 			"question":
 			{
-				"en": "Who confronted David for wanting Nabal's food?",
-				"pt": "Quem confrontou Davi por querer a comida de Nabal?"
+				"en": "Who confronted David to prevent him from avenging himself on Nabal?",
+				"pt": "Quem confrontou Davi para impedi-lo de vingar-se de Nabal?"
 			},
 			"answer": {"en": "Abigail", "pt": "Abigail"},
 			"tier": 2,
@@ -2614,86 +3817,285 @@ const BASE_QA := {
 			[
 				{"en": "Michal", "pt": "Mical"},
 				{"en": "Bathsheba", "pt": "Bate-Seba"},
-				{"en": "Ahinoam", "pt": "Ainoã"}
+				{"en": "Tamar", "pt": "Tamar"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "Who was the prophetess that found the Book of the Law in Josiah's time?",
-				"pt": "Quem foi a profetisa que encontrou o Livro da Lei na época de Josias?"
+				"en": "Which prophetess verified the Book of the Law in Josiah's day?",
+				"pt": "Qual profetisa confirmou o Livro da Lei nos dias de Josias?"
 			},
 			"answer": {"en": "Huldah", "pt": "Hulda"},
 			"tier": 2,
 			"decoys":
 			[
-				{"en": "Deborah", "pt": "Débora"},
-				{"en": "Miriam", "pt": "Míriam"},
-				{"en": "Anna", "pt": "Ana"}
+				{"en": "Deborah", "pt": "Debora"},
+				{"en": "Jael", "pt": "Jael"},
+				{"en": "Miriam", "pt": "Miri?"}
 			]
 		},
 		{
-			"question": {"en": "Who was the mother of Samson?", "pt": "Quem foi a mãe de Sansão?"},
-			"answer": {"en": "Manoah's wife", "pt": "A esposa de Manoá"},
+			"question":
+			{
+				"en": "Who hosted Elisha and built a room on her roof?",
+				"pt": "Quem hospedou Eliseu e construiu um quarto no terra?o?"
+			},
+			"answer": {"en": "The Shunammite woman", "pt": "A sunamita"},
 			"tier": 2,
 			"decoys":
 			[
-				{"en": "Hannah", "pt": "Ana"},
-				{"en": "Naomi", "pt": "Noemi"},
-				{"en": "Bathsheba", "pt": "Bate-Seba"}
-			]
-		},
-		{
-			"question": {"en": "Who was mother of Samuel?", "pt": "Quem foi a mãe de Samuel?"},
-			"answer": {"en": "Hannah", "pt": "Ana"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "Elizabeth", "pt": "Elisabete"},
-				{"en": "Miriam", "pt": "Míriam"},
-				{"en": "Deborah", "pt": "Débora"}
-			]
-		},
-		{
-			"question":
-			{"en": "Who rescued Moses as a baby?", "pt": "Quem resgatou Moisés quando bebê?"},
-			"answer": {"en": "Pharaoh's daughter", "pt": "Filha do Faraó"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "Miriam", "pt": "Míriam"},
-				{"en": "Jochebed", "pt": "Joquebede"},
-				{"en": "Zipporah", "pt": "Zípora"}
+				{"en": "Widow of Zarephath", "pt": "Vi?va de Sarepta"},
+				{"en": "Widow with the oil", "pt": "Vi?va do azeite"},
+				{"en": "Hannah", "pt": "Ana"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "Who was mother of John the Baptist (OT segue)?",
-				"pt": "Quem foi a mãe de João Batista (OT segue)?"
+				"en": "Who had a jar of oil that filled many vessels by Elisha's word?",
+				"pt":
+				"Quem teve uma botija de azeite que encheu muitos vasos pela palavra de Eliseu?"
 			},
-			"answer": {"en": "Elizabeth", "pt": "Elisabete"},
+			"answer": {"en": "The widow of a prophet", "pt": "A vi?va de um profeta"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Widow of Zarephath", "pt": "Vi?va de Sarepta"},
+				{"en": "Ruth", "pt": "Rute"},
+				{"en": "Esther", "pt": "Ester"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who hid a baby Joash in the temple to preserve the royal line?",
+				"pt": "Quem escondeu o beb? Jo?s no templo para preservar a linhagem real?"
+			},
+			"answer": {"en": "Jehosheba", "pt": "Jeoseba"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Athaliah", "pt": "Atalia"},
+				{"en": "Maacah", "pt": "Maaca"},
+				{"en": "Abijah", "pt": "Abias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who mocked David for dancing before the Lord?",
+				"pt": "Quem zombou de Davi por dan?ar diante do Senhor?"
+			},
+			"answer": {"en": "Michal", "pt": "Mical"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Abigail", "pt": "Abigail"},
+				{"en": "Bathsheba", "pt": "Bate-Seba"},
+				{"en": "Tamar", "pt": "Tamar"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who betrayed Samson by cutting his hair?",
+				"pt": "Quem traiu Sans?o cortando seu cabelo?"
+			},
+			"answer": {"en": "Delilah", "pt": "Dalila"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Jael", "pt": "Jael"},
+				{"en": "Rahab", "pt": "Raabe"},
+				{"en": "Athaliah", "pt": "Atalia"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who ruled Judah briefly and killed royal heirs?",
+				"pt": "Quem governou Jud? brevemente e matou herdeiros reais?"
+			},
+			"answer": {"en": "Athaliah", "pt": "Atalia"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Vashti", "pt": "Vasti"},
+				{"en": "Maacah", "pt": "Maaca"},
+				{"en": "Jezebel", "pt": "Jezabel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who drew Moses from the Nile and adopted him?",
+				"pt": "Quem tirou Mois?s do Nilo e o adotou?"
+			},
+			"answer": {"en": "Pharaoh's daughter", "pt": "Filha do Fara?"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Jochebed", "pt": "Joquebede"},
+				{"en": "Miriam", "pt": "Miri?"},
+				{"en": "Zipporah", "pt": "Zipora"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was mother of Perez and Zerah by Judah?",
+				"pt": "Quem foi m?e de Perez e Zera de Jud??"
+			},
+			"answer": {"en": "Tamar (Judah's daughter-in-law)", "pt": "Tamar (nora de Jud?)"},
 			"tier": 3,
 			"decoys":
 			[
-				{"en": "Hannah", "pt": "Ana"},
-				{"en": "Sarah", "pt": "Sara"},
-				{"en": "Miriam", "pt": "Míriam"}
+				{"en": "Ruth", "pt": "Rute"},
+				{"en": "Orpah", "pt": "Orfa"},
+				{"en": "Leah", "pt": "Lia"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "Who was King Ahab's wicked wife?",
+				"en": "Who was daughter of David violated by Amnon?",
+				"pt": "Quem foi a filha de Davi violentada por Amnom?"
+			},
+			"answer": {"en": "Tamar (daughter of David)", "pt": "Tamar (filha de Davi)"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Tamar (Judah's daughter-in-law)", "pt": "Tamar (nora de Jud?)"},
+				{"en": "Dinah", "pt": "Din?"},
+				{"en": "Michal", "pt": "Mical"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who circumcised her son to save Moses' life on the journey?",
+				"pt": "Quem circuncidou seu filho para salvar a vida de Mois?s na viagem?"
+			},
+			"answer": {"en": "Zipporah", "pt": "Zipora"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Jochebed", "pt": "Joquebede"},
+				{"en": "Miriam", "pt": "Miri?"},
+				{"en": "Elisheba", "pt": "Eliseba"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was wronged at Shechem, prompting her brothers' revenge?",
+				"pt": "Quem foi violentada em Siqu?m, provocando a vingan?a de seus irm?os?"
+			},
+			"answer": {"en": "Dinah", "pt": "Din?"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Leah", "pt": "Lia"},
+				{"en": "Rachel", "pt": "Raquel"},
+				{"en": "Deborah", "pt": "Debora"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was the wicked wife of King Ahab?",
 				"pt": "Quem era a esposa perversa do rei Acabe?"
 			},
 			"answer": {"en": "Jezebel", "pt": "Jezabel"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Athaliah", "pt": "Atalia"},
 				{"en": "Vashti", "pt": "Vasti"},
 				{"en": "Delilah", "pt": "Dalila"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who refused to appear before King Xerxes at his banquet?",
+				"pt": "Quem se recusou a aparecer perante o rei Xerxes em seu banquete?"
+			},
+			"answer": {"en": "Vashti", "pt": "Vasti"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Esther", "pt": "Ester"},
+				{"en": "Michal", "pt": "Mical"},
+				{"en": "Bathsheba", "pt": "Bate-Seba"}
+			]
+		},
+		{
+			"question": {"en": "Who was wife of Aaron?", "pt": "Quem era a esposa de Ar?o?"},
+			"answer": {"en": "Elisheba", "pt": "Eliseba"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Miriam", "pt": "Miri?"},
+				{"en": "Zipporah", "pt": "Zipora"},
+				{"en": "Naomi", "pt": "Noemi"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who tempted Joseph in Potiphar's house?",
+				"pt": "Quem tentou Jos? na casa de Potifar?"
+			},
+			"answer": {"en": "Potiphar's wife", "pt": "Esposa de Potifar"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Pharaoh's wife", "pt": "Esposa do Fara?"},
+				{"en": "Asenath", "pt": "Azenate"},
+				{"en": "Dinah", "pt": "Din?"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which midwives feared God and spared Hebrew baby boys?",
+				"pt": "Quais parteiras temeram a Deus e pouparam os meninos hebreus?"
+			},
+			"answer": {"en": "Shiphrah and Puah", "pt": "Sifrá e Puá"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Miriam and Jochebed", "pt": "Miriã e Joquebede"},
+				{"en": "Hannah and Peninnah", "pt": "Ana e Penina"},
+				{"en": "Leah and Rachel", "pt": "Lia e Raquel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was the unfaithful wife Hosea was told to marry?",
+				"pt": "Quem foi a esposa infiel que Oséias foi instruído a tomar?"
+			},
+			"answer": {"en": "Gomer", "pt": "Gomer"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Hagar", "pt": "Agar"},
+				{"en": "Maacah", "pt": "Maaca"},
+				{"en": "Vashti", "pt": "Vasti"}
+			]
+		},
+		{
+			"question": {"en": "Who was Absalom's mother?", "pt": "Quem era a mãe de Absalão?"},
+			"answer": {"en": "Maacah, daughter of Talmai", "pt": "Maaca, filha de Talmai"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Bathsheba", "pt": "Bate-Seba"},
+				{"en": "Michal", "pt": "Mical"},
+				{"en": "Tamar", "pt": "Tamar"}
 			]
 		}
 	],
@@ -2706,7 +4108,7 @@ const BASE_QA := {
 				"pt": "Qual bastão se tornou uma serpente diante do Faraó?"
 			},
 			"answer": {"en": "Aaron's", "pt": "Aarão"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Moses'", "pt": "Moisés'"},
@@ -2751,7 +4153,7 @@ const BASE_QA := {
 				"pt": "De quem era o óleo que continuava fluindo para encher os potes?"
 			},
 			"answer": {"en": "The widow helped by Elisha", "pt": "A viúva ajudada por Eliseu"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "The widow of Zarephath", "pt": "A viúva de Sarepta"},
@@ -2841,7 +4243,7 @@ const BASE_QA := {
 				"pt": "Quem foi curado quando olhou para a serpente de bronze?"
 			},
 			"answer": {"en": "Israelites bitten by snakes", "pt": "Israelitas mordidos por cobras"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Philistines", "pt": "Filisteus"},
@@ -2995,45 +4397,195 @@ const BASE_QA := {
 				{"en": "Samuel", "pt": "Samuel"},
 				{"en": "Isaiah", "pt": "Isaías"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Whose rod blossomed with almond flowers as a sign?",
+				"pt": "De quem a vara floresceu com amendoeiras como sinal?"
+			},
+			"answer": {"en": "Aaron", "pt": "Aar?o"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Moses", "pt": "Mois?s"},
+				{"en": "Joshua", "pt": "Josu?"},
+				{"en": "Elijah", "pt": "Elias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who made bitter water sweet at Marah?",
+				"pt": "Quem tornou doce a ?gua amarga em Mara?"
+			},
+			"answer": {"en": "Moses", "pt": "Mois?s"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Elisha", "pt": "Eliseu"},
+				{"en": "Joshua", "pt": "Josu?"},
+				{"en": "Samuel", "pt": "Samuel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who called down fire to consume a soaked sacrifice on Carmel?",
+				"pt": "Quem clamou fogo para consumir um sacrif?cio encharcado no Carmelo?"
+			},
+			"answer": {"en": "Elijah", "pt": "Elias"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Elisha", "pt": "Eliseu"},
+				{"en": "Moses", "pt": "Mois?s"},
+				{"en": "Gideon", "pt": "Gide?o"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who stretched out his staff and the sea parted?",
+				"pt": "Quem estendeu o cajado e o mar se abriu?"
+			},
+			"answer": {"en": "Moses", "pt": "Mois?s"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Aaron", "pt": "Aar?o"},
+				{"en": "Joshua", "pt": "Josu?"},
+				{"en": "Caleb", "pt": "Calebe"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who saw the sun and shadow go back ten steps as a sign?",
+				"pt": "Quem viu o sol e a sombra voltarem dez degraus como sinal?"
+			},
+			"answer": {"en": "King Hezekiah", "pt": "Rei Ezequias"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "King Jehoshaphat", "pt": "Rei Josaf?"},
+				{"en": "King Asa", "pt": "Rei Asa"},
+				{"en": "King Josiah", "pt": "Rei Josias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who made an iron axe head float on the Jordan?",
+				"pt": "Quem fez o ferro do machado flutuar no Jord?o?"
+			},
+			"answer": {"en": "Elisha", "pt": "Eliseu"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Elijah", "pt": "Elias"},
+				{"en": "Moses", "pt": "Mois?s"},
+				{"en": "Joshua", "pt": "Josu?"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who raised a Shunammite's son from the dead?",
+				"pt": "Quem ressuscitou o filho da sunamita?"
+			},
+			"answer": {"en": "Elisha", "pt": "Eliseu"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Elijah", "pt": "Elias"},
+				{"en": "Isaiah", "pt": "Isa?as"},
+				{"en": "Jeremiah", "pt": "Jeremias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Whose bones revived a dead man when touched?",
+				"pt": "De quem os ossos reviveram um morto ao serem tocados?"
+			},
+			"answer": {"en": "Elisha", "pt": "Eliseu"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Elijah", "pt": "Elias"},
+				{"en": "Isaiah", "pt": "Isa?as"},
+				{"en": "Samuel", "pt": "Samuel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who called fire to consume two captains of fifty?",
+				"pt": "Quem chamou fogo para consumir dois capit?es de cinquenta?"
+			},
+			"answer": {"en": "Elijah", "pt": "Elias"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Moses", "pt": "Mois?s"},
+				{"en": "Samuel", "pt": "Samuel"},
+				{"en": "Gideon", "pt": "Gide?o"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who saw a fiery chariot take his master up to heaven?",
+				"pt": "Quem viu um carro de fogo levar seu mestre aos c?us?"
+			},
+			"answer": {"en": "Elisha", "pt": "Eliseu"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Gehazi", "pt": "Geazi"},
+				{"en": "Obadiah", "pt": "Obadias"},
+				{"en": "Jehu", "pt": "Je?"}
+			]
 		}
 	],
 	"Birth of Jesus":
 	[
 		{
 			"question": {"en": "Where was Jesus born?", "pt": "Onde Jesus nasceu?"},
-			"answer": {"en": "Bethlehem", "pt": "Belém"},
+			"answer": {"en": "Bethlehem", "pt": "Bel?m"},
 			"tier": 1,
 			"decoys":
 			[
-				{"en": "Nazareth", "pt": "Nazaré"},
-				{"en": "Jerusalem", "pt": "Jerusalém"},
+				{"en": "Nazareth", "pt": "Nazar?"},
+				{"en": "Jerusalem", "pt": "Jerusal?m"},
 				{"en": "Capernaum", "pt": "Cafarnaum"}
 			]
 		},
 		{
-			"question": {"en": "Who was Jesus' mother?", "pt": "Quem foi a mãe de Jesus?"},
-			"answer": {"en": "Mary", "pt": "Mary"},
+			"question": {"en": "Who was Jesus' mother?", "pt": "Quem foi a m?e de Jesus?"},
+			"answer": {"en": "Mary", "pt": "Maria"},
 			"tier": 1,
 			"decoys":
 			[
 				{"en": "Elizabeth", "pt": "Elisabete"},
 				{"en": "Martha", "pt": "Marta"},
-				{"en": "Salome", "pt": "Salomé"}
+				{"en": "Salome", "pt": "Salom?"}
 			]
 		},
 		{
 			"question":
 			{
 				"en": "Where was Jesus laid after birth?",
-				"pt": "Onde Jesus foi colocado após o nascimento?"
+				"pt": "Onde Jesus foi colocado apos o nascimento?"
 			},
-			"answer": {"en": "In a manger", "pt": "Em uma manjedoura"},
+			"answer": {"en": "In a manger", "pt": "Numa manjedoura"},
 			"tier": 1,
 			"decoys":
 			[
-				{"en": "In a crib", "pt": "Em um berço"},
-				{"en": "In a basket", "pt": "Em uma cesta"},
-				{"en": "On straw in a cave", "pt": "Na palha em uma caverna"}
+				{"en": "In a crib", "pt": "Num ber?o"},
+				{"en": "In a basket", "pt": "Numa cesta"},
+				{"en": "On straw in a cave", "pt": "Na palha de uma caverna"}
 			]
 		},
 		{
@@ -3046,7 +4598,7 @@ const BASE_QA := {
 			"tier": 1,
 			"decoys":
 			[
-				{"en": "Wise men", "pt": "Homens sábios"},
+				{"en": "Wise men", "pt": "Magos"},
 				{"en": "Priests", "pt": "Sacerdotes"},
 				{"en": "Prophets", "pt": "Profetas"}
 			]
@@ -3054,16 +4606,88 @@ const BASE_QA := {
 		{
 			"question":
 			{
-				"en": "Who was Jesus' earthly guardian from the house of David?",
-				"pt": "Quem foi o guardião terrestre de Jesus na casa de Davi?"
+				"en": "Who was Jesus' earthly guardian from David's line?",
+				"pt": "Quem foi o guardi?o terreno de Jesus da linhagem de Davi?"
 			},
-			"answer": {"en": "Joseph the carpenter", "pt": "José, o carpinteiro"},
+			"answer": {"en": "Joseph", "pt": "Jos?"},
 			"tier": 1,
 			"decoys":
 			[
-				{"en": "Zacharias", "pt": "Zacarias"},
-				{"en": "Simeon", "pt": "Simeão"},
+				{"en": "Zechariah", "pt": "Zacarias"},
+				{"en": "Simeon", "pt": "Sime?o"},
 				{"en": "Nicodemus", "pt": "Nicodemos"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who visited Jesus guided by a star?",
+				"pt": "Quem visitou Jesus guiado por uma estrela?"
+			},
+			"answer": {"en": "Wise men from the east", "pt": "Magos do oriente"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Shepherds from Judea", "pt": "Pastores da Judeia"},
+				{"en": "Priests from Jerusalem", "pt": "Sacerdotes de Jerusal?m"},
+				{"en": "Merchants from Damascus", "pt": "Mercadores de Damasco"}
+			]
+		},
+		{
+			"question":
+			{"en": "What gifts did the wise men bring?", "pt": "Que presentes os magos trouxeram?"},
+			"answer": {"en": "Gold, frankincense, and myrrh", "pt": "Ouro, incenso e mirra"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Silver, spices, and oil", "pt": "Prata, especiarias e ?leo"},
+				{"en": "Wine, wool, and grain", "pt": "Vinho, l? e gr?o"},
+				{"en": "Iron, silk, and salt", "pt": "Ferro, seda e sal"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Where did the family flee from Herod?",
+				"pt": "Para onde a fam?lia fugiu de Herodes?"
+			},
+			"answer": {"en": "Egypt", "pt": "Egito"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Syria", "pt": "S?ria"},
+				{"en": "Babylon", "pt": "Babil?nia"},
+				{"en": "Rome", "pt": "Roma"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who ordered the massacre of infants in Bethlehem?",
+				"pt": "Quem ordenou a morte dos beb?s em Bel?m?"
+			},
+			"answer": {"en": "Herod the Great", "pt": "Herodes, o Grande"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Pilate", "pt": "Pilatos"},
+				{"en": "Herod Antipas", "pt": "Herodes Antipas"},
+				{"en": "Augustus", "pt": "Augusto"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What name was given because He will save His people?",
+				"pt": "Que nome foi dado porque Ele salvar? Seu povo?"
+			},
+			"answer": {"en": "Jesus", "pt": "Jesus"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Emmanuel", "pt": "Emanuel"},
+				{"en": "Christ", "pt": "Cristo"},
+				{"en": "Messiah", "pt": "Messias"}
 			]
 		},
 		{
@@ -3074,219 +4698,297 @@ const BASE_QA := {
 			},
 			"answer":
 			{
-				"en": "A baby wrapped in cloths lying in a manger",
-				"pt": "Um bebê envolto em panos deitado numa manjedoura"
+				"en": "A baby wrapped in cloths in a manger",
+				"pt": "Um beb? envolto em panos numa manjedoura"
 			},
 			"tier": 2,
 			"decoys":
 			[
 				{"en": "A star over a house", "pt": "Uma estrela sobre uma casa"},
-				{"en": "A crown on a child", "pt": "Uma coroa em uma criança"},
-				{"en": "A lamb by the child", "pt": "Um cordeiro da criança"}
+				{"en": "A crown on a child", "pt": "Uma coroa numa crian?a"},
+				{"en": "A lamb by the child", "pt": "Um cordeiro ao lado da crian?a"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "Who decreed the census that brought Mary and Joseph to Bethlehem?",
-				"pt": "Quem decretou o censo que trouxe Maria e José a Belém?"
+				"en": "Who decreed the census bringing Mary and Joseph to Bethlehem?",
+				"pt": "Quem decretou o censo que levou Maria e Jos? a Bel?m?"
 			},
-			"answer": {"en": "Caesar Augustus", "pt": "César Augusto"},
+			"answer": {"en": "Caesar Augustus", "pt": "C?sar Augusto"},
 			"tier": 2,
 			"decoys":
 			[
 				{"en": "Herod", "pt": "Herodes"},
 				{"en": "Quirinius", "pt": "Quirino"},
-				{"en": "Tiberius", "pt": "Tibério"}
+				{"en": "Tiberius", "pt": "Tib?rio"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "Who visited Jesus guided by a star?",
-				"pt": "Quem visitou Jesus guiado por uma estrela?"
-			},
-			"answer": {"en": "Wise men from the east", "pt": "Homens sábios do leste"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "Shepherds from Judea", "pt": "Pastores da Judéia"},
-				{"en": "Priests from Jerusalem", "pt": "Sacerdotes de Jerusalém"},
-				{"en": "Merchants from Damascus", "pt": "Comerciantes de Damasco"}
-			]
-		},
-		{
-			"question":
-			{
-				"en": "What gifts did the wise men bring?",
-				"pt": "Que presentes os sábios trouxeram?"
-			},
-			"answer": {"en": "Gold, frankincense, and myrrh", "pt": "Ouro, incenso e mirra"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "Jewels, spices, and silk", "pt": "Joias, especiarias e seda"},
-				{"en": "Silver, incense, and oil", "pt": "Prata, incenso e óleo"},
-				{"en": "Bronze, balsam, and wine", "pt": "Bronze, bálsamo e vinho"}
-			]
-		},
-		{
-			"question":
-			{
-				"en": "Where did the family flee from Herod?",
-				"pt": "Para onde a família fugiu de Herodes?"
-			},
-			"answer": {"en": "Egypt", "pt": "Egito"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "Nazareth", "pt": "Nazaré"},
-				{"en": "Damascus", "pt": "Damasco"},
-				{"en": "Babylon", "pt": "Babilônia"}
-			]
-		},
-		{
-			"question":
-			{
-				"en": "Who prophesied over baby Jesus saying 'a sword will pierce your soul'?",
-				"pt":
-				"Quem profetizou sobre o menino Jesus dizendo 'uma espada traspassará sua alma'?"
-			},
-			"answer": {"en": "Simeon", "pt": "Simeão"},
-			"tier": 2,
-			"decoys":
-			[
-				{"en": "Zechariah", "pt": "Zacarias"},
-				{"en": "Anna", "pt": "Ana"},
-				{"en": "Caiaphas", "pt": "Caifás"}
-			]
-		},
-		{
-			"question":
-			{
-				"en": "Who was the prophetess that rejoiced in the temple at Jesus' presentation?",
-				"pt": "Quem foi a profetisa que se alegrou no templo com a apresentação de Jesus?"
+				"en": "Which prophetess rejoiced in the temple at Jesus' presentation?",
+				"pt": "Qual profetisa se alegrou no templo na apresenta??o de Jesus?"
 			},
 			"answer": {"en": "Anna", "pt": "Ana"},
 			"tier": 2,
 			"decoys":
 			[
-				{"en": "Elizabeth", "pt": "Elisabete"},
-				{"en": "Mary of Clopas", "pt": "Maria de Clopas"},
+				{"en": "Huldah", "pt": "Hulda"},
+				{"en": "Deborah", "pt": "D?bora"},
+				{"en": "Elizabeth", "pt": "Elisabete"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who told Joseph to flee to Egypt?",
+				"pt": "Quem disse a Jos? para fugir para o Egito?"
+			},
+			"answer": {"en": "An angel in a dream", "pt": "Um anjo em sonho"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Simeon", "pt": "Sime?o"},
+				{"en": "Gabriel in the temple", "pt": "Gabriel no templo"},
+				{"en": "Herod's messenger", "pt": "Mensageiro de Herodes"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who told Joseph to return from Egypt after Herod died?",
+				"pt": "Quem disse a Jos? para voltar do Egito ap?s Herodes morrer?"
+			},
+			"answer": {"en": "An angel in a dream", "pt": "Um anjo em sonho"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Zechariah", "pt": "Zacarias"},
+				{"en": "Gabriel in person", "pt": "Gabriel em pessoa"},
+				{"en": "A prophetess", "pt": "Uma profetisa"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which angel spoke to Mary about bearing Jesus?",
+				"pt": "Qual anjo falou a Maria sobre conceber Jesus?"
+			},
+			"answer": {"en": "Gabriel", "pt": "Gabriel"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Michael", "pt": "Miguel"},
+				{"en": "Raphael", "pt": "Rafael"},
+				{"en": "Uriel", "pt": "Uriel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was Mary's relative expecting John the Baptist?",
+				"pt": "Qual parente de Maria esperava Jo?o Batista?"
+			},
+			"answer": {"en": "Elizabeth", "pt": "Elisabete"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Anna", "pt": "Ana"},
+				{"en": "Salome", "pt": "Salom?"},
 				{"en": "Martha", "pt": "Marta"}
 			]
 		},
 		{
 			"question":
-			{"en": "What town did Jesus grow up in?", "pt": "Em que cidade Jesus cresceu?"},
-			"answer": {"en": "Nazareth", "pt": "Nazaré"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "Bethlehem", "pt": "Belém"},
-				{"en": "Cana", "pt": "Caná"},
-				{"en": "Capernaum", "pt": "Cafarnaum"}
-			]
-		},
-		{
-			"question": {"en": "What lineage was Joseph from?", "pt": "De que linhagem era José?"},
-			"answer": {"en": "David", "pt": "Davi"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "Levi", "pt": "Levi"},
-				{"en": "Benjamin", "pt": "Benjamin"},
-				{"en": "Judah", "pt": "Judá"}
-			]
-		},
-		{
-			"question":
 			{
-				"en": "What was Mary's relative Elizabeth known for?",
-				"pt": "Pelo que Elizabeth, parente de Maria, era conhecida?"
+				"en": "Where was Jesus presented according to the law?",
+				"pt": "Onde Jesus foi apresentado segundo a lei?"
 			},
-			"answer": {"en": "Mother of John the Baptist", "pt": "Mãe de João Batista"},
+			"answer": {"en": "In the temple at Jerusalem", "pt": "No templo em Jerusal?m"},
 			"tier": 2,
 			"decoys":
 			[
-				{"en": "Prophetess in the temple", "pt": "Profetisa no templo"},
-				{"en": "Daughter of Aaron", "pt": "Filha de Arão"},
-				{"en": "Sister of Martha", "pt": "Irmã de Marta"}
+				{"en": "At Nazareth synagogue", "pt": "Na sinagoga de Nazar?"},
+				{"en": "At Bethlehem's gate", "pt": "No port?o de Bel?m"},
+				{"en": "At Mount Gerizim", "pt": "No Monte Gerizim"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "Who ordered the massacre of infants in Bethlehem?",
-				"pt": "Quem ordenou o massacre de crianças em Belém?"
+				"en": "What offering did Joseph and Mary bring at Jesus' presentation?",
+				"pt": "Que oferta Jos? e Maria trouxeram na apresenta??o de Jesus?"
 			},
-			"answer": {"en": "Herod", "pt": "Herodes"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "Pilate", "pt": "Pilatos"},
-				{"en": "Caiaphas", "pt": "Caifás"},
-				{"en": "Augustus", "pt": "Augusto"}
-			]
-		},
-		{
-			"question":
-			{
-				"en": "Where was the angel Gabriel sent to announce to Mary?",
-				"pt": "Onde foi enviado o anjo Gabriel para anunciar a Maria?"
-			},
-			"answer": {"en": "Nazareth", "pt": "Nazaré"},
+			"answer": {"en": "Two turtledoves or pigeons", "pt": "Duas rolas ou pombos"},
 			"tier": 2,
 			"decoys":
 			[
-				{"en": "Bethlehem", "pt": "Belém"},
-				{"en": "Jerusalem", "pt": "Jerusalém"},
-				{"en": "Hebron", "pt": "Hebrom"}
+				{"en": "A lamb", "pt": "Um cordeiro"},
+				{"en": "A grain offering", "pt": "Uma oferta de cereal"},
+				{"en": "A silver coin", "pt": "Uma moeda de prata"}
+			]
+		},
+		{
+			"question": {"en": "Joseph was from which house?", "pt": "Jos? era de qual casa?"},
+			"answer": {"en": "House of David", "pt": "Casa de Davi"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "House of Saul", "pt": "Casa de Saul"},
+				{"en": "House of Levi", "pt": "Casa de Levi"},
+				{"en": "House of Benjamin", "pt": "Casa de Benjamin"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "What did the shepherds do after seeing Jesus?",
-				"pt": "O que os pastores fizeram depois de ver Jesus?"
+				"en": "Who prophesied that a sword would pierce Mary's soul?",
+				"pt": "Quem profetizou que uma espada traspassaria a alma de Maria?"
 			},
-			"answer":
-			{
-				"en": "Spread the word and glorified God",
-				"pt": "Espalhe a palavra e glorifique a Deus"
-			},
-			"tier": 2,
-			"decoys":
-			[
-				{"en": "Returned silently", "pt": "Retornou silenciosamente"},
-				{"en": "Told only priests", "pt": "Disse apenas aos padres"},
-				{"en": "Stayed in Bethlehem", "pt": "Fiquei em Belém"}
-			]
-		},
-		{
-			"question": {"en": "Who was Mary's husband?", "pt": "Quem era o marido de Maria?"},
-			"answer": {"en": "Joseph", "pt": "José"},
-			"tier": 1,
+			"answer": {"en": "Simeon", "pt": "Sime?o"},
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Zechariah", "pt": "Zacarias"},
-				{"en": "John", "pt": "John"},
-				{"en": "Simon", "pt": "Simão"}
+				{"en": "Joseph", "pt": "Jos?"},
+				{"en": "John the Baptist", "pt": "Jo?o Batista"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "What name was given because He will save His people?",
-				"pt": "Que nome foi dado porque Ele salvará Seu povo?"
+				"en": "Who recognized Jesus as a light for the Gentiles?",
+				"pt": "Quem reconheceu Jesus como luz para os gentios?"
 			},
-			"answer": {"en": "Jesus", "pt": "Jesus"},
-			"tier": 1,
+			"answer": {"en": "Simeon", "pt": "Sime?o"},
+			"tier": 3,
 			"decoys":
 			[
-				{"en": "Emmanuel", "pt": "Emanuel"},
-				{"en": "Christ", "pt": "Cristo"},
-				{"en": "Messiah", "pt": "messias"}
+				{"en": "Nicodemus", "pt": "Nicodemos"},
+				{"en": "Gamaliel", "pt": "Gamaliel"},
+				{"en": "Caiaphas", "pt": "Caif?s"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which Old Testament book foretold Bethlehem as Messiah's birthplace?",
+				"pt": "Qual livro do AT previu Bel?m como local do nascimento do Messias?"
+			},
+			"answer": {"en": "Micah", "pt": "Miqu?ias"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Isaiah", "pt": "Isa?as"},
+				{"en": "Hosea", "pt": "Os?ias"},
+				{"en": "Malachi", "pt": "Malaquias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who warned the magi not to return to Herod?",
+				"pt": "Quem advertiu os magos a n?o retornarem a Herodes?"
+			},
+			"answer": {"en": "God in a dream", "pt": "Deus em sonho"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Gabriel", "pt": "Gabriel"},
+				{"en": "Herod's scribe", "pt": "Escriba de Herodes"},
+				{"en": "A shepherd", "pt": "Um pastor"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Where was Jesus when the wise men visited him?",
+				"pt": "Onde Jesus estava quando os magos o visitaram?"
+			},
+			"answer": {"en": "In a house", "pt": "Em uma casa"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "In the manger", "pt": "Na manjedoura"},
+				{"en": "In the temple", "pt": "No templo"},
+				{"en": "On the road", "pt": "Na estrada"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which ruler reigned in Judea after Herod, causing Joseph to avoid Judea?",
+				"pt":
+				"Qual governante reinava na Judeia ap?s Herodes, levando Jos? a evitar a Judeia?"
+			},
+			"answer": {"en": "Archelaus", "pt": "Arquelau"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Herod Antipas", "pt": "Herodes Antipas"},
+				{"en": "Pilate", "pt": "Pilatos"},
+				{"en": "Philip", "pt": "Filipe"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was governor of Syria during the census?",
+				"pt": "Quem era governador da S?ria durante o censo?"
+			},
+			"answer": {"en": "Quirinius", "pt": "Quirino"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Augustus", "pt": "Augusto"},
+				{"en": "Festus", "pt": "Festo"},
+				{"en": "Felix", "pt": "F?lix"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which prophet's words 'Out of Egypt I called my son' were fulfilled?",
+				"pt": "As palavras de qual profeta 'Do Egito chamei meu filho' foram cumpridas?"
+			},
+			"answer": {"en": "Hosea", "pt": "Os?ias"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Isaiah", "pt": "Isa?as"},
+				{"en": "Jeremiah", "pt": "Jeremias"},
+				{"en": "Micah", "pt": "Miqu?ias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "How old was Jesus when presented at the temple?",
+				"pt": "Quantos dias tinha Jesus quando foi apresentado no templo?"
+			},
+			"answer": {"en": "About forty days", "pt": "Cerca de quarenta dias"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Eight days", "pt": "Oito dias"},
+				{"en": "Twelve years", "pt": "Doze anos"},
+				{"en": "Thirty days", "pt": "Trinta dias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Where did Mary keep pondering these things?",
+				"pt": "Onde Maria guardava e meditava sobre essas coisas?"
+			},
+			"answer": {"en": "In her heart", "pt": "Em seu cora??o"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "In a scroll", "pt": "Em um pergaminho"},
+				{"en": "With Elizabeth", "pt": "Com Elisabete"},
+				{"en": "With Simeon", "pt": "Com Sime?o"}
 			]
 		}
 	],
@@ -3296,97 +4998,115 @@ const BASE_QA := {
 			"question":
 			{
 				"en": "What did Jesus turn water into at Cana?",
-				"pt": "Em que Jesus transformou a água em Caná?"
+				"pt": "Em que Jesus transformou a agua em Cana?"
 			},
 			"answer": {"en": "Wine", "pt": "Vinho"},
 			"tier": 1,
 			"decoys":
 			[
-				{"en": "Oil", "pt": "Óleo"},
-				{"en": "Milk", "pt": "Leite"},
-				{"en": "Vinegar", "pt": "Vinagre"}
+				{"en": "Grape juice", "pt": "Suco de uva"},
+				{"en": "Olive oil", "pt": "Azeite"},
+				{"en": "Nothing changed", "pt": "Nada mudou"}
 			]
 		},
 		{
 			"question":
 			{
 				"en": "How many were fed with five loaves and two fish?",
-				"pt": "Quantos foram alimentados com cinco pães e dois peixes?"
+				"pt": "Quantos foram alimentados com cinco paes e dois peixes?"
 			},
 			"answer": {"en": "About five thousand men", "pt": "Cerca de cinco mil homens"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "About four thousand", "pt": "Cerca de quatro mil"},
-				{"en": "About six thousand", "pt": "Cerca de seis mil"},
-				{"en": "About three thousand", "pt": "Cerca de três mil"}
+				{"en": "About three thousand", "pt": "Cerca de tres mil"},
+				{"en": "About two thousand", "pt": "Cerca de dois mil"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "Who did Jesus call out of the tomb after four days?",
-				"pt": "Quem Jesus chamou para fora do túmulo depois de quatro dias?"
+				"en": "How did Jesus calm the storm on the Sea of Galilee?",
+				"pt": "Como Jesus acalmou a tempestade no Mar da Galileia?"
 			},
-			"answer": {"en": "Lazarus", "pt": "Lázaro"},
+			"answer":
+			{"en": "He rebuked the wind and waves", "pt": "Repreendeu o vento e as ondas"},
 			"tier": 1,
 			"decoys":
 			[
-				{"en": "Jairus' daughter", "pt": "filha de Jairo"},
-				{"en": "Widow's son at Nain", "pt": "Filho da viúva em Naim"},
-				{"en": "Tabitha", "pt": "Tabita"}
-			]
-		},
-		{
-			"question":
-			{"en": "What stormy sea did Jesus calm?", "pt": "Que mar tempestuoso Jesus acalmou?"},
-			"answer": {"en": "The Sea of Galilee", "pt": "O Mar da Galileia"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "The Dead Sea", "pt": "O Mar Morto"},
-				{"en": "The Red Sea", "pt": "O Mar Vermelho"},
-				{"en": "The Mediterranean", "pt": "O Mediterrâneo"}
+				{"en": "He dropped anchor", "pt": "Largou a ancora"},
+				{"en": "He waited for sunrise", "pt": "Esperou o amanhecer"},
+				{"en": "He asked the sailors to row harder", "pt": "Pediu que remassem mais forte"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "On what did Jesus walk to reach his disciples?",
-				"pt": "Sobre o que Jesus caminhou para alcançar seus discípulos?"
+				"en": "Who was healed after being lowered through a roof?",
+				"pt": "Quem foi curado depois de ser descido pelo telhado?"
 			},
-			"answer": {"en": "On the water", "pt": "Na água"},
+			"answer": {"en": "A paralyzed man", "pt": "Um homem paralitico"},
 			"tier": 1,
 			"decoys":
 			[
-				{"en": "On the shore", "pt": "Na costa"},
-				{"en": "On a boat", "pt": "Em um barco"},
-				{"en": "On a path", "pt": "Em um caminho"}
+				{"en": "A blind beggar", "pt": "Um cego mendigo"},
+				{"en": "A tax collector", "pt": "Um cobrador de impostos"},
+				{"en": "A priest", "pt": "Um sacerdote"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What surface did Jesus walk on to reach his disciples?",
+				"pt": "Sobre o que Jesus caminhou para alcancar seus discipulos?"
+			},
+			"answer": {"en": "On the water", "pt": "Sobre a agua"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "On a sandbar", "pt": "Num banco de areia"},
+				{"en": "On another boat", "pt": "Em outro barco"},
+				{"en": "On a stone path", "pt": "Num caminho de pedra"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who cried 'Son of David, have mercy on me' near Jericho?",
+				"pt": "Quem clamou 'Filho de Davi, tem misericordia de mim' perto de Jerico?"
+			},
+			"answer": {"en": "Bartimaeus", "pt": "Bartimeu"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Zacchaeus", "pt": "Zaqueu"},
+				{"en": "Nicodemus", "pt": "Nicodemos"},
+				{"en": "Barabbas", "pt": "Barrabas"}
 			]
 		},
 		{
 			"question":
 			{
 				"en": "Whose daughter did Jesus raise saying 'Talitha koum'?",
-				"pt": "De quem é a filha que Jesus criou dizendo 'Talitha koum'?"
+				"pt": "De quem Jesus levantou a filha dizendo 'Talitha koum'?"
 			},
-			"answer": {"en": "Jairus' daughter", "pt": "filha de Jairo"},
-			"tier": 2,
+			"answer": {"en": "Jairus' daughter", "pt": "A filha de Jairo"},
+			"tier": 1,
 			"decoys":
 			[
-				{"en": "Widow's son at Nain", "pt": "Filho da viúva em Naim"},
-				{"en": "Lazarus", "pt": "Lázaro"},
-				{"en": "Peter's mother-in-law", "pt": "A sogra de Pedro"}
+				{"en": "Widow's son at Nain", "pt": "O filho da viuva de Naim"},
+				{"en": "Lazarus", "pt": "Lazaro"},
+				{"en": "The Shunammite's son", "pt": "O filho da sunamita"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "Who was healed after touching the edge of Jesus' cloak?",
-				"pt": "Quem foi curado depois de tocar na orla do manto de Jesus?"
+				"en": "Who was healed by touching the edge of Jesus' cloak?",
+				"pt": "Quem foi curada ao tocar a orla do manto de Jesus?"
 			},
-			"answer":
-			{"en": "The woman with the issue of blood", "pt": "A mulher com problema de sangue"},
+			"answer": {"en": "A woman with bleeding", "pt": "Uma mulher com fluxo de sangue"},
 			"tier": 1,
 			"decoys":
 			[
@@ -3398,8 +5118,38 @@ const BASE_QA := {
 		{
 			"question":
 			{
-				"en": "How many lepers did Jesus cleanse at once on the way to Jerusalem?",
-				"pt": "Quantos leprosos Jesus purificou de uma só vez no caminho para Jerusalém?"
+				"en": "Whom did Jesus heal of fever in Peter's house?",
+				"pt": "Quem Jesus curou da febre na casa de Pedro?"
+			},
+			"answer": {"en": "Peter's mother-in-law", "pt": "A sogra de Pedro"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Peter's daughter", "pt": "A filha de Pedro"},
+				{"en": "Andrew's wife", "pt": "A esposa de Andre"},
+				{"en": "James' mother", "pt": "A mae de Tiago"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said 'If you are willing, you can make me clean'?",
+				"pt": "Quem disse 'Se quiseres, podes purificar-me'?"
+			},
+			"answer": {"en": "A man with leprosy", "pt": "Um homem com lepra"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "A Roman centurion", "pt": "Um centuriao romano"},
+				{"en": "A blind man", "pt": "Um cego"},
+				{"en": "A lame beggar", "pt": "Um mendigo coxo"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "How many lepers were cleansed when only one returned to thank Jesus?",
+				"pt": "Quantos leprosos foram purificados quando apenas um voltou para agradecer?"
 			},
 			"answer": {"en": "Ten lepers", "pt": "Dez leprosos"},
 			"tier": 2,
@@ -3413,183 +5163,298 @@ const BASE_QA := {
 		{
 			"question":
 			{
-				"en": "What food did Jesus multiply to feed four thousand?",
-				"pt": "Que comida Jesus multiplicou para alimentar quatro mil?"
+				"en": "Whose servant did Jesus heal from a distance because of great faith?",
+				"pt": "O servo de quem Jesus curou a distancia por causa da fe?"
 			},
-			"answer": {"en": "Seven loaves and a few fish", "pt": "Sete pães e alguns peixes"},
+			"answer": {"en": "A Roman centurion's servant", "pt": "O servo de um centuriao romano"},
 			"tier": 2,
 			"decoys":
 			[
-				{"en": "Five loaves and two fish", "pt": "Cinco pães e dois peixes"},
-				{"en": "Two loaves and five fish", "pt": "Dois pães e cinco peixes"},
-				{"en": "Five barley cakes and goats", "pt": "Cinco bolos de cevada e cabras"}
+				{"en": "A synagogue ruler's servant", "pt": "O servo de um lider de sinagoga"},
+				{"en": "A Pharisee's servant", "pt": "O servo de um fariseu"},
+				{"en": "A temple guard's servant", "pt": "O servo de um guarda do templo"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "What filled Peter's nets when Jesus called him by the lake?",
-				"pt": "O que encheu as redes de Pedro quando Jesus o chamou à beira do lago?"
+				"en": "What did Jesus place on a man born blind before sending him to Siloam?",
+				"pt": "O que Jesus colocou em um homem cego de nascen a antes de envia-lo a Silo?m?"
 			},
-			"answer": {"en": "A miraculous catch of fish", "pt": "Uma pesca milagrosa"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "Baskets of bread", "pt": "Cestas de pão"},
-				{"en": "A school of turtles", "pt": "Uma escola de tartarugas"},
-				{"en": "A swarm of locusts", "pt": "Um enxame de gafanhotos"}
-			]
-		},
-		{
-			"question":
-			{
-				"en": "Where did Jesus send demons into a herd of pigs?",
-				"pt": "Para onde Jesus enviou demônios para uma manada de porcos?"
-			},
-			"answer": {"en": "The region of the Gerasenes", "pt": "A região dos gerasenos"},
+			"answer": {"en": "Mud made with spit", "pt": "Barro feito com saliva"},
 			"tier": 2,
 			"decoys":
 			[
-				{"en": "Bethsaida", "pt": "Betsaida"},
-				{"en": "Capernaum", "pt": "Cafarnaum"},
-				{"en": "Jericho", "pt": "Jericó"}
+				{"en": "Oil from the lampstand", "pt": "Oleo do candelabro"},
+				{"en": "Water from the Jordan", "pt": "Agua do Jordao"},
+				{"en": "Perfume and spices", "pt": "Perfume e especiarias"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "What tree did Jesus curse so it withered?",
-				"pt": "Que árvore Jesus amaldiçoou e por isso secou?"
+				"en": "Into what animals did Jesus send the demons from the Gerasene man?",
+				"pt": "Para que animais Jesus enviou os demonios do homem gadareno?"
 			},
-			"answer": {"en": "A fig tree", "pt": "Uma figueira"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "An olive tree", "pt": "Uma oliveira"},
-				{"en": "A cedar tree", "pt": "Uma árvore de cedro"},
-				{"en": "A sycamore tree", "pt": "Uma árvore de sicômoro"}
-			]
-		},
-		{
-			"question":
-			{
-				"en": "What happened to Peter's mother-in-law when Jesus touched her hand?",
-				"pt": "O que aconteceu com a sogra de Pedro quando Jesus tocou sua mão?"
-			},
-			"answer": {"en": "Her fever left her", "pt": "Sua febre a deixou"},
-			"tier": 1,
-			"decoys":
-			[
-				{"en": "She was raised from the dead", "pt": "Ela foi ressuscitada dos mortos"},
-				{"en": "She was struck mute", "pt": "Ela ficou muda"},
-				{"en": "She went blind", "pt": "Ela ficou cega"}
-			]
-		},
-		{
-			"question":
-			{
-				"en": "Who was raised from the dead at the town of Nain?",
-				"pt": "Quem foi ressuscitado dos mortos na cidade de Naim?"
-			},
-			"answer": {"en": "A widow's son", "pt": "Filho de uma viúva"},
+			"answer": {"en": "A herd of pigs", "pt": "Uma manada de porcos"},
 			"tier": 2,
 			"decoys":
 			[
-				{"en": "A centurion's servant", "pt": "Servo de um centurião"},
-				{"en": "Jairus' daughter", "pt": "filha de Jairo"},
+				{"en": "A flock of goats", "pt": "Um rebanho de cabras"},
+				{"en": "A herd of cattle", "pt": "Um rebanho de gado"},
+				{"en": "A swarm of birds", "pt": "Um bando de aves"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "With what did Jesus feed the crowd of about four thousand?",
+				"pt": "Com o que Jesus alimentou a multidao de cerca de quatro mil?"
+			},
+			"answer": {"en": "Seven loaves and a few fish", "pt": "Sete paes e alguns peixes"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Five loaves and two fish", "pt": "Cinco paes e dois peixes"},
+				{"en": "Manna from heaven", "pt": "Mana do ceu"},
+				{"en": "Barley cakes from a boy", "pt": "Bolos de cevada de um menino"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Where was the man who had been an invalid for thirty-eight years healed?",
+				"pt": "Onde foi curado o homem que era invalido ha trinta e oito anos?"
+			},
+			"answer": {"en": "At the pool of Bethesda", "pt": "No tanque de Betesda"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "At the pool of Siloam", "pt": "No tanque de Siloam"},
+				{"en": "By the Jordan River", "pt": "No rio Jordao"},
+				{"en": "At Jacob's well", "pt": "No poco de Jaco"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Whom did Jesus deliver when a boy kept falling into fire and water?",
+				"pt": "Quem Jesus libertou quando um menino caia no fogo e na agua?"
+			},
+			"answer": {"en": "A boy with an unclean spirit", "pt": "Um menino com espirito impuro"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "A man living among tombs", "pt": "Um homem que vivia entre sepulcros"},
+				{"en": "A girl in Tyre", "pt": "Uma menina em Tiro"},
+				{"en": "A nobleman's son", "pt": "O filho de um oficial"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"What part of the body did Jesus restore when it was withered in a synagogue?",
+				"pt":
+				"Qual parte do corpo Jesus restaurou quando estava ressequida em uma sinagoga?"
+			},
+			"answer": {"en": "A man's hand", "pt": "A mao de um homem"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "A man's foot", "pt": "O pe de um homem"},
+				{"en": "A woman's eye", "pt": "O olho de uma mulher"},
+				{"en": "A servant's ear", "pt": "A orelha de um servo"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which miracle included Jesus saying 'Ephphatha'?",
+				"pt": "Qual milagre incluiu Jesus dizendo 'Ephphatha'?"
+			},
+			"answer": {"en": "Healing a deaf and mute man", "pt": "Curar um homem surdo e mudo"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Raising Jairus' daughter", "pt": "Levantar a filha de Jairo"},
+				{"en": "Calming the storm", "pt": "Acalmar a tempestade"},
+				{"en": "Feeding the 5,000", "pt": "Alimentar os 5.000"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Whose son in Capernaum was healed the moment Jesus spoke?",
+				"pt": "O filho de quem em Cafarnaum foi curado no momento em que Jesus falou?"
+			},
+			"answer": {"en": "A royal official's son", "pt": "O filho de um oficial do rei"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Peter's son", "pt": "O filho de Pedro"},
+				{"en": "Jairus' son", "pt": "O filho de Jairo"},
+				{"en": "A priest's son", "pt": "O filho de um sacerdote"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was raised after four days in the tomb?",
+				"pt": "Quem foi levantado apos quatro dias no tumulo?"
+			},
+			"answer": {"en": "Lazarus", "pt": "Lazaro"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Jairus' daughter", "pt": "A filha de Jairo"},
+				{"en": "Widow's son at Nain", "pt": "O filho da viuva de Naim"},
 				{"en": "Tabitha", "pt": "Tabita"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "What did Jesus tell Peter to find in a fish's mouth?",
-				"pt": "O que Jesus disse a Pedro para encontrar na boca de um peixe?"
+				"en": "Where did Jesus find the coin to pay the temple tax?",
+				"pt": "Onde Jesus encontrou a moeda para pagar o imposto do templo?"
+			},
+			"answer": {"en": "In a fish's mouth", "pt": "Na boca de um peixe"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "In Judas' purse", "pt": "Na bolsa de Judas"},
+				{"en": "From the temple treasury", "pt": "Do tesouro do templo"},
+				{"en": "Given by Nicodemus", "pt": "Dada por Nicodemos"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "When did the nets nearly break with a miraculous catch of fish?",
+				"pt": "Quando as redes quase se romperam com uma pesca milagrosa?"
 			},
 			"answer":
-			{"en": "A coin for the temple tax", "pt": "Uma moeda para o imposto do templo"},
-			"tier": 2,
-			"decoys":
-			[
-				{"en": "A pearl of great price", "pt": "Uma pérola de ótimo preço"},
-				{"en": "A ring for Mary", "pt": "Um anel para Maria"},
-				{"en": "A scroll fragment", "pt": "Um fragmento de pergaminho"}
-			]
-		},
-		{
-			"question":
 			{
-				"en": "Which disciple briefly walked on water toward Jesus?",
-				"pt": "Qual discípulo caminhou brevemente sobre as águas em direção a Jesus?"
+				"en": "At the calling of Peter and partners",
+				"pt": "Na chamada de Pedro e companheiros"
 			},
-			"answer": {"en": "Peter", "pt": "Peter"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
-				{"en": "John", "pt": "John"},
-				{"en": "James", "pt": "James"},
-				{"en": "Andrew", "pt": "André"}
+				{"en": "After the Sermon on the Mount", "pt": "Depois do Sermao do Monte"},
+				{"en": "At the wedding in Cana", "pt": "No casamento em Cana"},
+				{"en": "During the Passover in Jerusalem", "pt": "Durante a Pascoa em Jerusalem"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "Who was born blind and healed after washing in Siloam?",
-				"pt": "Quem nasceu cego e foi curado após lavar-se em Siloé?"
+				"en": "After the resurrection, when did Jesus fill the nets with 153 fish?",
+				"pt": "Apos a ressurreicao, quando Jesus encheu as redes com 153 peixes?"
 			},
 			"answer":
-			{"en": "The man born blind in John 9", "pt": "O homem que nasceu cego em João 9"},
-			"tier": 2,
+			{"en": "On the Sea of Galilee at daybreak", "pt": "No Mar da Galileia ao amanhecer"},
+			"tier": 3,
 			"decoys":
 			[
-				{"en": "Bartimaeus", "pt": "Bartimeu"},
-				{"en": "Ten lepers", "pt": "Dez leprosos"},
-				{"en": "The servant of Malchus", "pt": "O servo de Malco"}
+				{"en": "During the Sermon on the Mount", "pt": "Durante o Sermao do Monte"},
+				{"en": "On the road to Emmaus", "pt": "No caminho de Emaus"},
+				{"en": "At a dinner in Bethany", "pt": "Num jantar em Betania"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "Whose servant was healed from a distance because of faith?",
-				"pt": "Qual servo foi curado à distância por causa da fé?"
+				"en": "What tree withered after Jesus spoke to it?",
+				"pt": "Que arvore secou depois que Jesus falou com ela?"
 			},
-			"answer": {"en": "The centurion's servant", "pt": "O servo do centurião"},
-			"tier": 2,
+			"answer": {"en": "A fig tree", "pt": "Uma figueira"},
+			"tier": 3,
 			"decoys":
 			[
-				{"en": "Jairus' servant", "pt": "Servo de Jairo"},
-				{"en": "Herod's officer", "pt": "Oficial de Herodes"},
-				{"en": "A synagogue ruler's slave", "pt": "Escravo do governante da sinagoga"}
+				{"en": "A mulberry tree", "pt": "Uma amoreira"},
+				{"en": "A cedar tree", "pt": "Um cedro"},
+				{"en": "A palm tree", "pt": "Uma palmeira"}
 			]
 		},
 		{
 			"question":
 			{
 				"en": "Whose ear did Jesus heal in Gethsemane?",
-				"pt": "De quem foi a orelha que Jesus curou no Getsêmani?"
+				"pt": "De quem Jesus curou a orelha no Getsemani?"
 			},
 			"answer": {"en": "Malchus", "pt": "Malco"},
-			"tier": 2,
+			"tier": 3,
 			"decoys":
 			[
-				{"en": "Caiaphas", "pt": "Caifás"},
-				{"en": "Annas", "pt": "Anás"},
-				{"en": "Barabbas", "pt": "Barrabás"}
+				{"en": "Barabbas", "pt": "Barrabas"},
+				{"en": "A Roman centurion", "pt": "Um centuriao romano"},
+				{"en": "Simon the Zealot", "pt": "Simao o Zelote"}
 			]
 		},
 		{
 			"question":
 			{
-				"en": "What happened to the man by the pool of Bethesda when Jesus spoke?",
-				"pt": "O que aconteceu com o homem junto ao tanque de Betesda quando Jesus falou?"
+				"en": "Who was raised when Jesus met a funeral procession at Nain?",
+				"pt": "Quem foi levantado quando Jesus encontrou um cortejo funebre em Naim?"
 			},
-			"answer": {"en": "A paralyzed man was healed", "pt": "Um homem paralítico foi curado"},
+			"answer": {"en": "A widow's only son", "pt": "O unico filho de uma viuva"},
 			"tier": 3,
 			"decoys":
 			[
-				{"en": "The waters boiled", "pt": "As águas ferveram"},
-				{"en": "Angels appeared visibly", "pt": "Anjos apareceram visivelmente"},
-				{"en": "It turned into wine", "pt": "Se transformou em vinho"}
+				{"en": "Eutychus", "pt": "Eutico"},
+				{"en": "Tabitha", "pt": "Tabita"},
+				{"en": "The Shunammite's son", "pt": "O filho da sunamita"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was straightened after being bent for eighteen years?",
+				"pt": "Quem foi endireitada apos ficar curvada por dezoito anos?"
+			},
+			"answer":
+			{"en": "A crippled woman in a synagogue", "pt": "Uma mulher encurvada na sinagoga"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "The Samaritan woman", "pt": "A mulher samaritana"},
+				{"en": "The bleeding woman", "pt": "A mulher com fluxo de sangue"},
+				{"en": "A widow who gave two coins", "pt": "A viuva das duas moedas"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Whom did Jesus heal of dropsy at a Pharisee's house?",
+				"pt": "Quem Jesus curou de hidropisia na casa de um fariseu?"
+			},
+			"answer": {"en": "A man with dropsy", "pt": "Um homem com hidropisia"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "A leper in Galilee", "pt": "Um leproso na Galileia"},
+				{"en": "A blind man in Jericho", "pt": "Um cego em Jerico"},
+				{"en": "A lame beggar at the gate", "pt": "Um mendigo coxo no portao"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which miracle freed a mute man to speak after a demon was cast out?",
+				"pt":
+				"Qual milagre libertou um homem mudo para falar depois que um demonio foi expulso?"
+			},
+			"answer": {"en": "Jesus cast out a mute demon", "pt": "Jesus expulsou um demonio mudo"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "He healed ten lepers", "pt": "Curou dez leprosos"},
+				{
+					"en": "He opened deaf ears in Decapolis",
+					"pt": "Abriu ouvidos surdos na Decapole"
+				},
+				{"en": "He calmed a storm on the lake", "pt": "Acalmou uma tempestade no lago"}
 			]
 		}
 	],
@@ -3916,6 +5781,174 @@ const BASE_QA := {
 				{"en": "The Good Shepherd", "pt": "O bom pastor"},
 				{"en": "The Net", "pt": "A rede"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Which parable features a woman who rejoices after finding a lost coin?",
+				"pt": "Which parable features a woman who rejoices after finding a lost coin?"
+			},
+			"answer": {"en": "Parable of the Lost Coin", "pt": "Parable of the Lost Coin"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Parable of the Lost Sheep", "pt": "Parable of the Lost Sheep"},
+				{"en": "Parable of the Hidden Treasure", "pt": "Parable of the Hidden Treasure"},
+				{"en": "Parable of the Pearl", "pt": "Parable of the Pearl"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which parable tells of a manager praised for shrewdly reducing debts?",
+				"pt": "Which parable tells of a manager praised for shrewdly reducing debts?"
+			},
+			"answer":
+			{"en": "Parable of the Unjust Steward", "pt": "Parable of the Unjust Steward"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Parable of the Talents", "pt": "Parable of the Talents"},
+				{"en": "Parable of the Two Debtors", "pt": "Parable of the Two Debtors"},
+				{"en": "Parable of the Two Sons", "pt": "Parable of the Two Sons"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which parable contrasts a rich man in torment and a beggar at Abraham's side?",
+				"pt":
+				"Which parable contrasts a rich man in torment and a beggar at Abraham's side?"
+			},
+			"answer":
+			{
+				"en": "Parable of the Rich Man and Lazarus",
+				"pt": "Parable of the Rich Man and Lazarus"
+			},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Parable of the Wedding Banquet", "pt": "Parable of the Wedding Banquet"},
+				{"en": "Parable of the Ten Virgins", "pt": "Parable of the Ten Virgins"},
+				{"en": "Parable of the Prodigal Son", "pt": "Parable of the Prodigal Son"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which parable pictures guests refusing a banquet so outsiders are invited?",
+				"pt": "Which parable pictures guests refusing a banquet so outsiders are invited?"
+			},
+			"answer": {"en": "Parable of the Great Banquet", "pt": "Parable of the Great Banquet"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Parable of the Ten Virgins", "pt": "Parable of the Ten Virgins"},
+				{"en": "Parable of the Talents", "pt": "Parable of the Talents"},
+				{"en": "Parable of the Two Sons", "pt": "Parable of the Two Sons"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which parable warns of a tree given one more year before being cut down?",
+				"pt": "Which parable warns of a tree given one more year before being cut down?"
+			},
+			"answer":
+			{"en": "Parable of the Barren Fig Tree", "pt": "Parable of the Barren Fig Tree"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Parable of the Mustard Seed", "pt": "Parable of the Mustard Seed"},
+				{"en": "Parable of the Two Builders", "pt": "Parable of the Two Builders"},
+				{"en": "Parable of the Hidden Treasure", "pt": "Parable of the Hidden Treasure"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which parable shows one debtor owing five hundred denarii and another fifty?",
+				"pt": "Which parable shows one debtor owing five hundred denarii and another fifty?"
+			},
+			"answer": {"en": "Parable of the Two Debtors", "pt": "Parable of the Two Debtors"},
+			"tier": 3,
+			"decoys":
+			[
+				{
+					"en": "Parable of the Unforgiving Servant",
+					"pt": "Parable of the Unforgiving Servant"
+				},
+				{"en": "Parable of the Two Sons", "pt": "Parable of the Two Sons"},
+				{"en": "Parable of the Sower", "pt": "Parable of the Sower"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which parable describes seed growing secretly until the harvest?",
+				"pt": "Which parable describes seed growing secretly until the harvest?"
+			},
+			"answer": {"en": "Parable of the Growing Seed", "pt": "Parable of the Growing Seed"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Parable of the Mustard Seed", "pt": "Parable of the Mustard Seed"},
+				{"en": "Parable of the Wheat and Weeds", "pt": "Parable of the Wheat and Weeds"},
+				{"en": "Parable of the Fig Tree", "pt": "Parable of the Fig Tree"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which parable has servants trading ten minas while the nobleman travels?",
+				"pt": "Which parable has servants trading ten minas while the nobleman travels?"
+			},
+			"answer": {"en": "Parable of the Ten Minas", "pt": "Parable of the Ten Minas"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Parable of the Talents", "pt": "Parable of the Talents"},
+				{"en": "Parable of the Faithful Servant", "pt": "Parable of the Faithful Servant"},
+				{"en": "Parable of the Lost Sheep", "pt": "Parable of the Lost Sheep"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which parable urges readiness like a master returning to find servants watching?",
+				"pt":
+				"Which parable urges readiness like a master returning to find servants watching?"
+			},
+			"answer":
+			{
+				"en": "Parable of the Faithful and Wicked Servant",
+				"pt": "Parable of the Faithful and Wicked Servant"
+			},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Parable of the Ten Virgins", "pt": "Parable of the Ten Virgins"},
+				{"en": "Parable of the Two Sons", "pt": "Parable of the Two Sons"},
+				{"en": "Parable of the Sower", "pt": "Parable of the Sower"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which parable teaches counting the cost like a builder or king before war?",
+				"pt": "Which parable teaches counting the cost like a builder or king before war?"
+			},
+			"answer": {"en": "Parable of Counting the Cost", "pt": "Parable of Counting the Cost"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Parable of the Pearl", "pt": "Parable of the Pearl"},
+				{"en": "Parable of the Hidden Treasure", "pt": "Parable of the Hidden Treasure"},
+				{"en": "Parable of the Unjust Judge", "pt": "Parable of the Unjust Judge"}
+			]
 		}
 	],
 	"Teachings of Jesus":
@@ -4012,7 +6045,7 @@ const BASE_QA := {
 				"en": "The kingdom of God and His righteousness",
 				"pt": "O reino de Deus e Sua justiça"
 			},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "A secure job", "pt": "Um trabalho seguro"},
@@ -4050,7 +6083,7 @@ const BASE_QA := {
 				"en": "No one can serve both God and money",
 				"pt": "Ninguém pode servir a Deus e ao dinheiro"
 			},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Masters must agree", "pt": "Os mestres devem concordar"},
@@ -4084,7 +6117,7 @@ const BASE_QA := {
 				"pt": "O que Jesus disse que os discípulos devem aprender para segui-Lo?"
 			},
 			"answer": {"en": "Their cross", "pt": "A cruz deles"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "A sword", "pt": "Uma espada"},
@@ -4256,6 +6289,185 @@ const BASE_QA := {
 				{"en": "Fire from heaven", "pt": "Fogo do céu"},
 				{"en": "A new temple", "pt": "Um novo templo"},
 				{"en": "Three more plagues", "pt": "Mais três pragas"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "How many times did Jesus say to forgive a brother who sins?",
+				"pt": "How many times did Jesus say to forgive a brother who sins?"
+			},
+			"answer": {"en": "Seventy-seven times", "pt": "Seventy-seven times"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Seven times", "pt": "Seven times"},
+				{"en": "Ten times", "pt": "Ten times"},
+				{"en": "Three times", "pt": "Three times"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What did Jesus say about the gate that leads to life?",
+				"pt": "What did Jesus say about the gate that leads to life?"
+			},
+			"answer": {"en": "It is narrow and few find it", "pt": "It is narrow and few find it"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "It is wide and easy", "pt": "It is wide and easy"},
+				{"en": "It is hidden under a field", "pt": "It is hidden under a field"},
+				{"en": "It is guarded by angels", "pt": "It is guarded by angels"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What did Jesus say to do when you give to the needy?",
+				"pt": "What did Jesus say to do when you give to the needy?"
+			},
+			"answer":
+			{
+				"en": "Give in secret and not announce it",
+				"pt": "Give in secret and not announce it"
+			},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Give only in the temple", "pt": "Give only in the temple"},
+				{"en": "Give only to relatives", "pt": "Give only to relatives"},
+				{
+					"en": "Tell your left hand what your right hand gives",
+					"pt": "Tell your left hand what your right hand gives"
+				}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What did Jesus say humans should live on besides bread?",
+				"pt": "What did Jesus say humans should live on besides bread?"
+			},
+			"answer":
+			{"en": "Every word that comes from God", "pt": "Every word that comes from God"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Every harvest offered", "pt": "Every harvest offered"},
+				{"en": "Fish from the sea", "pt": "Fish from the sea"},
+				{"en": "Oil and wine", "pt": "Oil and wine"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What sin did Jesus warn would not be forgiven?",
+				"pt": "What sin did Jesus warn would not be forgiven?"
+			},
+			"answer":
+			{"en": "Blasphemy against the Holy Spirit", "pt": "Blasphemy against the Holy Spirit"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Doubting Thomas", "pt": "Doubting Thomas"},
+				{"en": "Asking for a sign", "pt": "Asking for a sign"},
+				{"en": "Breaking the Sabbath", "pt": "Breaking the Sabbath"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What did Jesus say to do if your right eye causes you to sin?",
+				"pt": "What did Jesus say to do if your right eye causes you to sin?"
+			},
+			"answer":
+			{"en": "Gouge it out and throw it away", "pt": "Gouge it out and throw it away"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Cover it for seven days", "pt": "Cover it for seven days"},
+				{"en": "Wash it in Siloam", "pt": "Wash it in Siloam"},
+				{"en": "Pray with both eyes closed", "pt": "Pray with both eyes closed"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What did Jesus teach about divorce?",
+				"pt": "What did Jesus teach about divorce?"
+			},
+			"answer":
+			{
+				"en": "Anyone who divorces his wife except for sexual immorality causes adultery",
+				"pt": "Anyone who divorces his wife except for sexual immorality causes adultery"
+			},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Divorce is always acceptable", "pt": "Divorce is always acceptable"},
+				{"en": "Only widows may remarry", "pt": "Only widows may remarry"},
+				{"en": "Marriage vows are optional", "pt": "Marriage vows are optional"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What did Jesus predict about the temple buildings?",
+				"pt": "What did Jesus predict about the temple buildings?"
+			},
+			"answer":
+			{
+				"en": "Not one stone would be left on another",
+				"pt": "Not one stone would be left on another"
+			},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "They would shine forever", "pt": "They would shine forever"},
+				{"en": "They would be taller", "pt": "They would be taller"},
+				{"en": "They would move to Bethlehem", "pt": "They would move to Bethlehem"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What did Jesus say about hating father and mother compared to loving Him?",
+				"pt": "What did Jesus say about hating father and mother compared to loving Him?"
+			},
+			"answer":
+			{
+				"en": "Anyone who does not hate them compared to Him cannot be His disciple",
+				"pt": "Anyone who does not hate them compared to Him cannot be His disciple"
+			},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Family comes before faith", "pt": "Family comes before faith"},
+				{"en": "Only elders must choose", "pt": "Only elders must choose"},
+				{
+					"en": "He asked for total silence about it",
+					"pt": "He asked for total silence about it"
+				}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What did Jesus say about counting the cost of following Him?",
+				"pt": "What did Jesus say about counting the cost of following Him?"
+			},
+			"answer":
+			{
+				"en": "Whoever does not carry a cross cannot be His disciple",
+				"pt": "Whoever does not carry a cross cannot be His disciple"
+			},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Only rulers must count the cost", "pt": "Only rulers must count the cost"},
+				{"en": "No cost is involved", "pt": "No cost is involved"},
+				{"en": "Only priests must pay a tithe", "pt": "Only priests must pay a tithe"}
 			]
 		}
 	],
@@ -4570,6 +6782,169 @@ const BASE_QA := {
 				{"en": "The Roman centurion", "pt": "O centurião romano"},
 				{"en": "Herod Antipas", "pt": "Herodes Antipas"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Which women brought spices to the tomb at dawn?",
+				"pt": "Which women brought spices to the tomb at dawn?"
+			},
+			"answer":
+			{
+				"en": "Mary Magdalene, Mary the mother of James, and Salome",
+				"pt": "Mary Magdalene, Mary the mother of James, and Salome"
+			},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Mary and Martha", "pt": "Mary and Martha"},
+				{"en": "Priscilla and Phoebe", "pt": "Priscilla and Phoebe"},
+				{"en": "Elizabeth and Anna", "pt": "Elizabeth and Anna"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who bribed the guards to say the disciples stole Jesus' body?",
+				"pt": "Who bribed the guards to say the disciples stole Jesus' body?"
+			},
+			"answer": {"en": "The chief priests", "pt": "The chief priests"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Herod", "pt": "Herod"},
+				{"en": "Pilate", "pt": "Pilate"},
+				{"en": "Joseph of Arimathea", "pt": "Joseph of Arimathea"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What was bought with the thirty pieces of silver from Judas?",
+				"pt": "What was bought with the thirty pieces of silver from Judas?"
+			},
+			"answer":
+			{
+				"en": "The potter's field (Field of Blood)",
+				"pt": "The potter's field (Field of Blood)"
+			},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "A new tomb", "pt": "A new tomb"},
+				{"en": "A palace courtyard", "pt": "A palace courtyard"},
+				{"en": "A vineyard", "pt": "A vineyard"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who washed his hands saying, 'I am innocent of this man's blood'?",
+				"pt": "Who washed his hands saying, 'I am innocent of this man's blood'?"
+			},
+			"answer": {"en": "Pilate", "pt": "Pilate"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Herod", "pt": "Herod"},
+				{"en": "Caiaphas", "pt": "Caiaphas"},
+				{"en": "Nicodemus", "pt": "Nicodemus"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Why did soldiers not break Jesus' legs?",
+				"pt": "Why did soldiers not break Jesus' legs?"
+			},
+			"answer": {"en": "He was already dead", "pt": "He was already dead"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "They forgot the order", "pt": "They forgot the order"},
+				{"en": "They ran out of time", "pt": "They ran out of time"},
+				{"en": "They feared the crowd", "pt": "They feared the crowd"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "In what languages was the inscription on the cross written?",
+				"pt": "In what languages was the inscription on the cross written?"
+			},
+			"answer": {"en": "Hebrew, Latin, and Greek", "pt": "Hebrew, Latin, and Greek"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Hebrew only", "pt": "Hebrew only"},
+				{"en": "Latin only", "pt": "Latin only"},
+				{"en": "Greek and Aramaic", "pt": "Greek and Aramaic"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What did a soldier pierce Jesus' side with?",
+				"pt": "What did a soldier pierce Jesus' side with?"
+			},
+			"answer": {"en": "A spear", "pt": "A spear"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "A sword", "pt": "A sword"},
+				{"en": "A staff", "pt": "A staff"},
+				{"en": "A lance of bronze", "pt": "A lance of bronze"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which women sat opposite the tomb to see where He was laid?",
+				"pt": "Which women sat opposite the tomb to see where He was laid?"
+			},
+			"answer":
+			{"en": "Mary Magdalene and the other Mary", "pt": "Mary Magdalene and the other Mary"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Mary and Martha", "pt": "Mary and Martha"},
+				{"en": "Salome and Joanna", "pt": "Salome and Joanna"},
+				{"en": "Mary of Clopas and Anna", "pt": "Mary of Clopas and Anna"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Where was the tomb located in relation to the crucifixion site?",
+				"pt": "Where was the tomb located in relation to the crucifixion site?"
+			},
+			"answer":
+			{
+				"en": "In a garden near the place of crucifixion",
+				"pt": "In a garden near the place of crucifixion"
+			},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Inside the city walls", "pt": "Inside the city walls"},
+				{"en": "On the Mount of Olives", "pt": "On the Mount of Olives"},
+				{"en": "Beyond Bethany", "pt": "Beyond Bethany"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Where was Jesus arrested before His trial?",
+				"pt": "Where was Jesus arrested before His trial?"
+			},
+			"answer": {"en": "In the Garden of Gethsemane", "pt": "In the Garden of Gethsemane"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "In the temple courts", "pt": "In the temple courts"},
+				{"en": "At Herod's palace", "pt": "At Herod's palace"},
+				{"en": "In Nazareth", "pt": "In Nazareth"}
+			]
 		}
 	],
 	"Disciples & Apostles":
@@ -4876,6 +7251,156 @@ const BASE_QA := {
 				{"en": "Luke", "pt": "Lucas"},
 				{"en": "Apollos", "pt": "Apolo"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Which disciple was also called Levi?",
+				"pt": "Which disciple was also called Levi?"
+			},
+			"answer": {"en": "Matthew", "pt": "Matthew"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "James", "pt": "James"},
+				{"en": "Andrew", "pt": "Andrew"},
+				{"en": "Philip", "pt": "Philip"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which three disciples saw the Transfiguration?",
+				"pt": "Which three disciples saw the Transfiguration?"
+			},
+			"answer": {"en": "Peter, James, and John", "pt": "Peter, James, and John"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Peter, Andrew, and Philip", "pt": "Peter, Andrew, and Philip"},
+				{"en": "James, John, and Thomas", "pt": "James, John, and Thomas"},
+				{"en": "Peter, Thomas, and Matthew", "pt": "Peter, Thomas, and Matthew"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Whose shadow was said to heal the sick in Jerusalem?",
+				"pt": "Whose shadow was said to heal the sick in Jerusalem?"
+			},
+			"answer": {"en": "Peter", "pt": "Peter"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "John", "pt": "John"},
+				{"en": "Paul", "pt": "Paul"},
+				{"en": "Barnabas", "pt": "Barnabas"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was also called Barsabbas (Justus) but not chosen to replace Judas?",
+				"pt": "Who was also called Barsabbas (Justus) but not chosen to replace Judas?"
+			},
+			"answer": {"en": "Joseph called Barsabbas", "pt": "Joseph called Barsabbas"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Judas son of James", "pt": "Judas son of James"},
+				{"en": "Matthias", "pt": "Matthias"},
+				{"en": "Titius Justus", "pt": "Titius Justus"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who saw a sheet of unclean animals in a rooftop vision at Joppa?",
+				"pt": "Who saw a sheet of unclean animals in a rooftop vision at Joppa?"
+			},
+			"answer": {"en": "Peter", "pt": "Peter"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "John", "pt": "John"},
+				{"en": "Philip", "pt": "Philip"},
+				{"en": "Stephen", "pt": "Stephen"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was called a pillar along with Peter and John?",
+				"pt": "Who was called a pillar along with Peter and John?"
+			},
+			"answer": {"en": "James, the brother of Jesus", "pt": "James, the brother of Jesus"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Thomas", "pt": "Thomas"},
+				{"en": "Bartholomew", "pt": "Bartholomew"},
+				{"en": "Jude", "pt": "Jude"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was called Hermes because he was the chief speaker at Lystra?",
+				"pt": "Who was called Hermes because he was the chief speaker at Lystra?"
+			},
+			"answer": {"en": "Paul", "pt": "Paul"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Barnabas", "pt": "Barnabas"},
+				{"en": "Silas", "pt": "Silas"},
+				{"en": "Timothy", "pt": "Timothy"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was called Zeus at Lystra when a lame man was healed?",
+				"pt": "Who was called Zeus at Lystra when a lame man was healed?"
+			},
+			"answer": {"en": "Barnabas", "pt": "Barnabas"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Peter", "pt": "Peter"},
+				{"en": "James", "pt": "James"},
+				{"en": "Apollos", "pt": "Apollos"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Whose house did Peter stay in Joppa for many days?",
+				"pt": "Whose house did Peter stay in Joppa for many days?"
+			},
+			"answer": {"en": "Simon the tanner", "pt": "Simon the tanner"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Cornelius", "pt": "Cornelius"},
+				{"en": "Philip", "pt": "Philip"},
+				{"en": "Agabus", "pt": "Agabus"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who took Mark to Cyprus after a sharp disagreement with Paul?",
+				"pt": "Who took Mark to Cyprus after a sharp disagreement with Paul?"
+			},
+			"answer": {"en": "Barnabas", "pt": "Barnabas"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Silas", "pt": "Silas"},
+				{"en": "Luke", "pt": "Luke"},
+				{"en": "Titus", "pt": "Titus"}
+			]
 		}
 	],
 	"Early Church (Acts)":
@@ -4962,7 +7487,7 @@ const BASE_QA := {
 				"pt": "Onde os seguidores de Jesus foram chamados de cristãos pela primeira vez?"
 			},
 			"answer": {"en": "Antioch", "pt": "Antioquia"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Jerusalem", "pt": "Jerusalém"},
@@ -5183,6 +7708,158 @@ const BASE_QA := {
 				{"en": "Learning Greek philosophy", "pt": "Aprendendo filosofia grega"},
 				{"en": "Training soldiers for revolt", "pt": "Treinando soldados para a revolta"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Who preached the sermon at Pentecost?",
+				"pt": "Who preached the sermon at Pentecost?"
+			},
+			"answer": {"en": "Peter", "pt": "Peter"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "John", "pt": "John"},
+				{"en": "Stephen", "pt": "Stephen"},
+				{"en": "Philip", "pt": "Philip"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "About how many were added to the believers on Pentecost?",
+				"pt": "About how many were added to the believers on Pentecost?"
+			},
+			"answer": {"en": "About three thousand", "pt": "About three thousand"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "About five hundred", "pt": "About five hundred"},
+				{"en": "About seven thousand", "pt": "About seven thousand"},
+				{"en": "About twelve hundred", "pt": "About twelve hundred"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "In which city did the Holy Spirit fall at Pentecost?",
+				"pt": "In which city did the Holy Spirit fall at Pentecost?"
+			},
+			"answer": {"en": "Jerusalem", "pt": "Jerusalem"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Antioch", "pt": "Antioch"},
+				{"en": "Samaria", "pt": "Samaria"},
+				{"en": "Damascus", "pt": "Damascus"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who brought the gospel to Samaria with signs and joy?",
+				"pt": "Who brought the gospel to Samaria with signs and joy?"
+			},
+			"answer": {"en": "Philip", "pt": "Philip"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Peter", "pt": "Peter"},
+				{"en": "Stephen", "pt": "Stephen"},
+				{"en": "Barnabas", "pt": "Barnabas"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who prophesied a coming famine in Acts?",
+				"pt": "Who prophesied a coming famine in Acts?"
+			},
+			"answer": {"en": "Agabus", "pt": "Agabus"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Tychicus", "pt": "Tychicus"},
+				{"en": "Alexander", "pt": "Alexander"},
+				{"en": "Jason", "pt": "Jason"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was struck blind at Paphos for opposing Paul and Barnabas?",
+				"pt": "Who was struck blind at Paphos for opposing Paul and Barnabas?"
+			},
+			"answer": {"en": "Elymas (Bar-Jesus)", "pt": "Elymas (Bar-Jesus)"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Simon Magus", "pt": "Simon Magus"},
+				{"en": "Herod Agrippa", "pt": "Herod Agrippa"},
+				{"en": "Demetrius", "pt": "Demetrius"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which king was struck by an angel and eaten by worms?",
+				"pt": "Which king was struck by an angel and eaten by worms?"
+			},
+			"answer": {"en": "Herod Agrippa I", "pt": "Herod Agrippa I"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Herod Antipas", "pt": "Herod Antipas"},
+				{"en": "Herod Archelaus", "pt": "Herod Archelaus"},
+				{"en": "Felix", "pt": "Felix"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "In what city were Paul and Barnabas called Zeus and Hermes?",
+				"pt": "In what city were Paul and Barnabas called Zeus and Hermes?"
+			},
+			"answer": {"en": "Lystra", "pt": "Lystra"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Derbe", "pt": "Derbe"},
+				{"en": "Iconium", "pt": "Iconium"},
+				{"en": "Philippi", "pt": "Philippi"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"At whose house in Joppa did Peter stay long enough for people to gather at the door?",
+				"pt":
+				"At whose house in Joppa did Peter stay long enough for people to gather at the door?"
+			},
+			"answer": {"en": "Simon the tanner", "pt": "Simon the tanner"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Mary the mother of John Mark", "pt": "Mary the mother of John Mark"},
+				{"en": "Cornelius", "pt": "Cornelius"},
+				{"en": "Rhoda", "pt": "Rhoda"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "In which city did many burn magic scrolls worth fifty thousand drachmas?",
+				"pt": "In which city did many burn magic scrolls worth fifty thousand drachmas?"
+			},
+			"answer": {"en": "Ephesus", "pt": "Ephesus"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Philippi", "pt": "Philippi"},
+				{"en": "Corinth", "pt": "Corinth"},
+				{"en": "Caesarea", "pt": "Caesarea"}
+			]
 		}
 	],
 	"Journeys of Paul":
@@ -5225,7 +7902,7 @@ const BASE_QA := {
 				"en": "A Macedonian man begging for help",
 				"pt": "Um homem macedônio implorando por ajuda"
 			},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "An angel with a scroll", "pt": "Um anjo com um pergaminho"},
@@ -5287,7 +7964,7 @@ const BASE_QA := {
 				"pt": "Onde Paulo se dirigiu aos filósofos no Areópago?"
 			},
 			"answer": {"en": "Athens", "pt": "Atenas"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Rome", "pt": "Roma"},
@@ -5435,7 +8112,7 @@ const BASE_QA := {
 				"Que cidade era conhecida por examinar as Escrituras diariamente depois da pregação de Paulo?"
 			},
 			"answer": {"en": "Berea", "pt": "Beréia"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Corinth", "pt": "Corinto"},
@@ -5487,6 +8164,156 @@ const BASE_QA := {
 				{"en": "Joppa", "pt": "Jope"},
 				{"en": "Caesarea", "pt": "Cesaréia"},
 				{"en": "Sidon", "pt": "Sídon"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was the physician who traveled with Paul and wrote Acts?",
+				"pt": "Who was the physician who traveled with Paul and wrote Acts?"
+			},
+			"answer": {"en": "Luke", "pt": "Luke"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Mark", "pt": "Mark"},
+				{"en": "Titus", "pt": "Titus"},
+				{"en": "Silas", "pt": "Silas"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Where did Paul spend two years in a rented house under guard?",
+				"pt": "Where did Paul spend two years in a rented house under guard?"
+			},
+			"answer": {"en": "Rome", "pt": "Rome"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Antioch", "pt": "Antioch"},
+				{"en": "Caesarea", "pt": "Caesarea"},
+				{"en": "Corinth", "pt": "Corinth"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What harbor in Crete was considered unsuitable to winter in?",
+				"pt": "What harbor in Crete was considered unsuitable to winter in?"
+			},
+			"answer": {"en": "Fair Havens", "pt": "Fair Havens"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Phoenix", "pt": "Phoenix"},
+				{"en": "Alexandria", "pt": "Alexandria"},
+				{"en": "Myra", "pt": "Myra"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What was 'the Fast' already past when they set sail in Acts 27?",
+				"pt": "What was 'the Fast' already past when they set sail in Acts 27?"
+			},
+			"answer": {"en": "The Day of Atonement", "pt": "The Day of Atonement"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Passover", "pt": "Passover"},
+				{"en": "Pentecost", "pt": "Pentecost"},
+				{"en": "Purim", "pt": "Purim"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What inscription on an Athenian altar did Paul reference?",
+				"pt": "What inscription on an Athenian altar did Paul reference?"
+			},
+			"answer": {"en": "To an unknown god", "pt": "To an unknown god"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "To the gods of Olympus", "pt": "To the gods of Olympus"},
+				{"en": "To Mars", "pt": "To Mars"},
+				{"en": "To the imperial spirit", "pt": "To the imperial spirit"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "How long did Paul spend on Malta after the shipwreck?",
+				"pt": "How long did Paul spend on Malta after the shipwreck?"
+			},
+			"answer": {"en": "Three months", "pt": "Three months"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ten days", "pt": "Ten days"},
+				{"en": "Six months", "pt": "Six months"},
+				{"en": "One week", "pt": "One week"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was the chief official of Malta whose father Paul healed?",
+				"pt": "Who was the chief official of Malta whose father Paul healed?"
+			},
+			"answer": {"en": "Publius", "pt": "Publius"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Sergius Paulus", "pt": "Sergius Paulus"},
+				{"en": "Eutychus", "pt": "Eutychus"},
+				{"en": "Gaius", "pt": "Gaius"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "In which city did Paul reason for three Sabbaths causing jealousy?",
+				"pt": "In which city did Paul reason for three Sabbaths causing jealousy?"
+			},
+			"answer": {"en": "Thessalonica", "pt": "Thessalonica"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Berea", "pt": "Berea"},
+				{"en": "Athens", "pt": "Athens"},
+				{"en": "Derbe", "pt": "Derbe"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Whom did Paul circumcise to avoid offending Jews?",
+				"pt": "Whom did Paul circumcise to avoid offending Jews?"
+			},
+			"answer": {"en": "Timothy", "pt": "Timothy"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Titus", "pt": "Titus"},
+				{"en": "Silas", "pt": "Silas"},
+				{"en": "Luke", "pt": "Luke"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which proconsul dismissed the case against Paul in Corinth?",
+				"pt": "Which proconsul dismissed the case against Paul in Corinth?"
+			},
+			"answer": {"en": "Gallio", "pt": "Gallio"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Felix", "pt": "Felix"},
+				{"en": "Festus", "pt": "Festus"},
+				{"en": "Lysias", "pt": "Lysias"}
 			]
 		}
 	],
@@ -5574,7 +8401,7 @@ const BASE_QA := {
 				"pt": "Qual carta diz aos crentes que seus corpos são templos do Espírito Santo?"
 			},
 			"answer": {"en": "1 Corinthians", "pt": "1 Coríntios"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "2 Corinthians", "pt": "2 Coríntios"},
@@ -5589,7 +8416,7 @@ const BASE_QA := {
 				"pt": "Qual carta dá qualificações para superintendentes e diáconos?"
 			},
 			"answer": {"en": "1 Timothy", "pt": "1 Timóteo"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "2 Timothy", "pt": "2 Timóteo"},
@@ -5637,7 +8464,7 @@ const BASE_QA := {
 				"Qual carta conforta uma igreja sobre aqueles que adormeceram e o retorno de Cristo?"
 			},
 			"answer": {"en": "1 Thessalonians", "pt": "1 Tessalonicenses"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Galatians", "pt": "Gálatas"},
@@ -5794,12 +8621,166 @@ const BASE_QA := {
 				"Qual carta alerta que o amor ao dinheiro é a raiz de todos os tipos de males?"
 			},
 			"answer": {"en": "1 Timothy", "pt": "1 Timóteo"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "2 Thessalonians", "pt": "2 Tessalonicenses"},
 				{"en": "2 Peter", "pt": "2 Pedro"},
 				{"en": "Colossians", "pt": "Colossenses"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which letter mentions Paul's thorn and hears 'My grace is sufficient for you'?",
+				"pt":
+				"Which letter mentions Paul's thorn and hears 'My grace is sufficient for you'?"
+			},
+			"answer": {"en": "2 Corinthians", "pt": "2 Corinthians"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Romans", "pt": "Romans"},
+				{"en": "Galatians", "pt": "Galatians"},
+				{"en": "Ephesians", "pt": "Ephesians"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which letter uses an olive tree to picture Gentiles grafted in?",
+				"pt": "Which letter uses an olive tree to picture Gentiles grafted in?"
+			},
+			"answer": {"en": "Romans", "pt": "Romans"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Philippians", "pt": "Philippians"},
+				{"en": "Colossians", "pt": "Colossians"},
+				{"en": "Titus", "pt": "Titus"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which letter asks the recipient to prepare a guest room for Paul?",
+				"pt": "Which letter asks the recipient to prepare a guest room for Paul?"
+			},
+			"answer": {"en": "Philemon", "pt": "Philemon"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "1 Timothy", "pt": "1 Timothy"},
+				{"en": "2 Thessalonians", "pt": "2 Thessalonians"},
+				{"en": "Hebrews", "pt": "Hebrews"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which letter urges believers to live quietly and work with their hands?",
+				"pt": "Which letter urges believers to live quietly and work with their hands?"
+			},
+			"answer": {"en": "1 Thessalonians", "pt": "1 Thessalonians"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Galatians", "pt": "Galatians"},
+				{"en": "Ephesians", "pt": "Ephesians"},
+				{"en": "1 Corinthians", "pt": "1 Corinthians"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which letter mentions Epaphroditus risking his life to serve Paul?",
+				"pt": "Which letter mentions Epaphroditus risking his life to serve Paul?"
+			},
+			"answer": {"en": "Philippians", "pt": "Philippians"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Colossians", "pt": "Colossians"},
+				{"en": "2 Timothy", "pt": "2 Timothy"},
+				{"en": "Romans", "pt": "Romans"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which letter warns about those who forbid marriage and certain foods?",
+				"pt": "Which letter warns about those who forbid marriage and certain foods?"
+			},
+			"answer": {"en": "1 Timothy", "pt": "1 Timothy"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Titus", "pt": "Titus"},
+				{"en": "Galatians", "pt": "Galatians"},
+				{"en": "2 Corinthians", "pt": "2 Corinthians"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which letter asks Timothy to bring Paul's cloak and scrolls left at Troas?",
+				"pt": "Which letter asks Timothy to bring Paul's cloak and scrolls left at Troas?"
+			},
+			"answer": {"en": "2 Timothy", "pt": "2 Timothy"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "1 Timothy", "pt": "1 Timothy"},
+				{"en": "Philemon", "pt": "Philemon"},
+				{"en": "Hebrews", "pt": "Hebrews"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which letter says to read also the letter from Laodicea?",
+				"pt": "Which letter says to read also the letter from Laodicea?"
+			},
+			"answer": {"en": "Colossians", "pt": "Colossians"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ephesians", "pt": "Ephesians"},
+				{"en": "Philippians", "pt": "Philippians"},
+				{"en": "2 Thessalonians", "pt": "2 Thessalonians"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which letter commands husbands to love their wives as Christ loved the church?",
+				"pt":
+				"Which letter commands husbands to love their wives as Christ loved the church?"
+			},
+			"answer": {"en": "Ephesians", "pt": "Ephesians"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Galatians", "pt": "Galatians"},
+				{"en": "Romans", "pt": "Romans"},
+				{"en": "1 Timothy", "pt": "1 Timothy"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which letter declares there is no condemnation for those in Christ Jesus?",
+				"pt": "Which letter declares there is no condemnation for those in Christ Jesus?"
+			},
+			"answer": {"en": "Romans", "pt": "Romans"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "1 Thessalonians", "pt": "1 Thessalonians"},
+				{"en": "Titus", "pt": "Titus"},
+				{"en": "Philemon", "pt": "Philemon"}
 			]
 		}
 	],
@@ -5842,7 +8823,7 @@ const BASE_QA := {
 				"pt": "Qual igreja foi conhecida por seu primeiro amor esfriar?"
 			},
 			"answer": {"en": "Ephesus", "pt": "Éfeso"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Smyrna", "pt": "Esmirna"},
@@ -5857,7 +8838,7 @@ const BASE_QA := {
 				"pt": "Qual igreja tinha uma porta aberta que ninguém conseguia fechar?"
 			},
 			"answer": {"en": "Philadelphia", "pt": "Filadélfia"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Smyrna", "pt": "Esmirna"},
@@ -5887,7 +8868,7 @@ const BASE_QA := {
 				"pt": "Qual igreja era pobre, mas espiritualmente rica?"
 			},
 			"answer": {"en": "Smyrna", "pt": "Esmirna"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Laodicea", "pt": "Laodicéia"},
@@ -5933,7 +8914,7 @@ const BASE_QA := {
 				"pt": "Qual igreja tinha a reputação de estar viva, mas estava morta?"
 			},
 			"answer": {"en": "Sardis", "pt": "Sardes"},
-			"tier": 2,
+			"tier": 1,
 			"decoys":
 			[
 				{"en": "Philadelphia", "pt": "Filadélfia"},
@@ -6117,6 +9098,163 @@ const BASE_QA := {
 				{"en": "Philadelphia", "pt": "Filadélfia"},
 				{"en": "Thyatira", "pt": "Tiatira"},
 				{"en": "Laodicea", "pt": "Laodicéia"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who spoke the messages to the seven churches to John?",
+				"pt": "Who spoke the messages to the seven churches to John?"
+			},
+			"answer": {"en": "Jesus, the risen Son of Man", "pt": "Jesus, the risen Son of Man"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Paul", "pt": "Paul"},
+				{"en": "An angel", "pt": "An angel"},
+				{"en": "Moses", "pt": "Moses"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "In which chapters of Revelation are the letters to the churches found?",
+				"pt": "In which chapters of Revelation are the letters to the churches found?"
+			},
+			"answer": {"en": "Chapters 2 and 3", "pt": "Chapters 2 and 3"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Chapters 6 and 7", "pt": "Chapters 6 and 7"},
+				{"en": "Chapter 1 only", "pt": "Chapter 1 only"},
+				{"en": "Chapters 10 and 11", "pt": "Chapters 10 and 11"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What do the seven stars in Jesus' hand represent?",
+				"pt": "What do the seven stars in Jesus' hand represent?"
+			},
+			"answer":
+			{"en": "The angels of the seven churches", "pt": "The angels of the seven churches"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "The twelve tribes", "pt": "The twelve tribes"},
+				{"en": "The seven hills", "pt": "The seven hills"},
+				{"en": "The seven seals", "pt": "The seven seals"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What do the seven golden lampstands represent?",
+				"pt": "What do the seven golden lampstands represent?"
+			},
+			"answer": {"en": "The seven churches", "pt": "The seven churches"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Seven feasts", "pt": "Seven feasts"},
+				{"en": "Seven spirits", "pt": "Seven spirits"},
+				{"en": "Seven crowns", "pt": "Seven crowns"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which church was warned Jesus would come like a thief if they did not wake up?",
+				"pt":
+				"Which church was warned Jesus would come like a thief if they did not wake up?"
+			},
+			"answer": {"en": "Sardis", "pt": "Sardis"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Laodicea", "pt": "Laodicea"},
+				{"en": "Smyrna", "pt": "Smyrna"},
+				{"en": "Pergamum", "pt": "Pergamum"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which church was warned that Jesus would fight with the sword of His mouth?",
+				"pt": "Which church was warned that Jesus would fight with the sword of His mouth?"
+			},
+			"answer": {"en": "Pergamum", "pt": "Pergamum"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Thyatira", "pt": "Thyatira"},
+				{"en": "Sardis", "pt": "Sardis"},
+				{"en": "Philadelphia", "pt": "Philadelphia"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which church was promised authority over nations and the morning star?",
+				"pt": "Which church was promised authority over nations and the morning star?"
+			},
+			"answer": {"en": "Thyatira", "pt": "Thyatira"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ephesus", "pt": "Ephesus"},
+				{"en": "Sardis", "pt": "Sardis"},
+				{"en": "Laodicea", "pt": "Laodicea"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which church was promised to be a pillar in God's temple with His name written on them?",
+				"pt":
+				"Which church was promised to be a pillar in God's temple with His name written on them?"
+			},
+			"answer": {"en": "Philadelphia", "pt": "Philadelphia"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ephesus", "pt": "Ephesus"},
+				{"en": "Pergamum", "pt": "Pergamum"},
+				{"en": "Smyrna", "pt": "Smyrna"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which church was promised that Jesus would dine with anyone who opened the door?",
+				"pt":
+				"Which church was promised that Jesus would dine with anyone who opened the door?"
+			},
+			"answer": {"en": "Laodicea", "pt": "Laodicea"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ephesus", "pt": "Ephesus"},
+				{"en": "Sardis", "pt": "Sardis"},
+				{"en": "Smyrna", "pt": "Smyrna"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which church was told some would suffer tribulation ten days?",
+				"pt": "Which church was told some would suffer tribulation ten days?"
+			},
+			"answer": {"en": "Smyrna", "pt": "Smyrna"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Philadelphia", "pt": "Philadelphia"},
+				{"en": "Laodicea", "pt": "Laodicea"},
+				{"en": "Thyatira", "pt": "Thyatira"}
 			]
 		}
 	],
@@ -6407,6 +9545,153 @@ const BASE_QA := {
 				{"en": "Babylon", "pt": "Babilônia"},
 				{"en": "Samaria", "pt": "Samaria"},
 				{"en": "Bethel", "pt": "Betel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which plain did Lot choose because it was well watered like Egypt?",
+				"pt": "Which plain did Lot choose because it was well watered like Egypt?"
+			},
+			"answer": {"en": "The Jordan plain", "pt": "The Jordan plain"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "The Jezreel Valley", "pt": "The Jezreel Valley"},
+				{"en": "The Negev", "pt": "The Negev"},
+				{"en": "The plains of Moab", "pt": "The plains of Moab"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "In which valley is Megiddo located, linked with Armageddon?",
+				"pt": "In which valley is Megiddo located, linked with Armageddon?"
+			},
+			"answer": {"en": "The Jezreel Valley", "pt": "The Jezreel Valley"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Kidron Valley", "pt": "Kidron Valley"},
+				{"en": "Hinnom Valley", "pt": "Hinnom Valley"},
+				{"en": "Zered Valley", "pt": "Zered Valley"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which mountain opposite Mount Gerizim was used to pronounce curses?",
+				"pt": "Which mountain opposite Mount Gerizim was used to pronounce curses?"
+			},
+			"answer": {"en": "Mount Ebal", "pt": "Mount Ebal"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Mount Tabor", "pt": "Mount Tabor"},
+				{"en": "Mount Carmel", "pt": "Mount Carmel"},
+				{"en": "Mount Nebo", "pt": "Mount Nebo"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which oasis near the Dead Sea sheltered David from Saul?",
+				"pt": "Which oasis near the Dead Sea sheltered David from Saul?"
+			},
+			"answer": {"en": "En Gedi", "pt": "En Gedi"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Beersheba", "pt": "Beersheba"},
+				{"en": "Ramah", "pt": "Ramah"},
+				{"en": "Tekoa", "pt": "Tekoa"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which port city built by Herod served as Roman capital of Judea?",
+				"pt": "Which port city built by Herod served as Roman capital of Judea?"
+			},
+			"answer": {"en": "Caesarea Maritima", "pt": "Caesarea Maritima"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Joppa", "pt": "Joppa"},
+				{"en": "Tyre", "pt": "Tyre"},
+				{"en": "Sidon", "pt": "Sidon"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What mountain is traditionally associated with the Transfiguration?",
+				"pt": "What mountain is traditionally associated with the Transfiguration?"
+			},
+			"answer": {"en": "Mount Tabor", "pt": "Mount Tabor"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Mount Hermon", "pt": "Mount Hermon"},
+				{"en": "Mount Moriah", "pt": "Mount Moriah"},
+				{"en": "Mount Zion", "pt": "Mount Zion"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which city sat on seven hills and ruled the empire in Paul's day?",
+				"pt": "Which city sat on seven hills and ruled the empire in Paul's day?"
+			},
+			"answer": {"en": "Rome", "pt": "Rome"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Athens", "pt": "Athens"},
+				{"en": "Corinth", "pt": "Corinth"},
+				{"en": "Ephesus", "pt": "Ephesus"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What ancient route east of the Jordan was called the King's Highway?",
+				"pt": "What ancient route east of the Jordan was called the King's Highway?"
+			},
+			"answer": {"en": "The King's Highway", "pt": "The King's Highway"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Via Maris", "pt": "Via Maris"},
+				{"en": "Road to Jericho", "pt": "Road to Jericho"},
+				{"en": "Desert Way", "pt": "Desert Way"}
+			]
+		},
+		{
+			"question":
+			{"en": "On which mountain did Aaron die?", "pt": "On which mountain did Aaron die?"},
+			"answer": {"en": "Mount Hor", "pt": "Mount Hor"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Mount Nebo", "pt": "Mount Nebo"},
+				{"en": "Mount Sinai", "pt": "Mount Sinai"},
+				{"en": "Mount Carmel", "pt": "Mount Carmel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which northern mountain is near the source of the Jordan River?",
+				"pt": "Which northern mountain is near the source of the Jordan River?"
+			},
+			"answer": {"en": "Mount Hermon", "pt": "Mount Hermon"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Mount Ararat", "pt": "Mount Ararat"},
+				{"en": "Mount Sinai", "pt": "Mount Sinai"},
+				{"en": "Mount Tabor", "pt": "Mount Tabor"}
 			]
 		}
 	],
@@ -6706,6 +9991,158 @@ const BASE_QA := {
 				{"en": "Mahanaim", "pt": "Maanaim"},
 				{"en": "Hazor", "pt": "Hazor"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Which city was called the City of Palms?",
+				"pt": "Which city was called the City of Palms?"
+			},
+			"answer": {"en": "Jericho", "pt": "Jericho"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Jerusalem", "pt": "Jerusalem"},
+				{"en": "Bethlehem", "pt": "Bethlehem"},
+				{"en": "Bethel", "pt": "Bethel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which Red Sea port did Solomon use for trade to Ophir?",
+				"pt": "Which Red Sea port did Solomon use for trade to Ophir?"
+			},
+			"answer": {"en": "Ezion-Geber", "pt": "Ezion-Geber"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Joppa", "pt": "Joppa"},
+				{"en": "Tyre", "pt": "Tyre"},
+				{"en": "Sidon", "pt": "Sidon"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "In which city was King Josiah killed in battle?",
+				"pt": "In which city was King Josiah killed in battle?"
+			},
+			"answer": {"en": "Megiddo", "pt": "Megiddo"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Jerusalem", "pt": "Jerusalem"},
+				{"en": "Bethel", "pt": "Bethel"},
+				{"en": "Jericho", "pt": "Jericho"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Where did Israel first camp after crossing the Jordan and set up twelve stones?",
+				"pt":
+				"Where did Israel first camp after crossing the Jordan and set up twelve stones?"
+			},
+			"answer": {"en": "Gilgal", "pt": "Gilgal"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Shiloh", "pt": "Shiloh"},
+				{"en": "Bethel", "pt": "Bethel"},
+				{"en": "Shechem", "pt": "Shechem"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which coastal city was seat of Roman governors in Judea?",
+				"pt": "Which coastal city was seat of Roman governors in Judea?"
+			},
+			"answer": {"en": "Caesarea Maritima", "pt": "Caesarea Maritima"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Joppa", "pt": "Joppa"},
+				{"en": "Gaza", "pt": "Gaza"},
+				{"en": "Ptolemais", "pt": "Ptolemais"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which city was famously built on seven hills and ruled the world empire?",
+				"pt": "Which city was famously built on seven hills and ruled the world empire?"
+			},
+			"answer": {"en": "Rome", "pt": "Rome"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Athens", "pt": "Athens"},
+				{"en": "Alexandria", "pt": "Alexandria"},
+				{"en": "Ephesus", "pt": "Ephesus"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which city was known for lukewarm water between hot and cold springs?",
+				"pt": "Which city was known for lukewarm water between hot and cold springs?"
+			},
+			"answer": {"en": "Laodicea", "pt": "Laodicea"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Colossae", "pt": "Colossae"},
+				{"en": "Hierapolis", "pt": "Hierapolis"},
+				{"en": "Pergamum", "pt": "Pergamum"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which city housed the massive Temple of Artemis?",
+				"pt": "Which city housed the massive Temple of Artemis?"
+			},
+			"answer": {"en": "Ephesus", "pt": "Ephesus"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Corinth", "pt": "Corinth"},
+				{"en": "Athens", "pt": "Athens"},
+				{"en": "Rome", "pt": "Rome"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which city served as the missionary hub sending Paul and Barnabas?",
+				"pt": "Which city served as the missionary hub sending Paul and Barnabas?"
+			},
+			"answer": {"en": "Antioch of Syria", "pt": "Antioch of Syria"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Jerusalem", "pt": "Jerusalem"},
+				{"en": "Damascus", "pt": "Damascus"},
+				{"en": "Philippi", "pt": "Philippi"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which rock-carved capital of Edom was also called Sela?",
+				"pt": "Which rock-carved capital of Edom was also called Sela?"
+			},
+			"answer": {"en": "Petra", "pt": "Petra"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Samaria", "pt": "Samaria"},
+				{"en": "Nineveh", "pt": "Nineveh"},
+				{"en": "Rabbah", "pt": "Rabbah"}
+			]
 		}
 	],
 	"Animals in the Bible":
@@ -6835,7 +10272,7 @@ const BASE_QA := {
 				"pt": "Que animal apareceu no matagal como substituto de Isaque?"
 			},
 			"answer": {"en": "A ram", "pt": "Um carneiro"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "A goat", "pt": "Uma cabra"},
@@ -6970,7 +10407,7 @@ const BASE_QA := {
 				"pt": "Que animais são separados no ensino de Jesus sobre o julgamento final?"
 			},
 			"answer": {"en": "Sheep and goats", "pt": "Ovelhas e cabras"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "A shepherd and wolves", "pt": "Um pastor e lobos"},
@@ -7009,6 +10446,155 @@ const BASE_QA := {
 				{"en": "A burnt offering bull", "pt": "Um touro de oferta queimada"},
 				{"en": "A golden calf", "pt": "Um bezerro de ouro"},
 				{"en": "The Passover lamb", "pt": "O cordeiro pascal"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What animal did the father of the prodigal son order to be killed?",
+				"pt": "What animal did the father of the prodigal son order to be killed?"
+			},
+			"answer": {"en": "The fattened calf", "pt": "The fattened calf"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "A ram", "pt": "A ram"},
+				{"en": "A goat", "pt": "A goat"},
+				{"en": "A dove", "pt": "A dove"}
+			]
+		},
+		{
+			"question":
+			{"en": "What animal did Jesus call Herod?", "pt": "What animal did Jesus call Herod?"},
+			"answer": {"en": "A fox", "pt": "A fox"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "A wolf", "pt": "A wolf"},
+				{"en": "A serpent", "pt": "A serpent"},
+				{"en": "A viper", "pt": "A viper"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What animals did Jesus warn of in sheep's clothing?",
+				"pt": "What animals did Jesus warn of in sheep's clothing?"
+			},
+			"answer": {"en": "Wolves", "pt": "Wolves"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Bears", "pt": "Bears"},
+				{"en": "Foxes", "pt": "Foxes"},
+				{"en": "Lions", "pt": "Lions"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which small animal makes its home in the crags and is called wise?",
+				"pt": "Which small animal makes its home in the crags and is called wise?"
+			},
+			"answer": {"en": "The rock badger (hyrax)", "pt": "The rock badger (hyrax)"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "The fox", "pt": "The fox"},
+				{"en": "The otter", "pt": "The otter"},
+				{"en": "The weasel", "pt": "The weasel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which small creature marches in ranks without a king?",
+				"pt": "Which small creature marches in ranks without a king?"
+			},
+			"answer": {"en": "Locusts", "pt": "Locusts"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ants", "pt": "Ants"},
+				{"en": "Mice", "pt": "Mice"},
+				{"en": "Sparrows", "pt": "Sparrows"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which small creature can be caught with the hands yet lives in kings' palaces?",
+				"pt":
+				"Which small creature can be caught with the hands yet lives in kings' palaces?"
+			},
+			"answer": {"en": "A lizard", "pt": "A lizard"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "A mouse", "pt": "A mouse"},
+				{"en": "A sparrow", "pt": "A sparrow"},
+				{"en": "A mole", "pt": "A mole"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which animal in Daniel's vision represented Greece?",
+				"pt": "Which animal in Daniel's vision represented Greece?"
+			},
+			"answer": {"en": "A male goat", "pt": "A male goat"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "A bear", "pt": "A bear"},
+				{"en": "A leopard", "pt": "A leopard"},
+				{"en": "A ram", "pt": "A ram"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which creature in Revelation 12 symbolized Satan?",
+				"pt": "Which creature in Revelation 12 symbolized Satan?"
+			},
+			"answer": {"en": "A great red dragon", "pt": "A great red dragon"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "A sea serpent", "pt": "A sea serpent"},
+				{"en": "A leopard beast", "pt": "A leopard beast"},
+				{"en": "A pale horse", "pt": "A pale horse"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which animal killed the disobedient prophet in 1 Kings 13?",
+				"pt": "Which animal killed the disobedient prophet in 1 Kings 13?"
+			},
+			"answer": {"en": "A lion", "pt": "A lion"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "A bear", "pt": "A bear"},
+				{"en": "A wolf", "pt": "A wolf"},
+				{"en": "A dog", "pt": "A dog"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which tribe was compared to a ravenous wolf in Jacob's blessing?",
+				"pt": "Which tribe was compared to a ravenous wolf in Jacob's blessing?"
+			},
+			"answer": {"en": "Benjamin", "pt": "Benjamin"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Judah", "pt": "Judah"},
+				{"en": "Levi", "pt": "Levi"},
+				{"en": "Issachar", "pt": "Issachar"}
 			]
 		}
 	],
@@ -7321,6 +10907,156 @@ const BASE_QA := {
 				{"en": "John Mark", "pt": "João Marcos"},
 				{"en": "Luke", "pt": "Lucas"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Who dreamed of three baskets of bread being eaten by birds?",
+				"pt": "Who dreamed of three baskets of bread being eaten by birds?"
+			},
+			"answer": {"en": "Pharaoh's baker", "pt": "Pharaoh's baker"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Pharaoh's cupbearer", "pt": "Pharaoh's cupbearer"},
+				{"en": "Joseph", "pt": "Joseph"},
+				{"en": "Potiphar", "pt": "Potiphar"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was warned in a dream not to return to Herod?",
+				"pt": "Who was warned in a dream not to return to Herod?"
+			},
+			"answer": {"en": "The magi", "pt": "The magi"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "The shepherds", "pt": "The shepherds"},
+				{"en": "Zechariah", "pt": "Zechariah"},
+				{"en": "Simeon", "pt": "Simeon"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who saw a man with a measuring line for Jerusalem?",
+				"pt": "Who saw a man with a measuring line for Jerusalem?"
+			},
+			"answer": {"en": "Zechariah", "pt": "Zechariah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ezekiel", "pt": "Ezekiel"},
+				{"en": "Isaiah", "pt": "Isaiah"},
+				{"en": "Daniel", "pt": "Daniel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who saw four horns and four craftsmen?",
+				"pt": "Who saw four horns and four craftsmen?"
+			},
+			"answer": {"en": "Zechariah", "pt": "Zechariah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Jeremiah", "pt": "Jeremiah"},
+				{"en": "Haggai", "pt": "Haggai"},
+				{"en": "Malachi", "pt": "Malachi"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who saw a flying scroll in a vision?",
+				"pt": "Who saw a flying scroll in a vision?"
+			},
+			"answer": {"en": "Zechariah", "pt": "Zechariah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ezekiel", "pt": "Ezekiel"},
+				{"en": "Daniel", "pt": "Daniel"},
+				{"en": "John", "pt": "John"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who saw a woman in a basket carried by storks?",
+				"pt": "Who saw a woman in a basket carried by storks?"
+			},
+			"answer": {"en": "Zechariah", "pt": "Zechariah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Jeremiah", "pt": "Jeremiah"},
+				{"en": "Habakkuk", "pt": "Habakkuk"},
+				{"en": "Micah", "pt": "Micah"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who saw a golden lampstand with two olive trees beside it?",
+				"pt": "Who saw a golden lampstand with two olive trees beside it?"
+			},
+			"answer": {"en": "Zechariah", "pt": "Zechariah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "John", "pt": "John"},
+				{"en": "Ezekiel", "pt": "Ezekiel"},
+				{"en": "Daniel", "pt": "Daniel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who saw a valley of dry bones come to life?",
+				"pt": "Who saw a valley of dry bones come to life?"
+			},
+			"answer": {"en": "Ezekiel", "pt": "Ezekiel"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Elijah", "pt": "Elijah"},
+				{"en": "Daniel", "pt": "Daniel"},
+				{"en": "Isaiah", "pt": "Isaiah"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who saw a river flowing from the temple bringing life?",
+				"pt": "Who saw a river flowing from the temple bringing life?"
+			},
+			"answer": {"en": "Ezekiel", "pt": "Ezekiel"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Zechariah", "pt": "Zechariah"},
+				{"en": "John", "pt": "John"},
+				{"en": "Joel", "pt": "Joel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who saw four living creatures and wheels full of eyes?",
+				"pt": "Who saw four living creatures and wheels full of eyes?"
+			},
+			"answer": {"en": "Ezekiel", "pt": "Ezekiel"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Daniel", "pt": "Daniel"},
+				{"en": "Jeremiah", "pt": "Jeremiah"},
+				{"en": "Hosea", "pt": "Hosea"}
+			]
 		}
 	],
 	"Faith & Trust Stories":
@@ -7564,7 +11300,7 @@ const BASE_QA := {
 				"Quem saiu de um barco com fé para caminhar em direção a Jesus sobre as águas?"
 			},
 			"answer": {"en": "Peter", "pt": "Peter"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "John", "pt": "John"},
@@ -7634,6 +11370,162 @@ const BASE_QA := {
 				{"en": "Gideon", "pt": "Gideão"},
 				{"en": "Balaam", "pt": "Balaão"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said to Jesus, 'Only say the word and my servant will be healed'?",
+				"pt": "Who said to Jesus, 'Only say the word and my servant will be healed'?"
+			},
+			"answer": {"en": "A Roman centurion", "pt": "A Roman centurion"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "A synagogue ruler", "pt": "A synagogue ruler"},
+				{"en": "A Pharisee", "pt": "A Pharisee"},
+				{"en": "A scribe", "pt": "A scribe"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who marched around Jericho for seven days trusting God to bring down the walls?",
+				"pt":
+				"Who marched around Jericho for seven days trusting God to bring down the walls?"
+			},
+			"answer": {"en": "Israel under Joshua", "pt": "Israel under Joshua"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Israel under Moses", "pt": "Israel under Moses"},
+				{"en": "Israel under David", "pt": "Israel under David"},
+				{"en": "Israel under Gideon", "pt": "Israel under Gideon"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who dipped seven times in the Jordan to be healed of leprosy?",
+				"pt": "Who dipped seven times in the Jordan to be healed of leprosy?"
+			},
+			"answer": {"en": "Naaman", "pt": "Naaman"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Gehazi", "pt": "Gehazi"},
+				{"en": "Elisha", "pt": "Elisha"},
+				{"en": "Hazael", "pt": "Hazael"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who filled many jars with oil after borrowing vessels by faith?",
+				"pt": "Who filled many jars with oil after borrowing vessels by faith?"
+			},
+			"answer":
+			{
+				"en": "The widow of a prophet in Elisha's day",
+				"pt": "The widow of a prophet in Elisha's day"
+			},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "The Shunammite woman", "pt": "The Shunammite woman"},
+				{"en": "The widow at Zarephath", "pt": "The widow at Zarephath"},
+				{"en": "Ruth", "pt": "Ruth"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who rebuilt Jerusalem's wall with a sword and trowel despite threats?",
+				"pt": "Who rebuilt Jerusalem's wall with a sword and trowel despite threats?"
+			},
+			"answer": {"en": "Nehemiah and his workers", "pt": "Nehemiah and his workers"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ezra and the priests", "pt": "Ezra and the priests"},
+				{"en": "Zerubbabel alone", "pt": "Zerubbabel alone"},
+				{"en": "The Levites only", "pt": "The Levites only"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who risked death by approaching the king after a fast?",
+				"pt": "Who risked death by approaching the king after a fast?"
+			},
+			"answer": {"en": "Esther", "pt": "Esther"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Vashti", "pt": "Vashti"},
+				{"en": "Deborah", "pt": "Deborah"},
+				{"en": "Bathsheba", "pt": "Bathsheba"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who prayed seven times for rain on Carmel until a cloud appeared?",
+				"pt": "Who prayed seven times for rain on Carmel until a cloud appeared?"
+			},
+			"answer": {"en": "Elijah", "pt": "Elijah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Elisha", "pt": "Elisha"},
+				{"en": "Samuel", "pt": "Samuel"},
+				{"en": "Haggai", "pt": "Haggai"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who asked the sun to stand still over Gibeon?",
+				"pt": "Who asked the sun to stand still over Gibeon?"
+			},
+			"answer": {"en": "Joshua", "pt": "Joshua"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Moses", "pt": "Moses"},
+				{"en": "Caleb", "pt": "Caleb"},
+				{"en": "Barak", "pt": "Barak"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who took 300 men with trumpets and jars against Midian?",
+				"pt": "Who took 300 men with trumpets and jars against Midian?"
+			},
+			"answer": {"en": "Gideon", "pt": "Gideon"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Jephthah", "pt": "Jephthah"},
+				{"en": "Samson", "pt": "Samson"},
+				{"en": "Ehud", "pt": "Ehud"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who encouraged shipmates in a storm saying an angel promised survival?",
+				"pt": "Who encouraged shipmates in a storm saying an angel promised survival?"
+			},
+			"answer": {"en": "Paul", "pt": "Paul"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Peter", "pt": "Peter"},
+				{"en": "Barnabas", "pt": "Barnabas"},
+				{"en": "Silas", "pt": "Silas"}
+			]
 		}
 	],
 	"Forgiveness & Grace":
@@ -7645,7 +11537,7 @@ const BASE_QA := {
 				"pt": "Quem perdoou seus irmãos dizendo que Deus queria isso para o bem?"
 			},
 			"answer": {"en": "Joseph", "pt": "José"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Esau", "pt": "Esaú"},
@@ -7811,7 +11703,7 @@ const BASE_QA := {
 				"pt": "Quantas vezes Jesus disse para perdoar um irmão?"
 			},
 			"answer": {"en": "Seventy times seven", "pt": "Setenta vezes sete"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Seven", "pt": "Sete"},
@@ -7952,6 +11844,159 @@ const BASE_QA := {
 				{"en": "He sent another prophet", "pt": "Ele enviou outro profeta"},
 				{"en": "He destroyed the city", "pt": "Ele destruiu a cidade"},
 				{"en": "He scattered them to Babylon", "pt": "Ele os espalhou para a Babilônia"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who asked Jesus how many times to forgive and heard 'seventy-seven'?",
+				"pt": "Who asked Jesus how many times to forgive and heard 'seventy-seven'?"
+			},
+			"answer": {"en": "Peter", "pt": "Peter"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "John", "pt": "John"},
+				{"en": "James", "pt": "James"},
+				{"en": "Thomas", "pt": "Thomas"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who interceded after the golden calf asking God to forgive Israel?",
+				"pt": "Who interceded after the golden calf asking God to forgive Israel?"
+			},
+			"answer": {"en": "Moses", "pt": "Moses"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Aaron", "pt": "Aaron"},
+				{"en": "Joshua", "pt": "Joshua"},
+				{"en": "Hur", "pt": "Hur"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"In the parable of the unforgiving servant, how much was the first debt forgiven?",
+				"pt":
+				"In the parable of the unforgiving servant, how much was the first debt forgiven?"
+			},
+			"answer": {"en": "Ten thousand talents", "pt": "Ten thousand talents"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "One hundred talents", "pt": "One hundred talents"},
+				{"en": "One hundred denarii", "pt": "One hundred denarii"},
+				{"en": "A thousand shekels", "pt": "A thousand shekels"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "How much did the unforgiving servant demand from his fellow servant?",
+				"pt": "How much did the unforgiving servant demand from his fellow servant?"
+			},
+			"answer": {"en": "One hundred denarii", "pt": "One hundred denarii"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ten talents", "pt": "Ten talents"},
+				{"en": "Five minas", "pt": "Five minas"},
+				{"en": "A thousand shekels", "pt": "A thousand shekels"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who later called Mark useful again after once parting ways with him?",
+				"pt": "Who later called Mark useful again after once parting ways with him?"
+			},
+			"answer": {"en": "Paul", "pt": "Paul"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Peter", "pt": "Peter"},
+				{"en": "Barnabas", "pt": "Barnabas"},
+				{"en": "Silas", "pt": "Silas"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who offered himself as surety for Benjamin so his brother could return?",
+				"pt": "Who offered himself as surety for Benjamin so his brother could return?"
+			},
+			"answer": {"en": "Judah", "pt": "Judah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Reuben", "pt": "Reuben"},
+				{"en": "Levi", "pt": "Levi"},
+				{"en": "Simeon", "pt": "Simeon"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was the runaway slave Paul asked to receive as a brother?",
+				"pt": "Who was the runaway slave Paul asked to receive as a brother?"
+			},
+			"answer": {"en": "Onesimus", "pt": "Onesimus"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Tychicus", "pt": "Tychicus"},
+				{"en": "Silas", "pt": "Silas"},
+				{"en": "Titus", "pt": "Titus"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which prophet sulked when God spared a wicked city and learned from a plant?",
+				"pt": "Which prophet sulked when God spared a wicked city and learned from a plant?"
+			},
+			"answer": {"en": "Jonah", "pt": "Jonah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Nahum", "pt": "Nahum"},
+				{"en": "Micah", "pt": "Micah"},
+				{"en": "Habakkuk", "pt": "Habakkuk"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who cursed David but was spared when the king returned to Jerusalem?",
+				"pt": "Who cursed David but was spared when the king returned to Jerusalem?"
+			},
+			"answer": {"en": "Shimei", "pt": "Shimei"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Abishai", "pt": "Abishai"},
+				{"en": "Joab", "pt": "Joab"},
+				{"en": "Ittai", "pt": "Ittai"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who spared King Saul a second time, taking only his spear and jug?",
+				"pt": "Who spared King Saul a second time, taking only his spear and jug?"
+			},
+			"answer": {"en": "David", "pt": "David"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Samuel", "pt": "Samuel"},
+				{"en": "Jonathan", "pt": "Jonathan"},
+				{"en": "Ish-bosheth", "pt": "Ish-bosheth"}
 			]
 		}
 	],
@@ -8265,6 +12310,160 @@ const BASE_QA := {
 				{"en": "Revenge on the council", "pt": "Vingança no conselho"},
 				{"en": "A chance to form a rebellion", "pt": "Uma chance de formar uma rebelião"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Who confronted Pharaoh with God's demand, 'Let my people go'?",
+				"pt": "Who confronted Pharaoh with God's demand, 'Let my people go'?"
+			},
+			"answer": {"en": "Moses", "pt": "Moses"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Aaron", "pt": "Aaron"},
+				{"en": "Joshua", "pt": "Joshua"},
+				{"en": "Joseph", "pt": "Joseph"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who stepped out of the boat and walked on water toward Jesus?",
+				"pt": "Who stepped out of the boat and walked on water toward Jesus?"
+			},
+			"answer": {"en": "Peter", "pt": "Peter"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "John", "pt": "John"},
+				{"en": "Andrew", "pt": "Andrew"},
+				{"en": "Thomas", "pt": "Thomas"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who told the council, 'We cannot help speaking about what we have seen and heard'?",
+				"pt":
+				"Who told the council, 'We cannot help speaking about what we have seen and heard'?"
+			},
+			"answer": {"en": "Peter and John", "pt": "Peter and John"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Paul and Barnabas", "pt": "Paul and Barnabas"},
+				{"en": "Stephen and Philip", "pt": "Stephen and Philip"},
+				{"en": "James and Jude", "pt": "James and Jude"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who hid one hundred prophets of the LORD in caves from Jezebel?",
+				"pt": "Who hid one hundred prophets of the LORD in caves from Jezebel?"
+			},
+			"answer": {"en": "Obadiah", "pt": "Obadiah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Elisha", "pt": "Elisha"},
+				{"en": "Jehu", "pt": "Jehu"},
+				{"en": "Micaiah", "pt": "Micaiah"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who speared Zimri and Cozbi to stop a plague?",
+				"pt": "Who speared Zimri and Cozbi to stop a plague?"
+			},
+			"answer": {"en": "Phinehas", "pt": "Phinehas"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Eleazar", "pt": "Eleazar"},
+				{"en": "Nadab", "pt": "Nadab"},
+				{"en": "Abihu", "pt": "Abihu"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who defended a lentil field when others fled?",
+				"pt": "Who defended a lentil field when others fled?"
+			},
+			"answer": {"en": "Shammah son of Agee", "pt": "Shammah son of Agee"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Eleazar son of Dodai", "pt": "Eleazar son of Dodai"},
+				{"en": "Asahel", "pt": "Asahel"},
+				{"en": "Ira the Ithrite", "pt": "Ira the Ithrite"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who killed a lion in a pit on a snowy day?",
+				"pt": "Who killed a lion in a pit on a snowy day?"
+			},
+			"answer": {"en": "Benaiah son of Jehoiada", "pt": "Benaiah son of Jehoiada"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Samson", "pt": "Samson"},
+				{"en": "David", "pt": "David"},
+				{"en": "Jehu", "pt": "Jehu"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who confronted Jeroboam at Bethel causing his hand to wither?",
+				"pt": "Who confronted Jeroboam at Bethel causing his hand to wither?"
+			},
+			"answer": {"en": "A man of God from Judah", "pt": "A man of God from Judah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ahijah", "pt": "Ahijah"},
+				{"en": "Elisha", "pt": "Elisha"},
+				{"en": "Micah", "pt": "Micah"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which young king tore down idols and later led reforms beginning at age sixteen?",
+				"pt":
+				"Which young king tore down idols and later led reforms beginning at age sixteen?"
+			},
+			"answer": {"en": "Josiah", "pt": "Josiah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Hezekiah", "pt": "Hezekiah"},
+				{"en": "Uzziah", "pt": "Uzziah"},
+				{"en": "Manasseh", "pt": "Manasseh"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who told King Ahab the truth though 400 prophets promised victory?",
+				"pt": "Who told King Ahab the truth though 400 prophets promised victory?"
+			},
+			"answer": {"en": "Micaiah son of Imlah", "pt": "Micaiah son of Imlah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Elijah", "pt": "Elijah"},
+				{"en": "Elisha", "pt": "Elisha"},
+				{"en": "Obadiah", "pt": "Obadiah"}
+			]
 		}
 	],
 	"Famous Bible Quotes":
@@ -8336,7 +12535,7 @@ const BASE_QA := {
 				"pt": "Quem disse 'O que é a verdade?' para Jesus?"
 			},
 			"answer": {"en": "Pilate", "pt": "Pilatos"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Herod", "pt": "Herodes"},
@@ -8566,6 +12765,160 @@ const BASE_QA := {
 				{"en": "Asaph", "pt": "Asafe"},
 				{"en": "Solomon", "pt": "Salomão"}
 			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'The LORD will fight for you; you need only be still'?",
+				"pt": "Who said, 'The LORD will fight for you; you need only be still'?"
+			},
+			"answer": {"en": "Moses", "pt": "Moses"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Joshua", "pt": "Joshua"},
+				{"en": "Caleb", "pt": "Caleb"},
+				{"en": "Aaron", "pt": "Aaron"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'Not by might nor by power, but by My Spirit'?",
+				"pt": "Who said, 'Not by might nor by power, but by My Spirit'?"
+			},
+			"answer": {"en": "The LORD through Zechariah", "pt": "The LORD through Zechariah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "The LORD through Haggai", "pt": "The LORD through Haggai"},
+				{"en": "The LORD through Malachi", "pt": "The LORD through Malachi"},
+				{"en": "The LORD through Amos", "pt": "The LORD through Amos"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'He must increase, I must decrease'?",
+				"pt": "Who said, 'He must increase, I must decrease'?"
+			},
+			"answer": {"en": "John the Baptist", "pt": "John the Baptist"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Peter", "pt": "Peter"},
+				{"en": "Paul", "pt": "Paul"},
+				{"en": "John the apostle", "pt": "John the apostle"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'For to me, to live is Christ and to die is gain'?",
+				"pt": "Who said, 'For to me, to live is Christ and to die is gain'?"
+			},
+			"answer": {"en": "Paul", "pt": "Paul"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Peter", "pt": "Peter"},
+				{"en": "James", "pt": "James"},
+				{"en": "John", "pt": "John"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'I am the resurrection and the life'?",
+				"pt": "Who said, 'I am the resurrection and the life'?"
+			},
+			"answer": {"en": "Jesus", "pt": "Jesus"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Peter", "pt": "Peter"},
+				{"en": "Martha", "pt": "Martha"},
+				{"en": "Lazarus", "pt": "Lazarus"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'Though he slay me, yet will I hope in him'?",
+				"pt": "Who said, 'Though he slay me, yet will I hope in him'?"
+			},
+			"answer": {"en": "Job", "pt": "Job"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Habakkuk", "pt": "Habakkuk"},
+				{"en": "David", "pt": "David"},
+				{"en": "Jeremiah", "pt": "Jeremiah"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'For I know the plans I have for you'?",
+				"pt": "Who said, 'For I know the plans I have for you'?"
+			},
+			"answer": {"en": "The LORD through Jeremiah", "pt": "The LORD through Jeremiah"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Isaiah", "pt": "Isaiah"},
+				{"en": "Ezekiel", "pt": "Ezekiel"},
+				{"en": "Micah", "pt": "Micah"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'My eyes have seen your salvation'?",
+				"pt": "Who said, 'My eyes have seen your salvation'?"
+			},
+			"answer": {"en": "Simeon", "pt": "Simeon"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Zechariah", "pt": "Zechariah"},
+				{"en": "Anna", "pt": "Anna"},
+				{"en": "Philip", "pt": "Philip"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who said, 'I have fought the good fight, I have finished the race, I have kept the faith'?",
+				"pt":
+				"Who said, 'I have fought the good fight, I have finished the race, I have kept the faith'?"
+			},
+			"answer": {"en": "Paul", "pt": "Paul"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Peter", "pt": "Peter"},
+				{"en": "John", "pt": "John"},
+				{"en": "James", "pt": "James"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who said, 'If anyone would come after me, let him deny himself and take up his cross daily'?",
+				"pt":
+				"Who said, 'If anyone would come after me, let him deny himself and take up his cross daily'?"
+			},
+			"answer": {"en": "Jesus", "pt": "Jesus"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Peter", "pt": "Peter"},
+				{"en": "James", "pt": "James"},
+				{"en": "John", "pt": "John"}
+			]
 		}
 	],
 	"Who Said It?":
@@ -8620,7 +12973,7 @@ const BASE_QA := {
 				"pt": "Que exclamou: 'Meu Senhor e meu Deus!' quando ele viu Jesus?"
 			},
 			"answer": {"en": "Thomas", "pt": "Tomás"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Peter", "pt": "Peter"},
@@ -8635,7 +12988,7 @@ const BASE_QA := {
 				"pt": "Quem perguntou a Jesus: 'O que é a verdade?'?"
 			},
 			"answer": {"en": "Pontius Pilate", "pt": "Pôncio Pilatos"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Herod", "pt": "Herodes"},
@@ -8840,7 +13193,7 @@ const BASE_QA := {
 				"pt": "Quem gritou na estrada de Damasco: 'Quem és, Senhor?'?"
 			},
 			"answer": {"en": "Saul/Paul", "pt": "Saulo/Paulo"},
-			"tier": 1,
+			"tier": 3,
 			"decoys":
 			[
 				{"en": "Peter", "pt": "Peter"},
@@ -8876,6 +13229,162 @@ const BASE_QA := {
 				{"en": "Peter", "pt": "Peter"},
 				{"en": "Paul", "pt": "Paulo"},
 				{"en": "Jude", "pt": "Judas"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who asked, 'How can this be, since I am a virgin'?",
+				"pt": "Who asked, 'How can this be, since I am a virgin'?"
+			},
+			"answer": {"en": "Mary", "pt": "Mary"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Elizabeth", "pt": "Elizabeth"},
+				{"en": "Martha", "pt": "Martha"},
+				{"en": "Anna", "pt": "Anna"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'Come, let us rebuild the wall of Jerusalem'?",
+				"pt": "Who said, 'Come, let us rebuild the wall of Jerusalem'?"
+			},
+			"answer": {"en": "Nehemiah", "pt": "Nehemiah"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Ezra", "pt": "Ezra"},
+				{"en": "Zerubbabel", "pt": "Zerubbabel"},
+				{"en": "Joash", "pt": "Joash"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'Sun, stand still over Gibeon'?",
+				"pt": "Who said, 'Sun, stand still over Gibeon'?"
+			},
+			"answer": {"en": "Joshua", "pt": "Joshua"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Moses", "pt": "Moses"},
+				{"en": "Caleb", "pt": "Caleb"},
+				{"en": "Gideon", "pt": "Gideon"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who said, 'Lord, I am not worthy to have you come under my roof; only say the word'?",
+				"pt":
+				"Who said, 'Lord, I am not worthy to have you come under my roof; only say the word'?"
+			},
+			"answer": {"en": "The centurion at Capernaum", "pt": "The centurion at Capernaum"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "The nobleman at Cana", "pt": "The nobleman at Cana"},
+				{"en": "Jairus", "pt": "Jairus"},
+				{"en": "Bartimaeus", "pt": "Bartimaeus"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who said, 'It is better that one man die for the people than the whole nation perish'?",
+				"pt":
+				"Who said, 'It is better that one man die for the people than the whole nation perish'?"
+			},
+			"answer": {"en": "Caiaphas", "pt": "Caiaphas"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Pilate", "pt": "Pilate"},
+				{"en": "Herod", "pt": "Herod"},
+				{"en": "Gamaliel", "pt": "Gamaliel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'Who is the LORD that I should obey his voice to let Israel go'?",
+				"pt": "Who said, 'Who is the LORD that I should obey his voice to let Israel go'?"
+			},
+			"answer": {"en": "Pharaoh", "pt": "Pharaoh"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Nebuchadnezzar", "pt": "Nebuchadnezzar"},
+				{"en": "Balak", "pt": "Balak"},
+				{"en": "Sennacherib", "pt": "Sennacherib"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'Is not this the great Babylon I have built'?",
+				"pt": "Who said, 'Is not this the great Babylon I have built'?"
+			},
+			"answer": {"en": "Nebuchadnezzar", "pt": "Nebuchadnezzar"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Belshazzar", "pt": "Belshazzar"},
+				{"en": "Darius", "pt": "Darius"},
+				{"en": "Artaxerxes", "pt": "Artaxerxes"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'Surely this man was the Son of God' at the cross?",
+				"pt": "Who said, 'Surely this man was the Son of God' at the cross?"
+			},
+			"answer": {"en": "A Roman centurion", "pt": "A Roman centurion"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Pilate", "pt": "Pilate"},
+				{"en": "Herod", "pt": "Herod"},
+				{"en": "Caiaphas", "pt": "Caiaphas"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who said, 'I see heaven open and the Son of Man standing at the right hand of God'?",
+				"pt":
+				"Who said, 'I see heaven open and the Son of Man standing at the right hand of God'?"
+			},
+			"answer": {"en": "Stephen", "pt": "Stephen"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Peter", "pt": "Peter"},
+				{"en": "John", "pt": "John"},
+				{"en": "James", "pt": "James"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who said, 'You are the man!' to confront King David?",
+				"pt": "Who said, 'You are the man!' to confront King David?"
+			},
+			"answer": {"en": "Nathan", "pt": "Nathan"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Samuel", "pt": "Samuel"},
+				{"en": "Gad", "pt": "Gad"},
+				{"en": "Joab", "pt": "Joab"}
 			]
 		}
 	],
@@ -9192,8 +13701,1011 @@ const BASE_QA := {
 				{"en": "Samson", "pt": "Sansão"},
 				{"en": "Jonathan", "pt": "Jônatas"}
 			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who offered to God a better sacrifice than his brother and was commended as righteous?",
+				"pt":
+				"Quem ofereceu a Deus um sacrifício melhor do que o de seu irmão e foi considerado justo?"
+			},
+			"answer": {"en": "Abel", "pt": "Abel"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Cain", "pt": "Caim"},
+				{"en": "Enoch", "pt": "Enoque"},
+				{"en": "Noah", "pt": "Noé"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who walked with God and was taken so that he did not experience death?",
+				"pt": "Quem andou com Deus e foi levado, para não ver a morte?"
+			},
+			"answer": {"en": "Enoch", "pt": "Enoque"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Elijah", "pt": "Elias"},
+				{"en": "Moses", "pt": "Moisés"},
+				{"en": "Daniel", "pt": "Daniel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who was willing to offer his only son, believing God could raise him from the dead?",
+				"pt":
+				"Quem esteve disposto a oferecer seu filho único, crendo que Deus podia ressuscitá-lo dentre os mortos?"
+			},
+			"answer": {"en": "Abraham", "pt": "Abraão"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Isaac", "pt": "Isaque"},
+				{"en": "Jacob", "pt": "Jacó"},
+				{"en": "Jephthah", "pt": "Jefté"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who lived in tents in the promised land, looking forward to a city whose architect is God?",
+				"pt":
+				"Quem viveu em tendas na terra prometida, esperando uma cidade cujo arquiteto é Deus?"
+			},
+			"answer": {"en": "Abraham", "pt": "Abraão"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Lot", "pt": "Ló"},
+				{"en": "Joshua", "pt": "Josué"},
+				{"en": "Caleb", "pt": "Calebe"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which parents were not afraid of the king’s command and hid their child by faith?",
+				"pt": "Quais pais não temeram o decreto do rei e esconderam seu filho pela fé?"
+			},
+			"answer": {"en": "Moses’ parents", "pt": "Os pais de Moisés"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Samuel’s parents", "pt": "Os pais de Samuel"},
+				{"en": "John the Baptist’s parents", "pt": "Os pais de João Batista"},
+				{"en": "Jesus’ parents", "pt": "Os pais de Jesus"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who kept the Passover and the sprinkling of blood so that the destroyer would not touch Israel’s firstborn?",
+				"pt":
+				"Quem celebrou a Páscoa e a aspersão do sangue para que o destruidor não tocasse os primogênitos de Israel?"
+			},
+			"answer": {"en": "Moses", "pt": "Moisés"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Aaron", "pt": "Arão"},
+				{"en": "Joshua", "pt": "Josué"},
+				{"en": "Phinehas", "pt": "Fineias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who refused to be called the son of Pharaoh’s daughter, choosing mistreatment with God’s people?",
+				"pt":
+				"Quem recusou ser chamado filho da filha de Faraó, escolhendo ser maltratado com o povo de Deus?"
+			},
+			"answer": {"en": "Moses", "pt": "Moisés"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Joseph", "pt": "José"},
+				{"en": "Daniel", "pt": "Daniel"},
+				{"en": "Nehemiah", "pt": "Neemias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who were tortured, refusing release so that they might gain a better resurrection?",
+				"pt":
+				"Quem foi torturado, não aceitando ser libertado, para alcançar uma melhor ressurreição?"
+			},
+			"answer": {"en": "Unnamed martyrs of faith", "pt": "Mártires anônimos da fé"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "The Maccabees", "pt": "Os Macabeus"},
+				{"en": "The apostles", "pt": "Os apóstolos"},
+				{"en": "The prophets", "pt": "Os profetas"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who were sawn in two, stoned, and killed with the sword for their faith?",
+				"pt": "Quem foi serrado ao meio, apedrejado e morto à espada por causa da fé?"
+			},
+			"answer":
+			{
+				"en": "Unnamed prophets mentioned among the faithful",
+				"pt": "Profetas anônimos citados entre os fiéis"
+			},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "The Levites", "pt": "Os levitas"},
+				{"en": "The judges", "pt": "Os juízes"},
+				{"en": "The kings", "pt": "Os reis"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who wandered in deserts, mountains, caves, and holes in the ground, of whom the world was not worthy?",
+				"pt":
+				"Quem andou por desertos, montes, covas e cavernas, dos quais o mundo não era digno?"
+			},
+			"answer":
+			{
+				"en": "Persecuted believers listed at the end of Hebrews 11",
+				"pt": "Crentes perseguidos citados no final de Hebreus 11"
+			},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "The twelve apostles", "pt": "Os doze apóstolos"},
+				{"en": "The seventy disciples", "pt": "Os setenta discípulos"},
+				{"en": "The Pharisees", "pt": "Os fariseus"}
+			]
 		}
-	]
+	],
+	"Kings of Israel & Judah":
+	[
+		{
+			"question":
+			{"en": "Who was the first king of Israel?", "pt": "Quem foi o primeiro rei de Israel?"},
+			"answer": {"en": "Saul", "pt": "Saul"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "David", "pt": "Davi"},
+				{"en": "Solomon", "pt": "Salomão"},
+				{"en": "Samuel", "pt": "Samuel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which king killed Goliath when he was still a young shepherd?",
+				"pt": "Qual rei matou Golias quando ainda era um jovem pastor?"
+			},
+			"answer": {"en": "David", "pt": "Davi"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Saul", "pt": "Saul"},
+				{"en": "Jonathan", "pt": "Jônatas"},
+				{"en": "Absalom", "pt": "Absalão"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which king asked God for wisdom instead of long life or riches?",
+				"pt": "Qual rei pediu a Deus sabedoria em vez de longa vida ou riquezas?"
+			},
+			"answer": {"en": "Solomon", "pt": "Salomão"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Hezekiah", "pt": "Ezequias"},
+				{"en": "Josiah", "pt": "Josias"},
+				{"en": "Rehoboam", "pt": "Roboão"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which king of Judah had his life extended fifteen years after praying to God?",
+				"pt": "Qual rei de Judá teve sua vida prolongada em quinze anos após orar a Deus?"
+			},
+			"answer": {"en": "Hezekiah", "pt": "Ezequias"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Asa", "pt": "Asa"},
+				{"en": "Jehoshaphat", "pt": "Josafá"},
+				{"en": "Uzziah", "pt": "Uzias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which king of Judah rediscovered the Book of the Law and led a great Passover celebration?",
+				"pt":
+				"Qual rei de Judá redescobriu o Livro da Lei e conduziu uma grande celebração da Páscoa?"
+			},
+			"answer": {"en": "Josiah", "pt": "Josias"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Uzziah", "pt": "Uzias"},
+				{"en": "Manasseh", "pt": "Manassés"},
+				{"en": "Jehoram", "pt": "Jorão"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which king of Israel set up golden calves in Bethel and Dan, causing Israel to sin?",
+				"pt":
+				"Qual rei de Israel colocou bezerros de ouro em Betel e Dã, fazendo Israel pecar?"
+			},
+			"answer": {"en": "Jeroboam son of Nebat", "pt": "Jeroboão, filho de Nebate"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Ahab", "pt": "Acabe"},
+				{"en": "Omri", "pt": "Onri"},
+				{"en": "Jehu", "pt": "Jeú"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which king of Judah was struck with leprosy for burning incense in the temple, a duty reserved for priests?",
+				"pt":
+				"Qual rei de Judá foi acometido de lepra por queimar incenso no templo, tarefa reservada aos sacerdotes?"
+			},
+			"answer": {"en": "Uzziah (Azariah)", "pt": "Uzias (Azarias)"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ahaz", "pt": "Acaz"},
+				{"en": "Rehoboam", "pt": "Roboão"},
+				{"en": "Jehoiakim", "pt": "Jeoaquim"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which last king of Judah saw his sons killed, had his eyes put out, and was taken to Babylon?",
+				"pt":
+				"Qual foi o último rei de Judá que viu seus filhos serem mortos, teve os olhos furados e foi levado para a Babilônia?"
+			},
+			"answer": {"en": "Zedekiah", "pt": "Zedequias"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Jehoiachin", "pt": "Jeoaquim"},
+				{"en": "Manasseh", "pt": "Manassés"},
+				{"en": "Ahaz", "pt": "Acaz"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which king of Israel bought the hill of Samaria and made it his capital city?",
+				"pt": "Qual rei de Israel comprou o monte de Samaria e fez dele sua cidade capital?"
+			},
+			"answer": {"en": "Omri", "pt": "Onri"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ahab", "pt": "Acabe"},
+				{"en": "Jeroboam II", "pt": "Jeroboão II"},
+				{"en": "Pekah", "pt": "Peca"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which king of Israel married Jezebel and promoted Baal worship in Israel?",
+				"pt": "Qual rei de Israel se casou com Jezabel e promoveu o culto a Baal em Israel?"
+			},
+			"answer": {"en": "Ahab", "pt": "Acabe"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Jehu", "pt": "Jeú"},
+				{"en": "Ahaziah", "pt": "Acazias"},
+				{"en": "Hoshea", "pt": "Oséias (rei)"}
+			]
+		}
+	],
+	"Judges & Deliverers":
+	[
+		{
+			"question":
+			{
+				"en":
+				"Which judge defeated the Midianites with only three hundred men armed with trumpets and jars?",
+				"pt":
+				"Qual juiz derrotou os midianitas com apenas trezentos homens armados com trombetas e jarros?"
+			},
+			"answer": {"en": "Gideon", "pt": "Gideão"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Samson", "pt": "Sansão"},
+				{"en": "Barak", "pt": "Baraque"},
+				{"en": "Jephthah", "pt": "Jefté"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which judge was known for great strength and was betrayed by Delilah?",
+				"pt": "Qual juiz era conhecido por sua grande força e foi traído por Dalila?"
+			},
+			"answer": {"en": "Samson", "pt": "Sansão"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Gideon", "pt": "Gideão"},
+				{"en": "Othniel", "pt": "Otniel"},
+				{"en": "Abimelech", "pt": "Abimeleque"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which woman judged Israel and sat under a palm tree while people came to her for decisions?",
+				"pt":
+				"Qual mulher julgou Israel e se sentava debaixo de uma palmeira enquanto o povo vinha a ela para decisões?"
+			},
+			"answer": {"en": "Deborah", "pt": "Débora"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Jael", "pt": "Jael"},
+				{"en": "Hannah", "pt": "Ana"},
+				{"en": "Ruth", "pt": "Rute"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which left-handed judge killed King Eglon of Moab with a double-edged sword?",
+				"pt": "Qual juiz canhoto matou o rei Eglom de Moabe com uma espada de dois gumes?"
+			},
+			"answer": {"en": "Ehud", "pt": "Eúde"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Shamgar", "pt": "Samgar"},
+				{"en": "Jephthah", "pt": "Jefté"},
+				{"en": "Othniel", "pt": "Otniel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which deliverer drove a tent peg through Sisera’s head while he slept?",
+				"pt":
+				"Qual libertadora atravessou a cabeça de Sísera com uma estaca de tenda enquanto ele dormia?"
+			},
+			"answer": {"en": "Jael", "pt": "Jael"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Deborah", "pt": "Débora"},
+				{"en": "Delilah", "pt": "Dalila"},
+				{"en": "Naomi", "pt": "Noemi"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which first judge of Israel delivered them from Cushan-Rishathaim king of Aram?",
+				"pt": "Qual primeiro juiz de Israel os libertou de Cusã-Risataim, rei da Síria?"
+			},
+			"answer": {"en": "Othniel", "pt": "Otniel"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Ehud", "pt": "Eúde"},
+				{"en": "Shamgar", "pt": "Samgar"},
+				{"en": "Gideon", "pt": "Gideão"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which judge made a rash vow that resulted in great sorrow concerning his only child?",
+				"pt":
+				"Qual juiz fez um voto precipitado que resultou em grande tristeza em relação à sua única filha?"
+			},
+			"answer": {"en": "Jephthah", "pt": "Jefté"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Samson", "pt": "Sansão"},
+				{"en": "Gideon", "pt": "Gideão"},
+				{"en": "Abimelech", "pt": "Abimeleque"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which lesser-known judge had thirty sons who rode thirty donkeys and controlled thirty towns?",
+				"pt":
+				"Qual juiz menos conhecido teve trinta filhos que montavam trinta jumentos e governavam trinta cidades?"
+			},
+			"answer": {"en": "Jair", "pt": "Jair"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ibzan", "pt": "Ibsã"},
+				{"en": "Tola", "pt": "Tolá"},
+				{"en": "Elon", "pt": "Elom"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which deliverer started out hiding in a winepress to thresh wheat because he feared the Midianites?",
+				"pt":
+				"Qual libertador começou escondido em um lagar para debulhar trigo porque temia os midianitas?"
+			},
+			"answer": {"en": "Gideon", "pt": "Gideão"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Samson", "pt": "Sansão"},
+				{"en": "Barak", "pt": "Baraque"},
+				{"en": "Saul", "pt": "Saul"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which judge tied torches between foxes’ tails to burn the Philistines’ fields?",
+				"pt":
+				"Qual juiz amarrou tochas entre as caudas de raposas para queimar os campos dos filisteus?"
+			},
+			"answer": {"en": "Samson", "pt": "Sansão"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Gideon", "pt": "Gideão"},
+				{"en": "Shamgar", "pt": "Samgar"},
+				{"en": "Jephthah", "pt": "Jefté"}
+			]
+		}
+	],
+	"Tabernacle & Temple":
+	[
+		{
+			"question":
+			{
+				"en": "What was the portable sanctuary Israel used in the wilderness called?",
+				"pt": "Como se chamava o santuário portátil que Israel usava no deserto?"
+			},
+			"answer": {"en": "The Tabernacle", "pt": "O Tabernáculo"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "The Synagogue", "pt": "A Sinagoga"},
+				{"en": "The Ark", "pt": "A Arca"},
+				{"en": "The Tent of Saul", "pt": "A Tenda de Saul"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who built the first temple in Jerusalem?",
+				"pt": "Quem construiu o primeiro templo em Jerusalém?"
+			},
+			"answer": {"en": "Solomon", "pt": "Salomão"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "David", "pt": "Davi"},
+				{"en": "Hezekiah", "pt": "Ezequias"},
+				{"en": "Zerubbabel", "pt": "Zorobabel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"What sacred chest was placed in the Most Holy Place with cherubim on its cover?",
+				"pt": "Qual arca sagrada ficava no Santo dos Santos, com querubins sobre a tampa?"
+			},
+			"answer": {"en": "The Ark of the Covenant", "pt": "A Arca da Aliança"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "The Bronze Altar", "pt": "O Altar de Bronze"},
+				{"en": "The Incense Altar", "pt": "O Altar de Incenso"},
+				{"en": "The Table of Bread", "pt": "A Mesa dos Pães"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who was filled with the Spirit of God in wisdom and skill to design the tabernacle?",
+				"pt":
+				"Quem foi cheio do Espírito de Deus em sabedoria e habilidade para projetar o tabernáculo?"
+			},
+			"answer": {"en": "Bezalel", "pt": "Bezalel"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Oholiab", "pt": "Aoliabe"},
+				{"en": "Aaron", "pt": "Arão"},
+				{"en": "Hur", "pt": "Hur"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which Levitical family carried the most holy furnishings of the tabernacle?",
+				"pt": "Qual família levítica carregava os utensílios mais sagrados do tabernáculo?"
+			},
+			"answer": {"en": "The Kohathites", "pt": "Os coatitas"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "The Gershonites", "pt": "Os gersonitas"},
+				{"en": "The Merarites", "pt": "Os meraritas"},
+				{"en": "The sons of Zadok", "pt": "Os filhos de Zadoque"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What bronze item in the courtyard was used by priests for washing?",
+				"pt": "Qual item de bronze no átrio era usado pelos sacerdotes para se lavarem?"
+			},
+			"answer": {"en": "The basin (laver)", "pt": "A bacia (lavatório)"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "The lampstand", "pt": "O candelabro"},
+				{"en": "The incense altar", "pt": "O altar de incenso"},
+				{"en": "The table of showbread", "pt": "A mesa dos pães da proposição"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "What thick curtain was torn in two from top to bottom when Jesus died?",
+				"pt":
+				"Qual cortina espessa foi rasgada em duas, de alto a baixo, quando Jesus morreu?"
+			},
+			"answer": {"en": "The temple veil", "pt": "O véu do templo"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "The outer gate", "pt": "O portão externo"},
+				{"en": "The courtyard fence", "pt": "A cerca do átrio"},
+				{"en": "The priestly garments", "pt": "As vestes sacerdotais"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which king of Judah reopened and cleansed the temple after his father had shut its doors?",
+				"pt":
+				"Qual rei de Judá reabriu e purificou o templo depois que seu pai havia fechado as portas?"
+			},
+			"answer": {"en": "Hezekiah", "pt": "Ezequias"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Ahaz", "pt": "Acaz"},
+				{"en": "Manasseh", "pt": "Manassés"},
+				{"en": "Josiah", "pt": "Josias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who led the rebuilding of the temple after the exile when the foundation was laid again?",
+				"pt":
+				"Quem liderou a reconstrução do templo após o exílio, quando o fundamento foi novamente lançado?"
+			},
+			"answer": {"en": "Zerubbabel", "pt": "Zorobabel"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Nehemiah", "pt": "Neemias"},
+				{"en": "Ezra", "pt": "Esdras"},
+				{"en": "Joshua the high priest", "pt": "Josué, o sumo sacerdote"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"What piece of furniture in the Holy Place held twelve loaves representing the tribes of Israel?",
+				"pt":
+				"Qual móvel no Lugar Santo continha doze pães representando as tribos de Israel?"
+			},
+			"answer": {"en": "The table of showbread", "pt": "A mesa dos pães da proposição"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "The bronze altar", "pt": "O altar de bronze"},
+				{"en": "The lampstand", "pt": "O candelabro"},
+				{"en": "The ark", "pt": "A arca"}
+			]
+		}
+	],
+	"Feasts & Festivals":
+	[
+		{
+			"question":
+			{
+				"en":
+				"Which feast remembers God passing over the houses marked with blood in Egypt?",
+				"pt":
+				"Qual festa lembra quando Deus passou por cima das casas marcadas com sangue no Egito?"
+			},
+			"answer": {"en": "Passover", "pt": "Páscoa"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Pentecost", "pt": "Pentecostes"},
+				{"en": "Tabernacles", "pt": "Festa dos Tabernáculos"},
+				{"en": "Purim", "pt": "Purim"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which feast took place fifty days after Passover and celebrated the firstfruits of the harvest?",
+				"pt":
+				"Qual festa ocorria cinquenta dias depois da Páscoa e celebrava os primeiros frutos da colheita?"
+			},
+			"answer": {"en": "Pentecost (Feast of Weeks)", "pt": "Pentecostes (Festa das Semanas)"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Trumpets", "pt": "Festa das Trombetas"},
+				{"en": "Unleavened Bread", "pt": "Pães Asmos"},
+				{"en": "Day of Atonement", "pt": "Dia da Expiação"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which feast involved living in booths to remember Israel’s time in the wilderness?",
+				"pt":
+				"Qual festa envolvia morar em tendas para lembrar o tempo de Israel no deserto?"
+			},
+			"answer": {"en": "Feast of Tabernacles (Booths)", "pt": "Festa dos Tabernáculos"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Feast of Trumpets", "pt": "Festa das Trombetas"},
+				{"en": "Purim", "pt": "Purim"},
+				{"en": "Hanukkah", "pt": "Hanukkah"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"On which solemn day did the high priest enter the Most Holy Place to make atonement for the nation?",
+				"pt":
+				"Em qual dia solene o sumo sacerdote entrava no Santo dos Santos para fazer expiação pela nação?"
+			},
+			"answer": {"en": "Day of Atonement (Yom Kippur)", "pt": "Dia da Expiação (Yom Kippur)"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Feast of Trumpets", "pt": "Festa das Trombetas"},
+				{"en": "Passover", "pt": "Páscoa"},
+				{"en": "Firstfruits", "pt": "Primícias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which feast began with loud blasts on ram’s horns announcing a new year and repentance?",
+				"pt":
+				"Qual festa começava com toques altos de trombetas de chifre de carneiro, anunciando um novo ano e arrependimento?"
+			},
+			"answer": {"en": "Feast of Trumpets", "pt": "Festa das Trombetas"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Purim", "pt": "Purim"},
+				{"en": "Passover", "pt": "Páscoa"},
+				{"en": "Tabernacles", "pt": "Festa dos Tabernáculos"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which joyful feast in Esther’s time celebrated deliverance from Haman’s plot?",
+				"pt": "Qual festa alegre no tempo de Ester celebrou a libertação do plano de Hamã?"
+			},
+			"answer": {"en": "Purim", "pt": "Purim"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Passover", "pt": "Páscoa"},
+				{"en": "Hanukkah", "pt": "Hanukkah"},
+				{"en": "Trumpets", "pt": "Festa das Trombetas"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"During which feast did Jesus stand and cry out about living water in John 7?",
+				"pt": "Durante qual festa Jesus se levantou e clamou sobre a água viva em João 7?"
+			},
+			"answer": {"en": "Feast of Tabernacles", "pt": "Festa dos Tabernáculos"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Passover", "pt": "Páscoa"},
+				{"en": "Pentecost", "pt": "Pentecostes"},
+				{"en": "Trumpets", "pt": "Festa das Trombetas"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which feast do the Gospels connect with the Last Supper and Jesus as the Lamb of God?",
+				"pt":
+				"Qual festa os Evangelhos conectam com a Última Ceia e Jesus como o Cordeiro de Deus?"
+			},
+			"answer": {"en": "Passover", "pt": "Páscoa"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Purim", "pt": "Purim"},
+				{"en": "Tabernacles", "pt": "Festa dos Tabernáculos"},
+				{"en": "Pentecost", "pt": "Pentecostes"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which winter festival remembered the rededication of the temple in the days of the Maccabees?",
+				"pt":
+				"Qual festa de inverno lembrava a rededicação do templo nos dias dos Macabeus?"
+			},
+			"answer":
+			{"en": "Hanukkah (Feast of Dedication)", "pt": "Hanukkah (Festa da Dedicação)"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Purim", "pt": "Purim"},
+				{"en": "Trumpets", "pt": "Festa das Trombetas"},
+				{"en": "Tabernacles", "pt": "Festa dos Tabernáculos"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Which feast required removing all yeast from the houses for seven days?",
+				"pt": "Qual festa exigia remover todo o fermento das casas por sete dias?"
+			},
+			"answer": {"en": "Feast of Unleavened Bread", "pt": "Festa dos Pães Asmos"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Feast of Weeks", "pt": "Festa das Semanas"},
+				{"en": "Feast of Trumpets", "pt": "Festa das Trombetas"},
+				{"en": "Day of Atonement", "pt": "Dia da Expiação"}
+			]
+		}
+	],
+	"Covenants & Promises":
+	[
+		{
+			"question":
+			{
+				"en":
+				"What sign did God give Noah as a reminder that He would never again flood the whole earth?",
+				"pt":
+				"Que sinal Deus deu a Noé como lembrança de que nunca mais inundaria toda a terra?"
+			},
+			"answer": {"en": "The rainbow", "pt": "O arco-íris"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "The olive branch", "pt": "O ramo de oliveira"},
+				{"en": "The burning bush", "pt": "A sarça ardente"},
+				{"en": "The pillar of cloud", "pt": "A coluna de nuvem"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"What physical sign did God give Abraham’s descendants to mark His covenant with them?",
+				"pt":
+				"Que sinal físico Deus deu aos descendentes de Abraão para marcar a aliança com eles?"
+			},
+			"answer": {"en": "Circumcision", "pt": "A circuncisão"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Shaving the head", "pt": "Raspar a cabeça"},
+				{"en": "Wearing tassels", "pt": "Usar franjas"},
+				{"en": "Fasting yearly", "pt": "Jejuar todo ano"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"To whom did God promise, 'In your offspring all nations of the earth shall be blessed'?",
+				"pt":
+				"A quem Deus prometeu: 'Em tua descendência todas as nações da terra serão abençoadas'?"
+			},
+			"answer": {"en": "Abraham", "pt": "Abraão"},
+			"tier": 1,
+			"decoys":
+			[
+				{"en": "Noah", "pt": "Noé"},
+				{"en": "Moses", "pt": "Moisés"},
+				{"en": "David", "pt": "Davi"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"With whom did God make a covenant of law at Mount Sinai, including the Ten Commandments?",
+				"pt":
+				"Com quem Deus fez uma aliança de lei no Monte Sinai, incluindo os Dez Mandamentos?"
+			},
+			"answer": {"en": "Moses and Israel", "pt": "Moisés e Israel"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Joshua and Israel", "pt": "Josué e Israel"},
+				{"en": "Samuel and Israel", "pt": "Samuel e Israel"},
+				{"en": "David and Judah", "pt": "Davi e Judá"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"To which king did God promise an everlasting throne, ultimately fulfilled in Christ?",
+				"pt":
+				"A qual rei Deus prometeu um trono eterno, cumprido em última instância em Cristo?"
+			},
+			"answer": {"en": "David", "pt": "Davi"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Solomon", "pt": "Salomão"},
+				{"en": "Saul", "pt": "Saul"},
+				{"en": "Hezekiah", "pt": "Ezequias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which prophet spoke of a new covenant where God would write His law on people’s hearts?",
+				"pt":
+				"Qual profeta falou de uma nova aliança em que Deus escreveria a Sua lei no coração das pessoas?"
+			},
+			"answer": {"en": "Jeremiah", "pt": "Jeremias"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Isaiah", "pt": "Isaías"},
+				{"en": "Ezekiel", "pt": "Ezequiel"},
+				{"en": "Hosea", "pt": "Oséias"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "Who was promised that he would not die until he had seen the Lord’s Christ?",
+				"pt": "Quem recebeu a promessa de que não morreria antes de ver o Cristo do Senhor?"
+			},
+			"answer": {"en": "Simeon", "pt": "Simeão"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "Zechariah", "pt": "Zacarias"},
+				{"en": "John the Baptist", "pt": "João Batista"},
+				{"en": "Anna", "pt": "Ana"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Who received a promise that her barren womb would bear a son dedicated to the Lord all his life?",
+				"pt":
+				"Quem recebeu a promessa de que seu ventre estéril daria à luz um filho dedicado ao Senhor por toda a vida?"
+			},
+			"answer": {"en": "Hannah (mother of Samuel)", "pt": "Ana (mãe de Samuel)"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "Elizabeth", "pt": "Isabel"},
+				{"en": "Sarah", "pt": "Sara"},
+				{"en": "Rachel", "pt": "Raquel"}
+			]
+		},
+		{
+			"question":
+			{
+				"en":
+				"Which covenant did God seal with a meal on the mountain as Moses and elders ate before Him?",
+				"pt":
+				"Qual aliança Deus selou com uma refeição no monte, quando Moisés e os anciãos comeram diante dEle?"
+			},
+			"answer": {"en": "The Mosaic covenant at Sinai", "pt": "A aliança mosaica no Sinai"},
+			"tier": 3,
+			"decoys":
+			[
+				{"en": "The Abrahamic covenant", "pt": "A aliança abraâmica"},
+				{"en": "The Noahic covenant", "pt": "A aliança com Noé"},
+				{"en": "The Davidic covenant", "pt": "A aliança davídica"}
+			]
+		},
+		{
+			"question":
+			{
+				"en": "At the Last Supper, what did Jesus call 'the new covenant in my blood'?",
+				"pt": "Na Última Ceia, o que Jesus chamou de 'a nova aliança no meu sangue'?"
+			},
+			"answer": {"en": "The cup", "pt": "O cálice"},
+			"tier": 2,
+			"decoys":
+			[
+				{"en": "The bread", "pt": "O pão"},
+				{"en": "The basin", "pt": "A bacia"},
+				{"en": "The towel", "pt": "A toalha"}
+			]
+		}
+	],
 }
 
 static var CATEGORIES: Array = []
