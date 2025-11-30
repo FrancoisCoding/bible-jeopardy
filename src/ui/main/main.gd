@@ -3,10 +3,12 @@ extends Control
 @export var game_font: Font = preload("res://fonts/Comic Sans MS.ttf")
 @export var title_texture: Texture2D = preload("res://game title.png")
 @export var bible_character_textures: Array[Texture2D] = []
+@export var show_state_debug: bool = false
 
 const LoadedBibleData = preload("res://src/data/bible_data.gd")
 const VerseData = preload("res://src/data/verse_data.gd")
 const FinalJeopardyData = preload("res://src/data/final_jeopardy_data.gd")
+const GameStateMachine = preload("res://src/ui/main/game_state_machine.gd")
 const ThemeStyler = preload("res://src/ui/main/theme_styler.gd")
 const AudioController = preload("res://src/ui/main/audio_controller.gd")
 const MainMenuScreen = preload("res://src/ui/screens/main_menu_screen.gd")
@@ -17,7 +19,6 @@ const MUSIC_QUESTION := preload("res://music/question music.mp3")
 const SFX_CORRECT := preload("res://music/correct.mp3")
 const SFX_WRONG := preload("res://music/wrong answer.mp3")
 const SFX_SELECT := preload("res://music/select_001.ogg")
-const TTS_VOLUME := 80.0
 const TEAM_COLORS := [Color(0.9, 0.2, 0.2), Color(0.2, 0.45, 0.95), Color(0.15, 0.75, 0.35)]  # Red  # Blue  # Green
 
 const QUESTION_CHAR_DELAY := 0.03
@@ -269,6 +270,7 @@ var current_language: String = "en"
 var bible_data: LoadedBibleData = LoadedBibleData.new()
 var join_inputs: Array[Dictionary] = []  # Ordered join list of controllers/keyboard
 var pending_player_inputs: Array[Dictionary] = []
+var pending_allow_keyboard_fallback: bool = true
 var selected_player_characters: Array[Dictionary] = []
 var character_selection_index: int = 0
 var character_human_count: int = 0
@@ -290,7 +292,6 @@ const ONLINE_MIN_PLAYERS := 2
 var online_active: bool = false
 var local_player_index: int = -1
 var round_index: int = 0
-var final_round: bool = false
 var hidden_double_key: String = ""
 var total_clues_this_round: int = 0
 var current_wager: int = 0
@@ -316,9 +317,11 @@ var verse_data := VerseData.new()
 var question_panel_base_style: StyleBox = null
 var theme_styler: ThemeStyler
 var audio_controller: AudioController
+var game_state_machine: GameStateMachine
 var main_menu_screen: MainMenuScreen
 var board_screen: BoardScreen
 var settings_screen: SettingsScreen
+var state_debug_label: Label
 const SETTINGS_PATH := "user://settings.cfg"
 
 
@@ -333,6 +336,10 @@ func _ready() -> void:
 		sfx_select_player,
 		music_slider
 	)
+	game_state_machine = GameStateMachine.new()
+	game_state_machine.state_changed.connect(_on_game_state_changed)
+	if show_state_debug:
+		_create_state_debug_label()
 	main_menu_screen = MainMenuScreen.new(
 		title_panel,
 		settings_panel,
@@ -465,7 +472,6 @@ func _ready() -> void:
 	_setup_pause_menu_focus()
 	set_process_input(true)
 	_populate_player_count()
-	_show_title()
 	audio_controller.configure_streams(
 		MUSIC_BACKGROUND, MUSIC_QUESTION, SFX_CORRECT, SFX_WRONG, SFX_SELECT
 	)
@@ -485,7 +491,9 @@ func _ready() -> void:
 	if final_wager_panel:
 		final_wager_panel.visible = false
 	_apply_theme_styles()
-	_reset_round_state()
+	_reset_round_state(0)
+	if game_state_machine:
+		game_state_machine.bootstrap(GameStateMachine.State.MAIN_MENU)
 
 
 func _get_today_key() -> String:
@@ -547,6 +555,165 @@ func _setup_accessible_text() -> void:
 	answer_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if main_menu_screen:
 		main_menu_screen.setup_accessible_text()
+
+
+func _create_state_debug_label() -> void:
+	state_debug_label = Label.new()
+	state_debug_label.name = "StateDebugLabel"
+	add_child(state_debug_label)
+	state_debug_label.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	state_debug_label.position = Vector2(12, 12)
+	state_debug_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if theme_styler:
+		theme_styler.apply_font_override(state_debug_label, game_font)
+		theme_styler.apply_body_color(state_debug_label)
+	state_debug_label.add_theme_font_size_override("font_size", 16)
+	state_debug_label.text = "State: --"
+
+
+func _update_state_debug_label(name: String) -> void:
+	if state_debug_label:
+		state_debug_label.text = "State: %s" % name
+
+
+func _is_round_play_state() -> bool:
+	if game_state_machine == null:
+		return false
+	return game_state_machine.is_in_any(
+		[GameStateMachine.State.ROUND_1, GameStateMachine.State.ROUND_2]
+	)
+
+
+func _is_final_wager_state() -> bool:
+	return (
+		game_state_machine != null
+		and game_state_machine.is_in_state(GameStateMachine.State.FINAL_JEOPARDY_WAGER)
+	)
+
+
+func _is_final_question_state() -> bool:
+	return (
+		game_state_machine != null
+		and game_state_machine.is_in_state(GameStateMachine.State.FINAL_JEOPARDY_QUESTION)
+	)
+
+
+func _is_results_state() -> bool:
+	return (
+		game_state_machine != null
+		and game_state_machine.is_in_state(GameStateMachine.State.RESULTS)
+	)
+
+
+func _is_final_phase() -> bool:
+	return _is_final_wager_state() or _is_final_question_state()
+
+
+func _on_game_state_changed(old_state: int, new_state: int, payload: Dictionary = {}) -> void:
+	var from_name := game_state_machine.name_for(old_state) if game_state_machine else "UNKNOWN"
+	var to_name := game_state_machine.name_for(new_state) if game_state_machine else "UNKNOWN"
+	print("Game state: %s -> %s" % [from_name, to_name])
+	_update_state_debug_label(to_name)
+	if old_state != new_state:
+		_handle_state_exit(old_state, new_state)
+	if (
+		old_state == GameStateMachine.State.PAUSED
+		and game_state_machine
+		and new_state == game_state_machine.paused_from_state
+	):
+		_maybe_focus_for_nav()
+		return
+	_handle_state_enter(new_state, payload)
+
+
+func _handle_state_exit(state: int, _next: int) -> void:
+	match state:
+		GameStateMachine.State.PAUSED:
+			_close_pause_menu()
+		_:
+			pass
+
+
+func _handle_state_enter(state: int, payload: Dictionary = {}) -> void:
+	match state:
+		GameStateMachine.State.MAIN_MENU:
+			_enter_main_menu_state()
+		GameStateMachine.State.CONTROLLER_SETUP:
+			_enter_controller_setup_state()
+		GameStateMachine.State.CHARACTER_SELECT:
+			_enter_character_select_state()
+		GameStateMachine.State.ROUND_1:
+			_enter_round_one_state(payload)
+		GameStateMachine.State.ROUND_1_TO_2_TRANSITION:
+			_enter_round_two_transition_state()
+		GameStateMachine.State.ROUND_2:
+			_enter_round_two_state()
+		GameStateMachine.State.FINAL_JEOPARDY_WAGER:
+			_enter_final_wager_state()
+		GameStateMachine.State.FINAL_JEOPARDY_QUESTION:
+			_enter_final_question_state()
+		GameStateMachine.State.RESULTS:
+			_enter_results_state()
+		GameStateMachine.State.PAUSED:
+			_enter_pause_state()
+		_:
+			pass
+
+
+func _enter_main_menu_state() -> void:
+	_restart_to_main_menu()
+
+
+func _enter_controller_setup_state() -> void:
+	_open_controller_connect(join_inputs)
+
+
+func _enter_character_select_state() -> void:
+	if pending_player_inputs.is_empty():
+		pending_player_inputs = join_inputs.duplicate(true)
+	_open_character_select(pending_player_inputs)
+
+
+func _enter_round_one_state(payload: Dictionary = {}) -> void:
+	_reset_round_state(0)
+	if payload.has("allow_keyboard_fallback"):
+		pending_allow_keyboard_fallback = bool(payload["allow_keyboard_fallback"])
+	_start_game(pending_player_inputs, pending_allow_keyboard_fallback)
+	pending_player_inputs.clear()
+	pending_allow_keyboard_fallback = true
+
+
+func _enter_round_two_transition_state() -> void:
+	_show_result(_t("Round %d!", "Rodada %d!") % 2, Color(0.6, 0.8, 1.0))
+	if game_state_machine:
+		game_state_machine.transition_to(GameStateMachine.State.ROUND_2)
+	else:
+		_reset_round_state(1, false)
+		_build_board()
+
+
+func _enter_round_two_state() -> void:
+	_reset_round_state(1, false)
+	_build_board()
+
+
+func _enter_final_wager_state() -> void:
+	_start_final_round()
+
+
+func _enter_final_question_state() -> void:
+	if not final_question_revealed:
+		_reveal_final_question()
+
+
+func _enter_results_state() -> void:
+	_show_winner_trophies()
+	if play_again_button:
+		play_again_button.visible = true
+
+
+func _enter_pause_state() -> void:
+	_open_pause_menu()
 
 
 func _apply_controller_connect_text() -> void:
@@ -944,7 +1111,8 @@ func _show_title() -> void:
 
 func _on_play_pressed() -> void:
 	_play_select_sfx()
-	_open_controller_connect()
+	if game_state_machine:
+		game_state_machine.transition_to(GameStateMachine.State.CONTROLLER_SETUP)
 
 
 func _on_settings_pressed() -> void:
@@ -963,7 +1131,8 @@ func _on_settings_back_pressed() -> void:
 		if settings_screen:
 			settings_screen.back_to_pause()
 	else:
-		_show_title()
+		if game_state_machine:
+			game_state_machine.transition_to(GameStateMachine.State.MAIN_MENU, {}, true)
 
 
 func _on_online_pressed() -> void:
@@ -987,7 +1156,8 @@ func _on_online_join_pressed() -> void:
 
 func _on_online_back_pressed() -> void:
 	_play_select_sfx()
-	_show_title()
+	if game_state_machine:
+		game_state_machine.transition_to(GameStateMachine.State.MAIN_MENU, {}, true)
 
 
 func _show_online_menu() -> void:
@@ -1007,15 +1177,20 @@ func _show_online_menu() -> void:
 		online_back_button.grab_focus()
 
 
-func _open_controller_connect() -> void:
+func _open_controller_connect(restore_inputs: Array = []) -> void:
 	title_panel.visible = false
 	settings_panel.visible = false
 	player_select_panel.visible = false
 	controller_join_active = true
-	join_inputs.clear()
+	join_inputs = restore_inputs.duplicate(true)
 	if controller_connect_panel == null:
 		controller_join_active = false
-		_start_game([], true)
+		pending_player_inputs = join_inputs.duplicate(true)
+		pending_allow_keyboard_fallback = true
+		if game_state_machine:
+			game_state_machine.transition_to(
+				GameStateMachine.State.ROUND_1, {"allow_keyboard_fallback": true}
+			)
 		return
 	_refresh_controller_join_ui()
 	if controller_connect_panel:
@@ -1040,14 +1215,18 @@ func _on_controller_connect_confirm_pressed() -> void:
 		_register_keyboard_join(false)
 		devices = join_inputs.duplicate()
 	_close_controller_connect()
-	_open_character_select(devices)
+	pending_player_inputs = devices.duplicate(true)
+	pending_allow_keyboard_fallback = false
+	if game_state_machine:
+		game_state_machine.transition_to(GameStateMachine.State.CHARACTER_SELECT)
 
 
 func _on_controller_connect_cancel_pressed() -> void:
 	_play_select_sfx()
 	join_inputs.clear()
 	_close_controller_connect()
-	_show_title()
+	if game_state_machine:
+		game_state_machine.transition_to(GameStateMachine.State.MAIN_MENU)
 
 
 func _open_character_select(selected_inputs: Array) -> void:
@@ -1081,9 +1260,10 @@ func _on_character_back_pressed() -> void:
 	_play_select_sfx()
 	var restore_inputs := pending_player_inputs.duplicate(true)
 	_close_character_select()
-	_open_controller_connect()
 	join_inputs = restore_inputs
-	_refresh_controller_join_ui()
+	pending_player_inputs = restore_inputs
+	if game_state_machine:
+		game_state_machine.transition_to(GameStateMachine.State.CONTROLLER_SETUP)
 
 
 func _build_character_option_grid() -> void:
@@ -1313,8 +1493,14 @@ func _finalize_character_select() -> void:
 			else:
 				player_characters[i] = _character_data_for("Player %d" % (i + 1))
 	_close_character_select()
-	_start_game(pending_player_inputs, false)
-	pending_player_inputs.clear()
+	pending_allow_keyboard_fallback = false
+	if game_state_machine:
+		game_state_machine.transition_to(
+			GameStateMachine.State.ROUND_1, {"allow_keyboard_fallback": false}
+		)
+	else:
+		_start_game(pending_player_inputs, false)
+		pending_player_inputs.clear()
 
 
 func _on_ai_difficulty_selected(idx: int) -> void:
@@ -1468,15 +1654,17 @@ func _input(event: InputEvent) -> void:
 		return
 
 	if current_clue.is_empty() and not _event_is_for_current_turn(event):
-		if not event.is_action_pressed("ui_cancel"):
-			if (
-				event is InputEventMouseButton
-				or event is InputEventJoypadButton
-				or event is InputEventJoypadMotion
-				or event is InputEventKey
-			):
-				get_viewport().set_input_as_handled()
-				return
+		var is_final_wager_ui := final_wager_panel and final_wager_panel.visible
+		if not is_final_wager_ui:
+			if not event.is_action_pressed("ui_cancel"):
+				if (
+					event is InputEventMouseButton
+					or event is InputEventJoypadButton
+					or event is InputEventJoypadMotion
+					or event is InputEventKey
+				):
+					get_viewport().set_input_as_handled()
+					return
 
 
 func _can_open_pause_menu() -> bool:
@@ -1502,13 +1690,19 @@ func _close_pause_menu() -> void:
 
 func _on_pause_resume_pressed() -> void:
 	_play_select_sfx()
-	_close_pause_menu()
-	_maybe_focus_for_nav()
+	if game_state_machine:
+		game_state_machine.resume()
+	else:
+		_close_pause_menu()
+		_maybe_focus_for_nav()
 
 
 func _on_pause_main_menu_pressed() -> void:
 	_play_select_sfx()
-	_restart_to_main_menu()
+	if game_state_machine:
+		game_state_machine.transition_to(GameStateMachine.State.MAIN_MENU)
+	else:
+		_restart_to_main_menu()
 
 
 func _on_pause_settings_pressed() -> void:
@@ -1589,7 +1783,7 @@ func _on_language_selected(index: int) -> void:
 
 
 func _on_set_wager_pressed() -> void:
-	if not final_round:
+	if not _is_final_wager_state():
 		return
 	if final_question_revealed:
 		return
@@ -1618,7 +1812,7 @@ func _finalize_wager(idx: int, amount: int, reason_text: String = "") -> void:
 
 
 func _on_final_clue_pressed() -> void:
-	if not final_round or not final_wager_set or final_clue_used or final_wager_player == -1:
+	if not _is_final_phase() or not final_wager_set or final_clue_used or final_wager_player == -1:
 		return
 	if current_wager <= 0:
 		return
@@ -1839,10 +2033,6 @@ func _show_winner_trophies() -> void:
 
 
 func _build_board() -> void:
-	if round_index >= ROUND_VALUES.size():
-		_start_final_round()
-		return
-
 	question_panel.visible = false
 	_set_header_visible(true)
 	_show_result("", Color(0.1, 0.1, 0.1))
@@ -1969,7 +2159,7 @@ func _on_clue_button_pressed(button: Button) -> void:
 	_set_header_visible(false)
 	_set_board_input_enabled(false)
 	if final_wager_panel:
-		final_wager_panel.visible = final_round and final_wager_player != -1
+		final_wager_panel.visible = _is_final_wager_state() and final_wager_player != -1
 	_build_answer_options(clue)
 	_begin_question_audio()
 	_start_question_flow(question_text)
@@ -1977,9 +2167,8 @@ func _on_clue_button_pressed(button: Button) -> void:
 
 func _start_question_flow(question_text: String) -> void:
 	_type_out_question(question_text)
-	_start_tts(question_text)
-	if final_round:
-		if not final_wager_set:
+	if _is_final_phase():
+		if _is_final_wager_state():
 			return
 		if final_question_revealed:
 			return
@@ -2001,26 +2190,8 @@ func _type_out_question(text: String) -> void:
 	_on_question_typed_out()
 
 
-func _start_tts(text: String) -> void:
-	if DisplayServer.has_feature(DisplayServer.FEATURE_TEXT_TO_SPEECH):
-		if current_language == "pt":
-			return
-		DisplayServer.tts_speak(text, "default", _current_tts_volume(), 1.0, 1.0)
-
-
 func _on_question_typed_out() -> void:
 	_start_ai_buzz_timer()
-
-
-func _current_tts_volume() -> float:
-	if music_slider:
-		var norm: float = clamp(
-			inverse_lerp(music_slider.min_value, music_slider.max_value, music_slider.value),
-			0.0,
-			1.0
-		)
-		return norm * TTS_VOLUME
-	return TTS_VOLUME
 
 
 func _build_answer_options(clue: Dictionary) -> void:
@@ -2109,7 +2280,7 @@ func _on_player_buzz(player_index: int) -> void:
 		_set_question_panel_color(theme_styler.team_color(player_index))
 	var is_ai: bool = players[player_index].get("is_ai", false)
 
-	if final_round:
+	if _is_final_phase():
 		return
 
 	if is_ai:
@@ -2133,16 +2304,16 @@ func _on_answer_selected(answer_text: String) -> void:
 	_play_select_sfx()
 	if buzzed_player == -1:
 		return
-	if final_round and final_question_revealed:
+	if _is_final_question_state() and final_question_revealed:
 		_record_final_answer(answer_text)
 		return
-	if final_round and not final_wager_set:
+	if _is_final_wager_state() and not final_wager_set:
 		_show_result(_t("Set your wager first.", "Defina sua aposta antes."), Color(0.9, 0.3, 0.3))
 		return
 	var correct_answer: String = str(current_clue["answer"]).strip_edges().to_lower()
 	var given: String = str(answer_text).strip_edges().to_lower()
 	var value: int = int(current_clue.get("value", 0))
-	if final_round and current_wager > 0:
+	if _is_final_phase() and current_wager > 0:
 		value = current_wager
 	if given == correct_answer:
 		team_scores[buzzed_player] += value
@@ -2164,7 +2335,7 @@ func _on_answer_selected(answer_text: String) -> void:
 		_mark_clue_answered()
 
 		# If we just transitioned into the final round, don't hide the wager UI.
-		if final_round:
+		if _is_final_phase():
 			return
 
 		question_panel.visible = false
@@ -2212,7 +2383,7 @@ func _handle_all_attempted() -> void:
 	answering_input_lock.clear()
 
 	# If we've moved into the final round, the wager UI is now active.
-	if final_round:
+	if _is_final_phase():
 		return
 
 	turn_label.text = ""
@@ -2240,7 +2411,7 @@ func _start_answer_timer() -> void:
 
 
 func _on_answer_timer_timeout() -> void:
-	if final_round:
+	if _is_final_phase():
 		if not final_question_revealed:
 			_maybe_finish_wagers()
 			return
@@ -2259,7 +2430,7 @@ func _on_answer_timer_timeout() -> void:
 	_mark_clue_answered()
 
 	# If this timeout was on the very last clue of Round 2, we just started final round.
-	if final_round:
+	if _is_final_phase():
 		return
 
 	turn_label.text = _t("Time's up. Choose another clue.", "Tempo esgotado. Escolha outra pista.")
@@ -2292,7 +2463,7 @@ func _mark_clue_answered() -> void:
 	answering_input_lock.clear()
 	answering_player = -1
 	current_clue.clear()
-	if final_round:
+	if _is_final_phase():
 		board_grid.visible = false
 		turn_label.text = _t("Final scores", "Pontuacao final")
 		if final_wager_panel:
@@ -2325,7 +2496,6 @@ func _restart_to_main_menu() -> void:
 	nav_focus_enabled = false
 	if controller_connect_panel:
 		controller_connect_panel.visible = false
-	final_round = false
 	hidden_double_key = ""
 	current_wager = 0
 	final_question.clear()
@@ -2343,6 +2513,7 @@ func _restart_to_main_menu() -> void:
 	team_cards.clear()
 	team_trophies.clear()
 	team_wager_labels.clear()
+	pending_allow_keyboard_fallback = true
 	player_characters.clear()
 	selected_player_characters.clear()
 	_stop_team_card_pulse()
@@ -2372,9 +2543,14 @@ func _on_play_again_pressed() -> void:
 	_play_select_sfx()
 	if play_again_button:
 		play_again_button.visible = false
-	_restart_to_main_menu()
-	await get_tree().process_frame
-	_on_play_pressed()
+	if game_state_machine:
+		game_state_machine.transition_to(GameStateMachine.State.MAIN_MENU)
+		await get_tree().process_frame
+		game_state_machine.transition_to(GameStateMachine.State.CONTROLLER_SETUP)
+	else:
+		_restart_to_main_menu()
+		await get_tree().process_frame
+		_on_play_pressed()
 
 
 func _stop_timers(preserve_result: bool = false) -> void:
@@ -2516,7 +2692,7 @@ func _event_for_player(idx: int, event: InputEvent) -> bool:
 
 
 func _maybe_trigger_ai_board_choice() -> void:
-	if final_round:
+	if not _is_round_play_state():
 		return
 	if current_turn_team < 0 or current_turn_team >= players.size():
 		return
@@ -2538,9 +2714,8 @@ func _maybe_trigger_ai_board_choice() -> void:
 	_on_clue_button_pressed(pick)
 
 
-func _reset_round_state() -> void:
-	round_index = 0
-	final_round = false
+func _reset_round_state(new_round_index: int = 0, refresh_category_deck: bool = true) -> void:
+	round_index = new_round_index
 	current_wager = 0
 	final_wager_player = -1
 	final_wager_set = false
@@ -2557,7 +2732,8 @@ func _reset_round_state() -> void:
 	current_categories.clear()
 	current_options.clear()
 	total_clues_this_round = 0
-	category_deck = LoadedBibleData.get_categories()
+	if refresh_category_deck:
+		category_deck = LoadedBibleData.get_categories()
 	answered_map.clear()
 	current_turn_team = 0
 	answering_player = -1
@@ -2588,23 +2764,31 @@ func _select_hidden_double(num_categories: int, num_clues: int) -> void:
 
 
 func _advance_round_if_needed() -> void:
-	if final_round:
+	if _is_final_phase() or _is_results_state():
 		return
 	if total_clues_this_round == 0:
 		return
 	if answered_map.size() >= total_clues_this_round:
-		round_index += 1
 		hidden_double_key = ""
 		answered_map.clear()
-		if round_index >= ROUND_VALUES.size():
-			_start_final_round()
+		if game_state_machine:
+			if game_state_machine.is_in_state(GameStateMachine.State.ROUND_1):
+				game_state_machine.transition_to(GameStateMachine.State.ROUND_1_TO_2_TRANSITION)
+			elif game_state_machine.is_in_state(GameStateMachine.State.ROUND_2):
+				game_state_machine.transition_to(GameStateMachine.State.FINAL_JEOPARDY_WAGER)
 		else:
-			_show_result(_t("Round %d!", "Rodada %d!") % (round_index + 1), Color(0.6, 0.8, 1.0))
-			_build_board()
+			round_index += 1
+			if round_index >= ROUND_VALUES.size():
+				_start_final_round()
+			else:
+				_show_result(
+					_t("Round %d!", "Rodada %d!") % (round_index + 1), Color(0.6, 0.8, 1.0)
+				)
+				_build_board()
 
 
 func _start_final_round() -> void:
-	final_round = true
+	round_index = ROUND_VALUES.size()
 	current_wager = 0
 	current_options.clear()
 	total_clues_this_round = 0
@@ -2689,11 +2873,25 @@ func _calculate_auto_wager(idx: int) -> int:
 	return int(round(abs(team_scores[idx]) * 0.1))
 
 
+func _ensure_wager_arrays() -> void:
+	if players.is_empty():
+		return
+	if final_wager_values.size() < players.size():
+		final_wager_values.resize(players.size())
+	if final_wager_done.size() < players.size():
+		final_wager_done.resize(players.size())
+	if final_answer_choices.size() < players.size():
+		final_answer_choices.resize(players.size())
+	if final_answered.size() < players.size():
+		final_answered.resize(players.size())
+
+
 func _build_parallel_wager_ui() -> void:
 	_cancel_ai_buzz_timer()
 	_cancel_wager_timer()
 	_clear_wager_labels()
 	final_wager_header_labels.clear()
+	_ensure_wager_arrays()
 	if final_wager_panel:
 		final_wager_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 
@@ -2830,6 +3028,7 @@ func _build_parallel_wager_ui() -> void:
 				theme_styler.apply_body_color(btn)
 			btn.add_theme_font_size_override("font_size", 22)
 			var pct_val: float = p["pct"]
+			btn.disabled = false
 			btn.pressed.connect(func() -> void: _on_wager_choice(idx_copy, pct_val))
 			btn_row.add_child(btn)
 			if first_focus_button == null:
@@ -2867,21 +3066,29 @@ func _refresh_all_wager_headers() -> void:
 func _on_wager_choice(idx: int, pct: float) -> void:
 	if idx < 0 or idx >= players.size():
 		return
+	# Ensure wager arrays are large enough (defensive for any edge-case clears).
+	_ensure_wager_arrays()
 	var score: int = abs(team_scores[idx]) if team_scores.size() > idx else 0
 	var wager: int = int(round(score * pct))
 	final_wager_values[idx] = wager
 	final_wager_done[idx] = true
 	_update_wager_header_text(idx)
 	result_label.text = _t("Wager set: %d", "Aposta definida: %d") % wager
+	_show_result(result_label.text, Color(0.15, 0.45, 0.15))
+	print_debug("Wager choice -> player=%d pct=%.2f wager=%d" % [idx, pct, wager])
 	_maybe_finish_wagers()
 
 
 func _maybe_finish_wagers() -> void:
 	for i in range(players.size()):
 		if i >= final_wager_done.size():
+			print_debug("Wager finish check -> missing index %d" % i)
 			return
 		if not final_wager_done[i]:
+			print_debug("Wager finish check -> player %d still pending" % i)
 			return
+	_cancel_wager_timer()
+	print_debug("All wagers set. Showing summary then reveal.")
 	_show_wager_labels_then_reveal()
 
 
@@ -2899,6 +3106,7 @@ func _update_wager_header_text(idx: int) -> void:
 		var w: int = final_wager_values[idx] if idx < final_wager_values.size() else 0
 		wager_text = _t("Wager: %d", "Aposta: %d") % w
 	header.text = "%s\n%s\n%s" % [name, score_text, wager_text]
+	print_debug("Header update -> player=%d text=%s" % [idx, header.text])
 
 
 func _show_wager_labels_then_reveal() -> void:
@@ -2912,23 +3120,42 @@ func _show_wager_labels_then_reveal() -> void:
 			if lbl and is_instance_valid(lbl):
 				lbl.text = _t("Wager: %d", "Aposta: %d") % final_wager_values[i]
 				lbl.visible = true
+				print_debug(
+					"Wager summary label -> player=%d wager=%d" % [i, final_wager_values[i]]
+				)
 	var summary_timer := get_tree().create_timer(5.0)
 	summary_timer.timeout.connect(_on_wager_summary_timeout)
 
 
 func _on_wager_summary_timeout() -> void:
 	_clear_wager_labels()
-	_reveal_final_question()
+	final_wager_set = true
+	print_debug("Wager summary timeout; revealing final question.")
+	if game_state_machine:
+		if game_state_machine.is_in_state(GameStateMachine.State.FINAL_JEOPARDY_QUESTION):
+			_enter_final_question_state()
+		else:
+			game_state_machine.transition_to(GameStateMachine.State.FINAL_JEOPARDY_QUESTION)
+	else:
+		_reveal_final_question()
 
 
 func _on_all_wagers_done() -> void:
 	final_wager_player = -1
 	final_wager_set = true
-	_reveal_final_question()
+	print_debug("Explicit all wagers done call; revealing final question.")
+	if game_state_machine:
+		if game_state_machine.is_in_state(GameStateMachine.State.FINAL_JEOPARDY_QUESTION):
+			_enter_final_question_state()
+		else:
+			game_state_machine.transition_to(GameStateMachine.State.FINAL_JEOPARDY_QUESTION)
+	else:
+		_reveal_final_question()
 
 
 func _reveal_final_question() -> void:
 	final_question_revealed = true
+	print_debug("Reveal final question.")
 	_cancel_ai_buzz_timer()
 	_disable_answer_buttons()
 	_clear_wager_labels()
@@ -2980,7 +3207,6 @@ func _reveal_final_question() -> void:
 	_build_answer_options(current_clue)
 	q_text_label.text = question_text
 	is_typing_question = false
-	_start_tts(question_text)
 	_begin_final_answers()
 
 
@@ -3081,6 +3307,9 @@ func _resolve_final_answers() -> void:
 	q_text_label.text = ""
 	result_label.text = ""
 	_set_header_visible(true)
+	if game_state_machine:
+		game_state_machine.transition_to(GameStateMachine.State.RESULTS)
+		return
 	if play_again_button:
 		play_again_button.visible = true
 	_show_winner_trophies()
@@ -3233,6 +3462,7 @@ func _on_final_wager_timeout() -> void:
 		final_wager_values[i] = auto_wager
 		final_wager_done[i] = true
 		_update_wager_header_text(i)
+		print_debug("Final wager timeout -> auto wager player=%d wager=%d" % [i, auto_wager])
 	_refresh_all_wager_headers()
 	_maybe_finish_wagers()
 
@@ -3400,11 +3630,17 @@ func _handle_escape_input(event: InputEvent) -> bool:
 				_open_pause_menu()
 		elif pause_menu.visible:
 			_play_select_sfx()
-			_close_pause_menu()
+			if game_state_machine:
+				game_state_machine.resume()
+			else:
+				_close_pause_menu()
 		elif _can_open_pause_menu():
 			_play_select_sfx()
-			_open_pause_menu()
-			_maybe_focus_for_nav()
+			if game_state_machine:
+				game_state_machine.pause()
+			else:
+				_open_pause_menu()
+				_maybe_focus_for_nav()
 		get_viewport().set_input_as_handled()
 		return true
 	return false
