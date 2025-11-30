@@ -1654,15 +1654,17 @@ func _input(event: InputEvent) -> void:
 		return
 
 	if current_clue.is_empty() and not _event_is_for_current_turn(event):
-		if not event.is_action_pressed("ui_cancel"):
-			if (
-				event is InputEventMouseButton
-				or event is InputEventJoypadButton
-				or event is InputEventJoypadMotion
-				or event is InputEventKey
-			):
-				get_viewport().set_input_as_handled()
-				return
+		var is_final_wager_ui := final_wager_panel and final_wager_panel.visible
+		if not is_final_wager_ui:
+			if not event.is_action_pressed("ui_cancel"):
+				if (
+					event is InputEventMouseButton
+					or event is InputEventJoypadButton
+					or event is InputEventJoypadMotion
+					or event is InputEventKey
+				):
+					get_viewport().set_input_as_handled()
+					return
 
 
 func _can_open_pause_menu() -> bool:
@@ -2871,11 +2873,25 @@ func _calculate_auto_wager(idx: int) -> int:
 	return int(round(abs(team_scores[idx]) * 0.1))
 
 
+func _ensure_wager_arrays() -> void:
+	if players.is_empty():
+		return
+	if final_wager_values.size() < players.size():
+		final_wager_values.resize(players.size())
+	if final_wager_done.size() < players.size():
+		final_wager_done.resize(players.size())
+	if final_answer_choices.size() < players.size():
+		final_answer_choices.resize(players.size())
+	if final_answered.size() < players.size():
+		final_answered.resize(players.size())
+
+
 func _build_parallel_wager_ui() -> void:
 	_cancel_ai_buzz_timer()
 	_cancel_wager_timer()
 	_clear_wager_labels()
 	final_wager_header_labels.clear()
+	_ensure_wager_arrays()
 	if final_wager_panel:
 		final_wager_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 
@@ -3012,6 +3028,7 @@ func _build_parallel_wager_ui() -> void:
 				theme_styler.apply_body_color(btn)
 			btn.add_theme_font_size_override("font_size", 22)
 			var pct_val: float = p["pct"]
+			btn.disabled = false
 			btn.pressed.connect(func() -> void: _on_wager_choice(idx_copy, pct_val))
 			btn_row.add_child(btn)
 			if first_focus_button == null:
@@ -3050,9 +3067,7 @@ func _on_wager_choice(idx: int, pct: float) -> void:
 	if idx < 0 or idx >= players.size():
 		return
 	# Ensure wager arrays are large enough (defensive for any edge-case clears).
-	while final_wager_values.size() <= idx:
-		final_wager_values.append(0)
-		final_wager_done.append(false)
+	_ensure_wager_arrays()
 	var score: int = abs(team_scores[idx]) if team_scores.size() > idx else 0
 	var wager: int = int(round(score * pct))
 	final_wager_values[idx] = wager
@@ -3060,16 +3075,20 @@ func _on_wager_choice(idx: int, pct: float) -> void:
 	_update_wager_header_text(idx)
 	result_label.text = _t("Wager set: %d", "Aposta definida: %d") % wager
 	_show_result(result_label.text, Color(0.15, 0.45, 0.15))
+	print_debug("Wager choice -> player=%d pct=%.2f wager=%d" % [idx, pct, wager])
 	_maybe_finish_wagers()
 
 
 func _maybe_finish_wagers() -> void:
 	for i in range(players.size()):
 		if i >= final_wager_done.size():
+			print_debug("Wager finish check -> missing index %d" % i)
 			return
 		if not final_wager_done[i]:
+			print_debug("Wager finish check -> player %d still pending" % i)
 			return
 	_cancel_wager_timer()
+	print_debug("All wagers set. Showing summary then reveal.")
 	_show_wager_labels_then_reveal()
 
 
@@ -3087,6 +3106,7 @@ func _update_wager_header_text(idx: int) -> void:
 		var w: int = final_wager_values[idx] if idx < final_wager_values.size() else 0
 		wager_text = _t("Wager: %d", "Aposta: %d") % w
 	header.text = "%s\n%s\n%s" % [name, score_text, wager_text]
+	print_debug("Header update -> player=%d text=%s" % [idx, header.text])
 
 
 func _show_wager_labels_then_reveal() -> void:
@@ -3100,6 +3120,9 @@ func _show_wager_labels_then_reveal() -> void:
 			if lbl and is_instance_valid(lbl):
 				lbl.text = _t("Wager: %d", "Aposta: %d") % final_wager_values[i]
 				lbl.visible = true
+				print_debug(
+					"Wager summary label -> player=%d wager=%d" % [i, final_wager_values[i]]
+				)
 	var summary_timer := get_tree().create_timer(5.0)
 	summary_timer.timeout.connect(_on_wager_summary_timeout)
 
@@ -3107,6 +3130,7 @@ func _show_wager_labels_then_reveal() -> void:
 func _on_wager_summary_timeout() -> void:
 	_clear_wager_labels()
 	final_wager_set = true
+	print_debug("Wager summary timeout; revealing final question.")
 	if game_state_machine:
 		if game_state_machine.is_in_state(GameStateMachine.State.FINAL_JEOPARDY_QUESTION):
 			_enter_final_question_state()
@@ -3119,6 +3143,7 @@ func _on_wager_summary_timeout() -> void:
 func _on_all_wagers_done() -> void:
 	final_wager_player = -1
 	final_wager_set = true
+	print_debug("Explicit all wagers done call; revealing final question.")
 	if game_state_machine:
 		if game_state_machine.is_in_state(GameStateMachine.State.FINAL_JEOPARDY_QUESTION):
 			_enter_final_question_state()
@@ -3130,6 +3155,7 @@ func _on_all_wagers_done() -> void:
 
 func _reveal_final_question() -> void:
 	final_question_revealed = true
+	print_debug("Reveal final question.")
 	_cancel_ai_buzz_timer()
 	_disable_answer_buttons()
 	_clear_wager_labels()
@@ -3436,6 +3462,7 @@ func _on_final_wager_timeout() -> void:
 		final_wager_values[i] = auto_wager
 		final_wager_done[i] = true
 		_update_wager_header_text(i)
+		print_debug("Final wager timeout -> auto wager player=%d wager=%d" % [i, auto_wager])
 	_refresh_all_wager_headers()
 	_maybe_finish_wagers()
 
