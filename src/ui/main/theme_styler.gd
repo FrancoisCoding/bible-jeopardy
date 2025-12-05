@@ -176,20 +176,20 @@ func apply_team_card_style(card: PanelContainer, color: Color, highlighted: bool
 	if card == null or not is_instance_valid(card):
 		return
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(1, 1, 1)
-	style.border_color = color
-	var border := 4 if highlighted else 0
+	style.bg_color = Color(0.08, 0.04, 0.16).lerp(color, 0.1)
+	style.border_color = color.lightened(0.12)
+	var border := 5 if highlighted else 2
 	style.border_width_left = border
 	style.border_width_right = border
 	style.border_width_top = border
 	style.border_width_bottom = border
-	style.shadow_size = 12 if highlighted else 8
-	var shadow_alpha := 0.18 if highlighted else 0.08
-	style.shadow_color = Color(0, 0, 0, shadow_alpha)
-	style.corner_radius_top_left = 12
-	style.corner_radius_top_right = 12
-	style.corner_radius_bottom_left = 12
-	style.corner_radius_bottom_right = 12
+	style.shadow_size = 16 if highlighted else 10
+	var shadow_alpha := 0.26 if highlighted else 0.14
+	style.shadow_color = Color(color.r, color.g, color.b, shadow_alpha)
+	style.corner_radius_top_left = 14
+	style.corner_radius_top_right = 14
+	style.corner_radius_bottom_left = 14
+	style.corner_radius_bottom_right = 14
 	card.add_theme_stylebox_override("panel", style)
 
 
@@ -199,6 +199,11 @@ func refresh_team_highlight(team_cards: Array, current_turn_team: int) -> void:
 		var color := team_color(i)
 		var is_active := i == current_turn_team
 		apply_team_card_style(card, color, is_active)
+		if card and card.has_node("HighlightOverlay"):
+			var overlay := card.get_node("HighlightOverlay") as ColorRect
+			overlay.visible = is_active
+			if overlay.material and overlay.material is ShaderMaterial:
+				(overlay.material as ShaderMaterial).set_shader_parameter("border_color", color)
 
 
 func set_question_panel_color(
