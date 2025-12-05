@@ -11,7 +11,7 @@ var verse_title_label: Label
 var verse_text_label: Label
 var verse_reference_label: Label
 var title_play_button: Button
-var title_settings_button: Button
+var title_settings_button: BaseButton
 var settings_language_label: Label
 var music_label: Label
 var settings_back_button: Button
@@ -46,7 +46,7 @@ func _init(
 	verse_text_label: Label,
 	verse_reference_label: Label,
 	title_play_button: Button,
-	title_settings_button: Button,
+	title_settings_button: BaseButton,
 	settings_language_label: Label,
 	music_label: Label,
 	settings_back_button: Button,
@@ -108,8 +108,12 @@ func _init(
 func apply_language_texts(current_language: String, set_language_callable: Callable) -> void:
 	var is_pt := current_language == "pt"
 	set_language_callable.call(current_language)
-	title_play_button.text = translator.call("Play", "Jogar")
-	title_settings_button.text = translator.call("Settings", "Configuracoes")
+	if title_play_button:
+		if title_play_button is Button:
+			(title_play_button as Button).text = ""
+	if title_settings_button:
+		if title_settings_button is Button:
+			(title_settings_button as Button).text = ""
 	if verse_title_label:
 		verse_title_label.text = translator.call("Verse of the Day", "Verso do dia")
 

@@ -1,7 +1,7 @@
 extends Control
 
 @export var game_font: Font = preload("res://fonts/Comic Sans MS.ttf")
-@export var title_texture: Texture2D = preload("res://game title.png")
+@export var title_texture: Texture2D = preload("res://bible_jeopardy_logo.png")
 @export var bible_character_textures: Array[Texture2D] = []
 @export var show_state_debug: bool = false
 
@@ -44,24 +44,43 @@ const CHARACTER_ROSTER := [
 	{"name": "Noah", "bg": Color(0.92, 0.52, 0.2), "accent": Color(0.15, 0.38, 0.71)}
 ]
 # UI references
-@onready var title_panel: Control = get_node_or_null("TitlePanel")
-@onready var title_play_button: Button = get_node_or_null("TitlePanel/VBox/PlayButton")
-@onready var title_settings_button: Button = get_node_or_null("TitlePanel/VBox/SettingsButton")
-@onready var title_logo: TextureRect = get_node_or_null("TitlePanel/VBox/TitleLogo")
+@onready var title_panel: Control = get_node_or_null("MainMenu")
+@onready var title_play_button: Button = get_node_or_null(
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/PlayMarginContainer/PlayButton"
+)
+@onready var title_settings_button: BaseButton = get_node_or_null(
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/SettingsMarginContainer/SettingsButton"
+)
+@onready var title_logo: TextureRect = get_node_or_null(
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/TitleLogo"
+)
 @onready var title_logo_main: TextureRect = get_node_or_null("RootVBox/TitleLogoMain")
-@onready var title_screen_title: Label = get_node_or_null("TitlePanel/VBox/Title")
+@onready var title_screen_title: Label = get_node_or_null(
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/Title"
+)
 
 @onready var settings_panel: Control = get_node_or_null("SettingsPanel")
-@onready
-var settings_title_label: Label = get_node_or_null("SettingsPanel/Content/VBox/SettingsTitle")
-@onready
-var settings_language_label: Label = get_node_or_null("SettingsPanel/Content/VBox/LanguageLabel")
-@onready
-var language_option: OptionButton = get_node_or_null("SettingsPanel/Content/VBox/LanguageOption")
-@onready var music_slider: HSlider = get_node_or_null("SettingsPanel/Content/VBox/MusicSlider")
-@onready var music_label: Label = get_node_or_null("SettingsPanel/Content/VBox/MusicLabel")
-@onready var settings_back_button: Button = get_node_or_null("SettingsPanel/Content/VBox/BackButton")
-@onready var settings_exit_button: Button = get_node_or_null("SettingsPanel/Content/VBox/ExitButton")
+@onready var settings_title_label: Label = get_node_or_null(
+	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/SettingsTitle"
+)
+@onready var settings_language_label: Label = get_node_or_null(
+	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/LanguageLabel"
+)
+@onready var language_option: OptionButton = get_node_or_null(
+	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/LanguageOption"
+)
+@onready var music_slider: HSlider = get_node_or_null(
+	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/MusicSlider"
+)
+@onready var music_label: Label = get_node_or_null(
+	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/MusicLabel"
+)
+@onready var settings_back_button: Button = get_node_or_null(
+	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/BackButton"
+)
+@onready var settings_exit_button: Button = get_node_or_null(
+	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/ExitButton"
+)
 
 @onready var player_select_panel: Control = get_node_or_null("PlayerSelectPanel")
 @onready
@@ -152,7 +171,9 @@ var character_prompt_label: Label = get_node_or_null("CharacterSelectPanel/Conte
 	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox/SlotHint")
 ]
 @onready var online_panel: Control = get_node_or_null("OnlinePanel")
-@onready var title_online_button: Button = get_node_or_null("TitlePanel/VBox/OnlineButton")
+@onready var title_online_button: Button = get_node_or_null(
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/OnlineButton"
+)
 @onready
 var online_title_label: Label = get_node_or_null("OnlinePanel/OnlineContent/VBox/OnlineTitle")
 @onready var online_host_button: Button = get_node_or_null(
@@ -212,13 +233,17 @@ var online_join_panel: PanelContainer = get_node_or_null("OnlinePanel/OnlineCont
 @onready var board_grid: GridContainer = get_node_or_null("RootVBox/BoardMargin/BoardGrid")
 var play_again_button: Button = null
 
-@onready var verse_panel: PanelContainer = get_node_or_null("TitlePanel/VBox/VerseOfDay")
-@onready
-var verse_title_label: Label = get_node_or_null("TitlePanel/VBox/VerseOfDay/CardVBox/VerseTitle")
-@onready
-var verse_text_label: Label = get_node_or_null("TitlePanel/VBox/VerseOfDay/CardVBox/VerseText")
+@onready var verse_panel: PanelContainer = get_node_or_null(
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay"
+)
+@onready var verse_title_label: Label = get_node_or_null(
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer/CardVBox/VerseTitle"
+)
+@onready var verse_text_label: Label = get_node_or_null(
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer/CardVBox/VerseText"
+)
 @onready var verse_reference_label: Label = get_node_or_null(
-	"TitlePanel/VBox/VerseOfDay/CardVBox/VerseReference"
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer/CardVBox/VerseReference"
 )
 
 @onready var question_panel: PanelContainer = get_node_or_null("QuestionPanel")
@@ -243,7 +268,9 @@ var q_category_label: Label = get_node_or_null("QuestionPanel/QuestionVBox/Quest
 )
 
 # Settings
-@onready var play_button: Button = get_node_or_null("TitlePanel/PlayButton")
+@onready var play_button: Button = get_node_or_null(
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/PlayMarginContainer/PlayButton"
+)
 
 var answer_button_nodes: Array[Button] = []
 
@@ -322,7 +349,39 @@ var main_menu_screen: MainMenuScreen
 var board_screen: BoardScreen
 var settings_screen: SettingsScreen
 var state_debug_label: Label
+var default_game_alignment: int = BoxContainer.ALIGNMENT_CENTER
 const SETTINGS_PATH := "user://settings.cfg"
+
+
+func _safe_connect_pressed(button: BaseButton, callback: Callable, label: String) -> void:
+	if button and is_instance_valid(button):
+		button.pressed.connect(callback)
+	else:
+		push_warning("%s missing; skipping pressed connection" % label)
+
+
+func _safe_connect_value_changed(slider: Range, callback: Callable, label: String) -> void:
+	if slider and is_instance_valid(slider):
+		slider.value_changed.connect(callback)
+	else:
+		push_warning("%s missing; skipping value_changed connection" % label)
+
+
+func _safe_connect_item_selected(
+	option_button: OptionButton, callback: Callable, label: String
+) -> void:
+	if option_button and is_instance_valid(option_button):
+		option_button.item_selected.connect(callback)
+	else:
+		push_warning("%s missing; skipping item_selected connection" % label)
+
+
+func _safe_clear_option(option_button: OptionButton, label: String) -> bool:
+	if option_button and is_instance_valid(option_button):
+		option_button.clear()
+		return true
+	push_warning("%s missing; skipping clear" % label)
+	return false
 
 
 func _ready() -> void:
@@ -379,31 +438,40 @@ func _ready() -> void:
 		title_panel, settings_panel, player_select_panel, pause_menu, game_root, question_panel
 	)
 
+	if game_root and game_root is BoxContainer:
+		default_game_alignment = (game_root as BoxContainer).alignment
+	if question_panel:
+		question_panel.visibility_changed.connect(_on_question_panel_visibility_changed)
+
 	_update_verse_of_day()
 	# Hook up UI
-	title_play_button.pressed.connect(_on_play_pressed)
-	if title_online_button:
-		title_online_button.pressed.connect(_on_online_pressed)
-	title_settings_button.pressed.connect(_on_settings_pressed)
-	settings_back_button.pressed.connect(_on_settings_back_pressed)
-	player_start_button.pressed.connect(_on_player_start_pressed)
-	music_slider.value_changed.connect(_on_music_slider_changed)
-	language_option.item_selected.connect(_on_language_selected)
-	player_count_option.item_selected.connect(func(_idx: int) -> void: _play_select_sfx())
-	pause_resume_button.pressed.connect(_on_pause_resume_pressed)
-	pause_main_menu_button.pressed.connect(_on_pause_main_menu_pressed)
-	pause_settings_button.pressed.connect(_on_pause_settings_pressed)
-	settings_exit_button.pressed.connect(_on_exit_pressed)
-	final_wager_button.pressed.connect(_on_set_wager_pressed)
-	final_clue_button.pressed.connect(_on_final_clue_pressed)
-	if controller_start_button:
-		controller_start_button.pressed.connect(_on_controller_connect_confirm_pressed)
-	if controller_cancel_button:
-		controller_cancel_button.pressed.connect(_on_controller_connect_cancel_pressed)
-	if controller_ai_option:
-		controller_ai_option.item_selected.connect(
-			func(idx: int) -> void: _on_ai_difficulty_selected(idx)
-		)
+	_safe_connect_pressed(title_play_button, _on_play_pressed, "Play button")
+	_safe_connect_pressed(title_online_button, _on_online_pressed, "Online button")
+	_safe_connect_pressed(title_settings_button, _on_settings_pressed, "Settings button")
+	_safe_connect_pressed(settings_back_button, _on_settings_back_pressed, "Settings back button")
+	_safe_connect_pressed(player_start_button, _on_player_start_pressed, "Player start button")
+	_safe_connect_value_changed(music_slider, _on_music_slider_changed, "Music slider")
+	_safe_connect_item_selected(language_option, _on_language_selected, "Language option")
+	_safe_connect_item_selected(
+		player_count_option, func(_idx: int) -> void: _play_select_sfx(), "Player count option"
+	)
+	_safe_connect_pressed(pause_resume_button, _on_pause_resume_pressed, "Pause resume button")
+	_safe_connect_pressed(pause_main_menu_button, _on_pause_main_menu_pressed, "Pause main button")
+	_safe_connect_pressed(
+		pause_settings_button, _on_pause_settings_pressed, "Pause settings button"
+	)
+	_safe_connect_pressed(settings_exit_button, _on_exit_pressed, "Settings exit button")
+	_safe_connect_pressed(final_wager_button, _on_set_wager_pressed, "Final wager button")
+	_safe_connect_pressed(final_clue_button, _on_final_clue_pressed, "Final clue button")
+	_safe_connect_pressed(
+		controller_start_button, _on_controller_connect_confirm_pressed, "Controller start button"
+	)
+	_safe_connect_pressed(
+		controller_cancel_button, _on_controller_connect_cancel_pressed, "Controller cancel button"
+	)
+	_safe_connect_item_selected(
+		controller_ai_option, func(idx: int) -> void: _on_ai_difficulty_selected(idx), "AI option"
+	)
 
 	# Add play again button for final screen
 	if game_root and is_instance_valid(game_root):
@@ -513,7 +581,8 @@ func _update_verse_of_day():
 
 
 func _populate_player_count() -> void:
-	player_count_option.clear()
+	if not _safe_clear_option(player_count_option, "Player count option"):
+		return
 	for i in range(2, 4):
 		player_count_option.add_item("%d Players" % i, i)
 	player_count_option.selected = 0
@@ -537,10 +606,11 @@ func _apply_language_texts() -> void:
 
 
 func _setup_accessible_text() -> void:
-	q_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	q_text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	q_text_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	q_text_label.add_theme_font_size_override("font_size", 32)
+	if q_text_label:
+		q_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+		q_text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		q_text_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		q_text_label.add_theme_font_size_override("font_size", 32)
 	if verse_text_label:
 		verse_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD
 		verse_text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -549,10 +619,14 @@ func _setup_accessible_text() -> void:
 	if verse_title_label:
 		verse_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
-	q_category_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	q_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	result_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	answer_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if q_category_label:
+		q_category_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if q_value_label:
+		q_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if result_label:
+		result_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if answer_timer_label:
+		answer_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if main_menu_screen:
 		main_menu_screen.setup_accessible_text()
 
@@ -726,8 +800,7 @@ func _apply_controller_connect_text() -> void:
 		)
 	if controller_ai_label:
 		controller_ai_label.text = _t("AI Difficulty", "Dificuldade da IA")
-	if controller_ai_option:
-		controller_ai_option.clear()
+	if _safe_clear_option(controller_ai_option, "Controller AI option"):
 		controller_ai_option.add_item(_t("Easy", "Facil"), 0)
 		controller_ai_option.add_item(_t("Normal", "Normal"), 1)
 		controller_ai_option.add_item(_t("Hard", "Dificil"), 2)
@@ -824,22 +897,6 @@ func _apply_theme_styles() -> void:
 	if theme_styler == null:
 		return
 
-	if verse_panel:
-		var card := StyleBoxFlat.new()
-		card.bg_color = Color(1.0, 0.96, 0.88)
-		card.corner_radius_top_left = 18
-		card.corner_radius_top_right = 18
-		card.corner_radius_bottom_left = 18
-		card.corner_radius_bottom_right = 18
-		card.border_color = Color(0.78, 0.6, 0.35)
-		card.border_width_left = 2
-		card.border_width_right = 2
-		card.border_width_top = 2
-		card.border_width_bottom = 2
-		card.shadow_size = 10
-		card.shadow_color = Color(0, 0, 0, 0.12)
-		verse_panel.add_theme_stylebox_override("panel", card)
-
 	var font_controls: Array[Control] = [
 		verse_title_label,
 		verse_text_label,
@@ -860,8 +917,6 @@ func _apply_theme_styles() -> void:
 		final_wager_label,
 		final_wager_panel,
 		final_wager_input,
-		title_play_button,
-		title_settings_button,
 		settings_back_button,
 		settings_exit_button,
 		player_start_button,
@@ -881,11 +936,7 @@ func _apply_theme_styles() -> void:
 	]
 	theme_styler.apply_game_font(game_font, font_controls)
 
-	background_rect = theme_styler.setup_background(self, background_rect)
-
 	var primary_controls: Array = [
-		title_play_button,
-		title_settings_button,
 		verse_title_label,
 		verse_text_label,
 		verse_reference_label,
@@ -942,8 +993,6 @@ func _apply_theme_styles() -> void:
 	]
 
 	var button_controls := [
-		title_play_button,
-		title_settings_button,
 		settings_back_button,
 		settings_exit_button,
 		player_start_button,
@@ -987,7 +1036,8 @@ func _apply_theme_styles() -> void:
 		verse_reference_label.add_theme_font_size_override("font_size", 20)
 		verse_reference_label.add_theme_color_override("font_color", Color(0.25, 0.22, 0.2))
 		verse_reference_label.add_theme_font_override("font", game_font)
-	verse_reference_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if verse_reference_label:
+		verse_reference_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if verse_text_label:
 		verse_text_label.add_theme_font_size_override("font_size", 18)
 		verse_text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1054,6 +1104,18 @@ func _set_question_panel_color(color: Color) -> void:
 func _reset_question_panel_color() -> void:
 	if theme_styler and question_panel_base_style:
 		theme_styler.reset_question_panel_color(question_panel, question_panel_base_style)
+
+
+func _on_question_panel_visibility_changed() -> void:
+	var showing := question_panel != null and question_panel.visible
+	if game_root and game_root is BoxContainer:
+		(game_root as BoxContainer).alignment = (
+			BoxContainer.ALIGNMENT_BEGIN if showing else default_game_alignment
+		)
+	if scoreboard:
+		scoreboard.z_index = 2 if showing else 0
+	if turn_label:
+		turn_label.z_index = 2 if showing else 0
 
 
 func _play_background_music() -> void:
@@ -1716,7 +1778,8 @@ func _on_pause_settings_pressed() -> void:
 
 
 func _populate_languages() -> void:
-	language_option.clear()
+	if not _safe_clear_option(language_option, "Language option"):
+		return
 	language_option.add_item("English", 0)
 	language_option.add_item("Portuguese (BR)", 1)
 	language_option.selected = 0
@@ -1726,18 +1789,21 @@ func _load_settings() -> void:
 	loading_settings = true
 	var cfg := ConfigFile.new()
 	var err := cfg.load(SETTINGS_PATH)
+	var default_db := -10.0
 	if music_slider:
 		music_slider.min_value = -80.0
-		var default_db: float = clamp(-10.0, music_slider.min_value, music_slider.max_value)
+		default_db = clamp(default_db, music_slider.min_value, music_slider.max_value)
 		if err != OK:
 			music_slider.value = default_db
 			_on_music_slider_changed(music_slider.value)
 	if err == OK:
 		current_language = str(cfg.get_value("general", "language", current_language))
-		var saved_db := float(cfg.get_value("audio", "music_db", music_slider.value))
-		music_slider.value = clamp(saved_db, music_slider.min_value, music_slider.max_value)
-		language_option.select(1 if current_language == "pt" else 0)
-		_on_music_slider_changed(music_slider.value)
+		var saved_db := float(cfg.get_value("audio", "music_db", default_db))
+		if music_slider:
+			music_slider.value = clamp(saved_db, music_slider.min_value, music_slider.max_value)
+			_on_music_slider_changed(music_slider.value)
+		if language_option:
+			language_option.select(1 if current_language == "pt" else 0)
 		FinalJeopardyData.set_language(current_language)
 	loading_settings = false
 
@@ -1747,7 +1813,10 @@ func _save_settings() -> void:
 		return
 	var cfg := ConfigFile.new()
 	cfg.set_value("general", "language", current_language)
-	cfg.set_value("audio", "music_db", music_slider.value)
+	var music_db := -10.0
+	if music_slider:
+		music_db = music_slider.value
+	cfg.set_value("audio", "music_db", music_db)
 	cfg.save(SETTINGS_PATH)
 
 
@@ -1975,7 +2044,8 @@ func _build_teams() -> void:
 			team_wager_labels,
 			player_characters,
 			scoreboard,
-			func(en_text: String, pt_text: String) -> String: return _t(en_text, pt_text)
+			func(en_text: String, pt_text: String) -> String: return _t(en_text, pt_text),
+			players
 		)
 		_clear_trophies()
 		_clear_wager_labels()

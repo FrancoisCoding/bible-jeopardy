@@ -1,8 +1,55 @@
-[gd_scene load_steps=4 format=3 uid="uid://88jpn26ij3hx"]
+[gd_scene load_steps=17 format=3 uid="uid://88jpn26ij3hx"]
 
-[ext_resource type="Script" path="res://src/ui/main/main.gd" id="1"]
-[ext_resource type="Texture2D" path="res://game title.png" id="2"]
-[ext_resource type="Script" path="res://src/ui/components/timer_bar.gd" id="3"]
+[ext_resource type="Script" uid="uid://bpdw75wca58c" path="res://src/ui/main/main.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cnfkil73kqn83" path="res://paper_background.png" id="2_kek77"]
+[ext_resource type="Script" uid="uid://c8ooxfpwprdxg" path="res://src/ui/components/timer_bar.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://dnastiuh25tlv" path="res://settings.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://cabhcrlphxn4l" path="res://settings_button_pressed.png" id="4_5vw27"]
+[ext_resource type="Texture2D" uid="uid://dohylgpi1ocl" path="res://verse_background.png" id="5_4c57u"]
+[ext_resource type="Texture2D" uid="uid://dtwavah46mwt3" path="res://bible_jeopardy_logo.png" id="5_efxa6"]
+[ext_resource type="Texture2D" uid="uid://d4etpp6i60fnp" path="res://play_button.png" id="5_kek77"]
+[ext_resource type="Texture2D" uid="uid://cinmeiy2lsn3j" path="res://bible_jeopardy_play_button_pressed.png" id="6_4c57u"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kek77"]
+texture = ExtResource("4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4c57u"]
+texture = ExtResource("4_5vw27")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w48qg"]
+texture = ExtResource("5_efxa6")
+expand_margin_left = 15.0
+expand_margin_top = 105.0
+expand_margin_right = 15.0
+expand_margin_bottom = 105.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ycdy4"]
+texture = ExtResource("5_4c57u")
+expand_margin_left = 72.0
+expand_margin_top = 45.0
+expand_margin_right = 109.0
+expand_margin_bottom = 78.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_efxa6"]
+texture = ExtResource("5_kek77")
+expand_margin_left = 13.0
+expand_margin_top = 51.0
+expand_margin_right = 33.0
+expand_margin_bottom = 64.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dg77c"]
+texture = ExtResource("6_4c57u")
+expand_margin_left = 13.0
+expand_margin_top = 51.0
+expand_margin_right = 33.0
+expand_margin_bottom = 64.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vivmo"]
+texture = ExtResource("5_4c57u")
+expand_margin_left = 165.0
+expand_margin_top = 140.0
+expand_margin_right = 256.0
+expand_margin_bottom = 226.0
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -12,9 +59,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
-mouse_filter = 0
 
-[node name="TitlePanel" type="Control" parent="."]
+[node name="MainMenu" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,83 +68,110 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="TitlePanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-theme_override_constants/separation = 32
-
-[node name="TitleLogo" type="TextureRect" parent="TitlePanel/VBox"]
+[node name="baseMenuScreen" type="MarginContainer" parent="MainMenu"]
 layout_mode = 2
-visible = true
-texture = ExtResource("2")
-stretch_mode = 6
 size_flags_horizontal = 4
 size_flags_vertical = 4
-expand_mode = 2
-offset_top = -40.0
-custom_minimum_size = Vector2(1100, 300)
 
-[node name="Title" type="Label" parent="TitlePanel/VBox"]
+[node name="NinePatchRect" type="NinePatchRect" parent="MainMenu/baseMenuScreen"]
+custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 2
-visible = false
+texture = ExtResource("2_kek77")
 
-[node name="PlayButton" type="Button" parent="TitlePanel/VBox"]
-layout_mode = 2
-text = "Play"
-custom_minimum_size = Vector2(0, 70)
-margin_top = 12.0
-
-[node name="SettingsButton" type="Button" parent="TitlePanel/VBox"]
-layout_mode = 2
-text = "Settings"
-custom_minimum_size = Vector2(0, 70)
-margin_top = 8.0
-
-[node name="VerseOfDay" type="PanelContainer" parent="TitlePanel/VBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(700, 200)
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="CardVBox" type="VBoxContainer" parent="TitlePanel/VBox/VerseOfDay"]
-layout_mode = 2
-alignment = 1
-theme_override_constants/separation = 6
+[node name="MarginContainer" type="MarginContainer" parent="MainMenu/baseMenuScreen/NinePatchRect"]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 15
 
-[node name="VerseTitle" type="Label" parent="TitlePanel/VBox/VerseOfDay/CardVBox"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer"]
+custom_minimum_size = Vector2(600, 200)
+layout_mode = 2
+
+[node name="SettingsMarginContainer" type="MarginContainer" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 80
+
+[node name="SettingsButton" type="Button" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/SettingsMarginContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_kek77")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_4c57u")
+theme_override_styles/hover = SubResource("StyleBoxTexture_4c57u")
+
+[node name="TitleMarginContainer" type="MarginContainer" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(700, 400)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="PanelContainer" type="PanelContainer" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/TitleMarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_w48qg")
+
+[node name="VerseMarginContainer" type="MarginContainer" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(500, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="VerseOfDay" type="PanelContainer" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_ycdy4")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="CardVBox" type="VBoxContainer" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer"]
+custom_minimum_size = Vector2(320, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="VerseTitle" type="Label" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer/CardVBox"]
 layout_mode = 2
 text = "SCRIPTURE OF THE DAY"
 horizontal_alignment = 1
 
-[node name="VerseText" type="Label" parent="TitlePanel/VBox/VerseOfDay/CardVBox"]
+[node name="VerseText" type="Label" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer/CardVBox"]
 layout_mode = 2
 text = "Loading..."
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="VerseReference" type="Label" parent="TitlePanel/VBox/VerseOfDay/CardVBox"]
+[node name="VerseReference" type="Label" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer/CardVBox"]
 layout_mode = 2
-text = ""
 horizontal_alignment = 1
 
-[node name="Spacer" type="Control" parent="TitlePanel/VBox"]
+[node name="PlayMarginContainer" type="MarginContainer" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 200)
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="PlayButton" type="Button" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/PlayMarginContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxTexture_efxa6")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_dg77c")
+theme_override_styles/hover = SubResource("StyleBoxTexture_dg77c")
 
 [node name="SettingsPanel" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -107,66 +180,85 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Content" type="MarginContainer" parent="SettingsPanel"]
+custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 240
-theme_override_constants/margin_right = 240
-theme_override_constants/margin_top = 60
-theme_override_constants/margin_bottom = 60
 
-[node name="VBox" type="VBoxContainer" parent="SettingsPanel/Content"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-theme_override_constants/separation = 32
-size_flags_horizontal = 4
-
-[node name="SettingsTitle" type="Label" parent="SettingsPanel/Content/VBox"]
+[node name="NinePatchRect" type="NinePatchRect" parent="SettingsPanel/Content"]
+custom_minimum_size = Vector2(1920, 1080)
 layout_mode = 2
+texture = ExtResource("2_kek77")
+
+[node name="SettingsGUI" type="Control" parent="SettingsPanel/Content"]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="SettingsPanel/Content/SettingsGUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="SettingsPanel/Content/SettingsGUI/CenterContainer"]
+custom_minimum_size = Vector2(1200, 800)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_vivmo")
+
+[node name="VBox" type="VBoxContainer" parent="SettingsPanel/Content/SettingsGUI/CenterContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="SettingsTitle" type="Label" parent="SettingsPanel/Content/SettingsGUI/CenterContainer/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 52
 text = "Settings"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 52
 
-[node name="LanguageLabel" type="Label" parent="SettingsPanel/Content/VBox"]
+[node name="LanguageLabel" type="Label" parent="SettingsPanel/Content/SettingsGUI/CenterContainer/VBox"]
 layout_mode = 2
 text = "Language"
 horizontal_alignment = 1
 
-[node name="LanguageOption" type="OptionButton" parent="SettingsPanel/Content/VBox"]
-layout_mode = 2
+[node name="LanguageOption" type="OptionButton" parent="SettingsPanel/Content/SettingsGUI/CenterContainer/VBox"]
 custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="MusicLabel" type="Label" parent="SettingsPanel/Content/VBox"]
+[node name="MusicLabel" type="Label" parent="SettingsPanel/Content/SettingsGUI/CenterContainer/VBox"]
 layout_mode = 2
 text = "Music Volume"
 horizontal_alignment = 1
 
-[node name="MusicSlider" type="HSlider" parent="SettingsPanel/Content/VBox"]
+[node name="MusicSlider" type="HSlider" parent="SettingsPanel/Content/SettingsGUI/CenterContainer/VBox"]
+custom_minimum_size = Vector2(520, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 min_value = -30.0
 max_value = 6.0
 step = 0.5
 value = -6.0
-custom_minimum_size = Vector2(520, 0)
-size_flags_horizontal = 4
 
-[node name="BackButton" type="Button" parent="SettingsPanel/Content/VBox"]
+[node name="BackButton" type="Button" parent="SettingsPanel/Content/SettingsGUI/CenterContainer/VBox"]
 layout_mode = 2
 text = "Back"
 
-[node name="ExitButton" type="Button" parent="SettingsPanel/Content/VBox"]
+[node name="ExitButton" type="Button" parent="SettingsPanel/Content/SettingsGUI/CenterContainer/VBox"]
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 text = "Exit Game"
-custom_minimum_size = Vector2(0, 70)
 
 [node name="PlayerSelectPanel" type="Control" parent="."]
 visible = false
@@ -211,7 +303,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 
 [node name="Dimmer" type="ColorRect" parent="CharacterSelectPanel"]
 layout_mode = 1
@@ -220,8 +311,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.32)
 mouse_filter = 2
+color = Color(0, 0, 0, 0.32)
 
 [node name="Content" type="PanelContainer" parent="CharacterSelectPanel"]
 layout_mode = 1
@@ -235,15 +326,9 @@ grow_vertical = 2
 mouse_filter = 1
 
 [node name="VBox" type="VBoxContainer" parent="CharacterSelectPanel/Content"]
-layout_mode = 0
-anchor_left = 0.05
-anchor_top = 0.05
-anchor_right = 0.95
-anchor_bottom = 0.95
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
+layout_mode = 2
 theme_override_constants/separation = 14
+alignment = 1
 
 [node name="SelectTitle" type="Label" parent="CharacterSelectPanel/Content/VBox"]
 layout_mode = 2
@@ -258,23 +343,23 @@ autowrap_mode = 2
 
 [node name="Slots" type="HBoxContainer" parent="CharacterSelectPanel/Content/VBox"]
 layout_mode = 2
-alignment = 1
-theme_override_constants/separation = 12
 size_flags_horizontal = 4
+theme_override_constants/separation = 12
+alignment = 1
 
 [node name="Slot1" type="PanelContainer" parent="CharacterSelectPanel/Content/VBox/Slots"]
-layout_mode = 2
 custom_minimum_size = Vector2(240, 170)
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="SlotVBox" type="VBoxContainer" parent="CharacterSelectPanel/Content/VBox/Slots/Slot1"]
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 6
+alignment = 1
 
 [node name="Portrait" type="ColorRect" parent="CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox"]
-layout_mode = 2
 custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
 color = Color(0.18, 0.18, 0.18, 1)
 
 [node name="SlotLabel" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox"]
@@ -290,18 +375,18 @@ horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="Slot2" type="PanelContainer" parent="CharacterSelectPanel/Content/VBox/Slots"]
-layout_mode = 2
 custom_minimum_size = Vector2(240, 170)
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="SlotVBox" type="VBoxContainer" parent="CharacterSelectPanel/Content/VBox/Slots/Slot2"]
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 6
+alignment = 1
 
 [node name="Portrait" type="ColorRect" parent="CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox"]
-layout_mode = 2
 custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
 color = Color(0.18, 0.18, 0.18, 1)
 
 [node name="SlotLabel" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox"]
@@ -317,18 +402,18 @@ horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="Slot3" type="PanelContainer" parent="CharacterSelectPanel/Content/VBox/Slots"]
-layout_mode = 2
 custom_minimum_size = Vector2(240, 170)
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="SlotVBox" type="VBoxContainer" parent="CharacterSelectPanel/Content/VBox/Slots/Slot3"]
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 6
+alignment = 1
 
 [node name="Portrait" type="ColorRect" parent="CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox"]
-layout_mode = 2
 custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
 color = Color(0.18, 0.18, 0.18, 1)
 
 [node name="SlotLabel" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox"]
@@ -351,21 +436,21 @@ autowrap_mode = 2
 
 [node name="Options" type="GridContainer" parent="CharacterSelectPanel/Content/VBox"]
 layout_mode = 2
-columns = 4
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 10
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 4
 
 [node name="CharacterButtonRow" type="HBoxContainer" parent="CharacterSelectPanel/Content/VBox"]
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 12
+alignment = 1
 
 [node name="CharacterBackButton" type="Button" parent="CharacterSelectPanel/Content/VBox/CharacterButtonRow"]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 text = "Back"
-custom_minimum_size = Vector2(160, 0)
 
 [node name="ControllerConnectPanel" type="Control" parent="."]
 visible = false
@@ -375,7 +460,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 
 [node name="Dimmer" type="ColorRect" parent="ControllerConnectPanel"]
 layout_mode = 1
@@ -384,8 +468,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.32)
 mouse_filter = 2
+color = Color(0, 0, 0, 0.32)
 
 [node name="Content" type="PanelContainer" parent="ControllerConnectPanel"]
 layout_mode = 1
@@ -399,15 +483,9 @@ grow_vertical = 2
 mouse_filter = 1
 
 [node name="VBox" type="VBoxContainer" parent="ControllerConnectPanel/Content"]
-layout_mode = 0
-anchor_left = 0.05
-anchor_top = 0.05
-anchor_right = 0.95
-anchor_bottom = 0.95
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
+layout_mode = 2
 theme_override_constants/separation = 16
+alignment = 1
 
 [node name="ConnectTitle" type="Label" parent="ControllerConnectPanel/Content/VBox"]
 layout_mode = 2
@@ -422,13 +500,13 @@ autowrap_mode = 2
 
 [node name="Slots" type="HBoxContainer" parent="ControllerConnectPanel/Content/VBox"]
 layout_mode = 2
-alignment = 1
-theme_override_constants/separation = 12
 size_flags_horizontal = 4
+theme_override_constants/separation = 12
+alignment = 1
 
 [node name="Slot1" type="PanelContainer" parent="ControllerConnectPanel/Content/VBox/Slots"]
-layout_mode = 2
 custom_minimum_size = Vector2(220, 90)
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="Label" type="Label" parent="ControllerConnectPanel/Content/VBox/Slots/Slot1"]
@@ -438,8 +516,8 @@ horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="Slot2" type="PanelContainer" parent="ControllerConnectPanel/Content/VBox/Slots"]
-layout_mode = 2
 custom_minimum_size = Vector2(220, 90)
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="Label" type="Label" parent="ControllerConnectPanel/Content/VBox/Slots/Slot2"]
@@ -449,8 +527,8 @@ horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="Slot3" type="PanelContainer" parent="ControllerConnectPanel/Content/VBox/Slots"]
-layout_mode = 2
 custom_minimum_size = Vector2(220, 90)
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="Label" type="Label" parent="ControllerConnectPanel/Content/VBox/Slots/Slot3"]
@@ -470,24 +548,24 @@ text = "AI Difficulty"
 horizontal_alignment = 1
 
 [node name="AIDifficultyOption" type="OptionButton" parent="ControllerConnectPanel/Content/VBox"]
-layout_mode = 2
 custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="ButtonRow" type="HBoxContainer" parent="ControllerConnectPanel/Content/VBox"]
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 12
+alignment = 1
 
 [node name="StartButton" type="Button" parent="ControllerConnectPanel/Content/VBox/ButtonRow"]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 text = "Continue"
-custom_minimum_size = Vector2(160, 0)
 
 [node name="CancelButton" type="Button" parent="ControllerConnectPanel/Content/VBox/ButtonRow"]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 text = "Back"
-custom_minimum_size = Vector2(160, 0)
 
 [node name="RootVBox" type="VBoxContainer" parent="."]
 visible = false
@@ -500,18 +578,17 @@ grow_vertical = 2
 alignment = 1
 
 [node name="TitleLogoMain" type="TextureRect" parent="RootVBox"]
-layout_mode = 2
 visible = false
-texture = ExtResource("2")
-stretch_mode = 6
+custom_minimum_size = Vector2(1100, 300)
+layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 expand_mode = 2
-custom_minimum_size = Vector2(1100, 300)
+stretch_mode = 6
 
 [node name="TitleLabel" type="Label" parent="RootVBox"]
-layout_mode = 2
 visible = false
+layout_mode = 2
 
 [node name="Scoreboard" type="HBoxContainer" parent="RootVBox"]
 layout_mode = 2
@@ -524,8 +601,8 @@ horizontal_alignment = 1
 [node name="BoardMargin" type="MarginContainer" parent="RootVBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 40
-theme_override_constants/margin_right = 40
 theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 20
 
 [node name="BoardGrid" type="GridContainer" parent="RootVBox/BoardMargin"]
@@ -535,13 +612,11 @@ columns = 3
 [node name="QuestionPanel" type="PanelContainer" parent="."]
 visible = false
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 40.0
-offset_top = 60.0
-offset_right = -40.0
-offset_bottom = -60.0
+anchors_preset = -1
+anchor_left = 0.08
+anchor_top = 0.24
+anchor_right = 0.92
+anchor_bottom = 0.96
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -581,18 +656,17 @@ layout_mode = 2
 [node name="AnswerButtons" type="Control" parent="QuestionPanel/QuestionVBox"]
 layout_mode = 2
 
+[node name="TimerBar" type="Control" parent="QuestionPanel/QuestionVBox"]
+custom_minimum_size = Vector2(800, 28)
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("3")
+
 [node name="FinalWager" type="VBoxContainer" parent="QuestionPanel"]
 visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.25
-anchor_top = 0.12
-anchor_right = 0.75
-anchor_bottom = 0.3
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
+layout_mode = 2
 theme_override_constants/separation = 32
+alignment = 1
 
 [node name="WagerLabel" type="Label" parent="QuestionPanel/FinalWager"]
 layout_mode = 2
@@ -611,13 +685,6 @@ text = "Set Wager"
 [node name="FinalClueButton" type="Button" parent="QuestionPanel/FinalWager"]
 layout_mode = 2
 text = "Get Clue (-10%)"
-
-[node name="TimerBar" type="Control" parent="QuestionPanel/QuestionVBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(800, 28)
-size_flags_horizontal = 4
-size_flags_vertical = 1
-script = ExtResource("3")
 
 [node name="AnswerTimer" type="Label" parent="QuestionPanel"]
 layout_mode = 2
