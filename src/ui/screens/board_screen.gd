@@ -12,24 +12,6 @@ func _init(theme_styler: ThemeStyler, game_font: Font) -> void:
 	self.game_font = game_font
 
 
-func update_player_info_label(player_info_label: Label, t_func: Callable) -> void:
-	if player_info_label == null:
-		return
-	var info: String = str(
-		t_func.call(
-			"Three players always. Keyboard is Player 1 (Spacebar buzz).\n",
-			"Sempre tres jogadores. Teclado e o Jogador 1 (barra de espaco).\n"
-		)
-	)
-	info += str(
-		t_func.call(
-			"Press Play to join, pick characters, then start; empty slots become AI.",
-			"Aperte Jogar para entrar, escolha personagens e inicie; vagas vazias viram IA."
-		)
-	)
-	player_info_label.text = info
-
-
 func build_teams(
 	team_names: Array[String],
 	team_scores: Array,

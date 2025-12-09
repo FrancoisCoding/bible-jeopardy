@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnastiuh25tlv"
-path="res://.godot/imported/settings.png-ca1e7ab13a25083bf00852ad7dcec7ad.ctex"
+uid="uid://888tiv3dy8sl"
+path="res://.godot/imported/start_button_pressed.png-d706644c9a26f4d59bc511612becb05d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://settings.png"
-dest_files=["res://.godot/imported/settings.png-ca1e7ab13a25083bf00852ad7dcec7ad.ctex"]
+source_file="res://start_button_pressed.png"
+dest_files=["res://.godot/imported/start_button_pressed.png-d706644c9a26f4d59bc511612becb05d.ctex"]
 
 [params]
 

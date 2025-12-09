@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://i3aere6occcc"
-path="res://.godot/imported/Comic Sans MS.ttf-7ada7215f8979243ab223160736a684c.fontdata"
+uid="uid://b2dtthqjcbvu1"
+path="res://.godot/imported/troika.otf-0fd2245e8f4a11de0ae6e4c56051889f.fontdata"
 
 [deps]
 
-source_file="res://fonts/Comic Sans MS.ttf"
-dest_files=["res://.godot/imported/Comic Sans MS.ttf-7ada7215f8979243ab223160736a684c.fontdata"]
+source_file="res://fonts/troika.otf"
+dest_files=["res://.godot/imported/troika.otf-0fd2245e8f4a11de0ae6e4c56051889f.fontdata"]
 
 [params]
 

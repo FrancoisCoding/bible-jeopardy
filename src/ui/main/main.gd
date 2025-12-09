@@ -1,6 +1,6 @@
 extends Control
 
-@export var game_font: Font = preload("res://fonts/Comic Sans MS.ttf")
+@export var game_font: Font = preload("res://fonts/troika.otf")
 @export var title_texture: Texture2D = preload("res://bible_jeopardy_logo.png")
 @export var bible_character_textures: Array[Texture2D] = []
 @export var show_state_debug: bool = false
@@ -44,6 +44,8 @@ const CHARACTER_ROSTER := [
 	{"name": "Noah", "bg": Color(0.92, 0.52, 0.2), "accent": Color(0.15, 0.38, 0.71)}
 ]
 # UI references
+
+# Main Menu UI
 @onready var title_panel: Control = get_node_or_null("MainMenu")
 @onready var title_play_button: Button = get_node_or_null(
 	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/PlayMarginContainer/PlayButton"
@@ -58,81 +60,103 @@ const CHARACTER_ROSTER := [
 @onready var title_screen_title: Label = get_node_or_null(
 	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/Title"
 )
-
-@onready var settings_panel: Control = get_node_or_null("SettingsPanel")
-@onready var settings_title_label: Label = get_node_or_null(
-	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/SettingsTitle"
+@onready var verse_panel: PanelContainer = get_node_or_null(
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay"
 )
+@onready var verse_title_label: Label = get_node_or_null(
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer/CardVBox/VerseTitle"
+)
+@onready var verse_text_label: Label = get_node_or_null(
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer/CardVBox/VerseText"
+)
+@onready var verse_reference_label: Label = get_node_or_null(
+	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer/CardVBox/VerseReference"
+)
+
+# Settings UI
+@onready var settings_panel: Control = get_node_or_null("SettingsPanel")
 @onready var settings_language_label: Label = get_node_or_null(
-	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/LanguageLabel"
+	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBoxContainer/PanelContainer/VBox/LanguageLabel"
 )
 @onready var language_option: OptionButton = get_node_or_null(
-	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/LanguageOption"
+	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBoxContainer/PanelContainer/VBox/LanguageOption"
 )
 @onready var music_slider: HSlider = get_node_or_null(
-	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/MusicSlider"
+	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBoxContainer/PanelContainer/VBox/MusicSlider"
 )
 @onready var music_label: Label = get_node_or_null(
-	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/MusicLabel"
+	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBoxContainer/PanelContainer/VBox/MusicLabel"
 )
 @onready var settings_back_button: Button = get_node_or_null(
-	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/BackButton"
+	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBoxContainer/HBoxContainer/BackButtonContainer/BackButton"
 )
 @onready var settings_exit_button: Button = get_node_or_null(
-	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBox/ExitButton"
+	"SettingsPanel/Content/SettingsGUI/CenterContainer/VBoxContainer/HBoxContainer/ExitButtonContainer/ExitButton"
 )
 
-@onready var player_select_panel: Control = get_node_or_null("PlayerSelectPanel")
-@onready
-var player_count_option: OptionButton = get_node_or_null("PlayerSelectPanel/VBox/PlayerCount")
-@onready var player_start_button: Button = get_node_or_null("PlayerSelectPanel/VBox/StartButton")
-@onready var player_info_label: Label = get_node_or_null("PlayerSelectPanel/VBox/InfoLabel")
-@onready var player_select_title: Label = get_node_or_null("PlayerSelectPanel/VBox/SelectTitle")
-
+# Audio Players
 @onready var music_player: AudioStreamPlayer = get_node_or_null("MusicPlayer")
 @onready var question_music_player: AudioStreamPlayer = get_node_or_null("QuestionMusicPlayer")
 @onready var sfx_correct_player: AudioStreamPlayer = get_node_or_null("CorrectSfxPlayer")
 @onready var sfx_wrong_player: AudioStreamPlayer = get_node_or_null("WrongSfxPlayer")
 @onready var sfx_select_player: AudioStreamPlayer = get_node_or_null("SelectSfxPlayer")
+
+# Pause Menu UI
 @onready var pause_menu: Control = get_node_or_null("PauseMenu")
 @onready var pause_title_label: Label = get_node_or_null("PauseMenu/Panel/VBox/PauseLabel")
 @onready var pause_resume_button: Button = get_node_or_null("PauseMenu/Panel/VBox/ResumeButton")
 @onready var pause_main_menu_button: Button = get_node_or_null("PauseMenu/Panel/VBox/MainMenuButton")
 @onready var pause_settings_button: Button = get_node_or_null("PauseMenu/Panel/VBox/SettingsButton")
-@onready var controller_connect_panel: Control = get_node_or_null("ControllerConnectPanel")
+
+# Controller Connect UI
+@onready var controller_connect_panel: Control = get_node_or_null("ConnectControllersPanel")
 @onready var controller_title_label: Label = get_node_or_null(
-	"ControllerConnectPanel/Content/VBox/ConnectTitle"
+	"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/ConnectTitle"
 )
 @onready var controller_subtitle_label: Label = get_node_or_null(
-	"ControllerConnectPanel/Content/VBox/ConnectSubtitle"
+	"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxSubtitleContainer/Subtitle"
 )
 @onready var controller_slot_labels: Array[Label] = [
-	get_node_or_null("ControllerConnectPanel/Content/VBox/Slots/Slot1/Label"),
-	get_node_or_null("ControllerConnectPanel/Content/VBox/Slots/Slot2/Label"),
-	get_node_or_null("ControllerConnectPanel/Content/VBox/Slots/Slot3/Label")
+	get_node_or_null(
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer1/Panel/MarginContainer/VBoxContainer/Label"
+	),
+	get_node_or_null(
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer2/Panel/MarginContainer/VBoxContainer/Label"
+	),
+	get_node_or_null(
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer3/Panel/MarginContainer/VBoxContainer/Label"
+	)
 ]
 @onready var controller_slot_panels: Array[PanelContainer] = [
-	get_node_or_null("ControllerConnectPanel/Content/VBox/Slots/Slot1"),
-	get_node_or_null("ControllerConnectPanel/Content/VBox/Slots/Slot2"),
-	get_node_or_null("ControllerConnectPanel/Content/VBox/Slots/Slot3")
+	get_node_or_null(
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer1/Panel/MarginContainer/VBoxContainer/Label2"
+	),
+	get_node_or_null(
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer2/Panel/MarginContainer/VBoxContainer/Label2"
+	),
+	get_node_or_null(
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer3/Panel/MarginContainer/VBoxContainer/Label2"
+	)
 ]
 @onready var controller_status_label: Label = get_node_or_null(
-	"ControllerConnectPanel/Content/VBox/StatusLabel"
+	"ConnectControllersPanel/Content/VBox/StatusLabel"
 )
 @onready var controller_ai_label: Label = get_node_or_null(
-	"ControllerConnectPanel/Content/VBox/AIDifficultyLabel"
+	"ConnectControllersPanel/Content/VBox/AIDifficultyLabel"
 )
 @onready var controller_ai_option: OptionButton = get_node_or_null(
-	"ControllerConnectPanel/Content/VBox/AIDifficultyOption"
+	"ConnectControllersPanel/Content/VBox/AIDifficultyOption"
 )
-@onready var controller_start_button: Button = get_node_or_null(
-	"ControllerConnectPanel/Content/VBox/ButtonRow/StartButton"
+@onready var controller_continue_button: Button = get_node_or_null(
+	"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxButtonContainer/ContinueContainer/ContinueButton"
 )
-@onready var controller_cancel_button: Button = get_node_or_null(
-	"ControllerConnectPanel/Content/VBox/ButtonRow/CancelButton"
+@onready var controller_back_button: Button = get_node_or_null(
+	"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxButtonContainer/BackContainer/BackButton"
 )
 @onready
-var controller_connect_content: PanelContainer = get_node_or_null("ControllerConnectPanel/Content")
+var controller_connect_content: PanelContainer = get_node_or_null("ConnectControllersPanel/Content")
+
+# Character Select UI
 @onready var character_select_panel: Control = get_node_or_null("CharacterSelectPanel")
 @onready var character_select_title_label: Label = get_node_or_null(
 	"CharacterSelectPanel/Content/VBox/SelectTitle"
@@ -170,60 +194,6 @@ var character_prompt_label: Label = get_node_or_null("CharacterSelectPanel/Conte
 	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox/SlotHint"),
 	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox/SlotHint")
 ]
-@onready var online_panel: Control = get_node_or_null("OnlinePanel")
-@onready var title_online_button: Button = get_node_or_null(
-	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/OnlineButton"
-)
-@onready
-var online_title_label: Label = get_node_or_null("OnlinePanel/OnlineContent/VBox/OnlineTitle")
-@onready var online_host_button: Button = get_node_or_null(
-	"OnlinePanel/OnlineContent/VBox/ActionRow/HostButton"
-)
-@onready var online_join_button: Button = get_node_or_null(
-	"OnlinePanel/OnlineContent/VBox/ActionRow/JoinButton"
-)
-@onready var online_back_button: Button = get_node_or_null(
-	"OnlinePanel/OnlineContent/VBox/ActionRow/OnlineBackButton"
-)
-@onready
-var online_host_lobby: PanelContainer = get_node_or_null("OnlinePanel/OnlineContent/VBox/HostLobby")
-@onready
-var online_join_panel: PanelContainer = get_node_or_null("OnlinePanel/OnlineContent/VBox/JoinPanel")
-@onready var online_code_label: Label = get_node_or_null(
-	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/CodeLabel"
-)
-@onready var online_code_value: Label = get_node_or_null(
-	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/CodeValue"
-)
-@onready var online_slot_labels: Array[Label] = [
-	get_node_or_null("OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/PlayerList/Slot1"),
-	get_node_or_null("OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/PlayerList/Slot2"),
-	get_node_or_null("OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/PlayerList/Slot3")
-]
-@onready var online_status_label: Label = get_node_or_null(
-	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/HostStatus"
-)
-@onready var online_host_start_button: Button = get_node_or_null(
-	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/HostButtons/HostStartButton"
-)
-@onready var online_host_leave_button: Button = get_node_or_null(
-	"OnlinePanel/OnlineContent/VBox/HostLobby/HostVBox/HostButtons/HostLeaveButton"
-)
-@onready var online_join_code_input: LineEdit = get_node_or_null(
-	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinCodeInput"
-)
-@onready var online_join_ip_input: LineEdit = get_node_or_null(
-	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinIPInput"
-)
-@onready var online_join_status: Label = get_node_or_null(
-	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinStatus"
-)
-@onready var online_join_connect_button: Button = get_node_or_null(
-	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinButtons/JoinConnectButton"
-)
-@onready var online_join_cancel_button: Button = get_node_or_null(
-	"OnlinePanel/OnlineContent/VBox/JoinPanel/JoinVBox/JoinButtons/JoinCancelButton"
-)
 
 # Game UI
 @onready var game_root: Control = get_node_or_null("RootVBox")
@@ -232,19 +202,6 @@ var online_join_panel: PanelContainer = get_node_or_null("OnlinePanel/OnlineCont
 @onready var turn_label: Label = get_node_or_null("RootVBox/TurnLabel")
 @onready var board_grid: GridContainer = get_node_or_null("RootVBox/BoardMargin/BoardGrid")
 var play_again_button: Button = null
-
-@onready var verse_panel: PanelContainer = get_node_or_null(
-	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay"
-)
-@onready var verse_title_label: Label = get_node_or_null(
-	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer/CardVBox/VerseTitle"
-)
-@onready var verse_text_label: Label = get_node_or_null(
-	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer/CardVBox/VerseText"
-)
-@onready var verse_reference_label: Label = get_node_or_null(
-	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer/CardVBox/VerseReference"
-)
 
 @onready var question_panel: PanelContainer = get_node_or_null("QuestionPanel")
 @onready
@@ -309,14 +266,6 @@ var nav_focus_enabled: bool = false  # Only grab focus highlights when a control
 var settings_opened_from_pause: bool = false
 var ai_difficulty: String = "normal"
 var ai_correct_rate: float = AI_DIFFICULTY_RATES["normal"]
-var online_peer: ENetMultiplayerPeer
-var online_is_host: bool = false
-var online_room_code: String = ""
-var online_host_peer_id: int = -1
-var online_players: Array[Dictionary] = []  # [{id,name}]
-const ONLINE_MAX_PLAYERS := 3
-const ONLINE_MIN_PLAYERS := 2
-var online_active: bool = false
 var local_player_index: int = -1
 var round_index: int = 0
 var hidden_double_key: String = ""
@@ -402,7 +351,6 @@ func _ready() -> void:
 	main_menu_screen = MainMenuScreen.new(
 		title_panel,
 		settings_panel,
-		player_select_panel,
 		verse_panel,
 		verse_title_label,
 		verse_text_label,
@@ -413,10 +361,6 @@ func _ready() -> void:
 		music_label,
 		settings_back_button,
 		settings_exit_button,
-		player_select_title,
-		player_count_option,
-		player_info_label,
-		player_start_button,
 		pause_title_label,
 		pause_resume_button,
 		pause_main_menu_button,
@@ -435,7 +379,7 @@ func _ready() -> void:
 	)
 	board_screen = BoardScreen.new(theme_styler, game_font)
 	settings_screen = SettingsScreen.new(
-		title_panel, settings_panel, player_select_panel, pause_menu, game_root, question_panel
+		title_panel, settings_panel, pause_menu, game_root, question_panel
 	)
 
 	if game_root and game_root is BoxContainer:
@@ -446,15 +390,10 @@ func _ready() -> void:
 	_update_verse_of_day()
 	# Hook up UI
 	_safe_connect_pressed(title_play_button, _on_play_pressed, "Play button")
-	_safe_connect_pressed(title_online_button, _on_online_pressed, "Online button")
 	_safe_connect_pressed(title_settings_button, _on_settings_pressed, "Settings button")
 	_safe_connect_pressed(settings_back_button, _on_settings_back_pressed, "Settings back button")
-	_safe_connect_pressed(player_start_button, _on_player_start_pressed, "Player start button")
 	_safe_connect_value_changed(music_slider, _on_music_slider_changed, "Music slider")
 	_safe_connect_item_selected(language_option, _on_language_selected, "Language option")
-	_safe_connect_item_selected(
-		player_count_option, func(_idx: int) -> void: _play_select_sfx(), "Player count option"
-	)
 	_safe_connect_pressed(pause_resume_button, _on_pause_resume_pressed, "Pause resume button")
 	_safe_connect_pressed(pause_main_menu_button, _on_pause_main_menu_pressed, "Pause main button")
 	_safe_connect_pressed(
@@ -464,10 +403,12 @@ func _ready() -> void:
 	_safe_connect_pressed(final_wager_button, _on_set_wager_pressed, "Final wager button")
 	_safe_connect_pressed(final_clue_button, _on_final_clue_pressed, "Final clue button")
 	_safe_connect_pressed(
-		controller_start_button, _on_controller_connect_confirm_pressed, "Controller start button"
+		controller_continue_button,
+		_on_controller_connect_confirm_pressed,
+		"Controller continue button"
 	)
 	_safe_connect_pressed(
-		controller_cancel_button, _on_controller_connect_cancel_pressed, "Controller cancel button"
+		controller_back_button, _on_controller_connect_cancel_pressed, "Controller back button"
 	)
 	_safe_connect_item_selected(
 		controller_ai_option, func(idx: int) -> void: _on_ai_difficulty_selected(idx), "AI option"
@@ -509,20 +450,6 @@ func _ready() -> void:
 		game_root.add_child(play_again_button)
 	if character_back_button:
 		character_back_button.pressed.connect(_on_character_back_pressed)
-	if online_host_button:
-		online_host_button.pressed.connect(_on_online_host_pressed)
-	if online_join_button:
-		online_join_button.pressed.connect(_on_online_join_pressed)
-	if online_back_button:
-		online_back_button.pressed.connect(_on_online_back_pressed)
-	if online_host_start_button:
-		online_host_start_button.pressed.connect(_on_online_host_pressed)
-	if online_host_leave_button:
-		online_host_leave_button.pressed.connect(_on_online_back_pressed)
-	if online_join_connect_button:
-		online_join_connect_button.pressed.connect(_on_online_join_pressed)
-	if online_join_cancel_button:
-		online_join_cancel_button.pressed.connect(_on_online_back_pressed)
 	if title_texture:
 		if title_logo:
 			title_logo.texture = title_texture
@@ -539,7 +466,6 @@ func _ready() -> void:
 	_ensure_default_input_actions()
 	_setup_pause_menu_focus()
 	set_process_input(true)
-	_populate_player_count()
 	audio_controller.configure_streams(
 		MUSIC_BACKGROUND, MUSIC_QUESTION, SFX_CORRECT, SFX_WRONG, SFX_SELECT
 	)
@@ -580,16 +506,6 @@ func _update_verse_of_day():
 		main_menu_screen.update_verse_of_day(current_language, _get_today_key())
 
 
-func _populate_player_count() -> void:
-	if not _safe_clear_option(player_count_option, "Player count option"):
-		return
-	for i in range(2, 4):
-		player_count_option.add_item("%d Players" % i, i)
-	player_count_option.selected = 0
-	_reset_round_state()
-	_apply_resolution(Vector2i(1920, 1080))
-
-
 func _apply_language_texts() -> void:
 	LoadedBibleData.set_language(current_language)
 	FinalJeopardyData.set_language(current_language)
@@ -597,11 +513,8 @@ func _apply_language_texts() -> void:
 		main_menu_screen.apply_language_texts(
 			current_language, func(lang: String) -> void: LoadedBibleData.set_language(lang)
 		)
-	_update_player_info_label()
 	_apply_controller_connect_text()
 	_apply_character_select_text()
-	_apply_online_texts()
-
 	_update_verse_of_day()
 
 
@@ -805,10 +718,10 @@ func _apply_controller_connect_text() -> void:
 		controller_ai_option.add_item(_t("Normal", "Normal"), 1)
 		controller_ai_option.add_item(_t("Hard", "Dificil"), 2)
 		controller_ai_option.select(1)
-	if controller_start_button:
-		controller_start_button.text = _t("Continue", "Continuar")
-	if controller_cancel_button:
-		controller_cancel_button.text = _t("Back", "Voltar")
+	if controller_continue_button:
+		controller_continue_button.text = _t("Continue", "Continuar")
+	if controller_back_button:
+		controller_back_button.text = _t("Back", "Voltar")
 	_refresh_controller_join_ui()
 
 
@@ -825,74 +738,6 @@ func _apply_character_select_text() -> void:
 	_update_character_prompt()
 
 
-func _apply_online_texts() -> void:
-	if title_online_button:
-		title_online_button.text = _t("Online", "Online")
-	if online_title_label:
-		online_title_label.text = _t("Online Multiplayer", "Multijogador Online")
-	if online_host_button:
-		online_host_button.text = _t("Host Room", "Hospedar Sala")
-	if online_join_button:
-		online_join_button.text = _t("Join Room", "Entrar na Sala")
-	if online_back_button:
-		online_back_button.text = _t("Back", "Voltar")
-	if online_code_label:
-		online_code_label.text = _t("Room Code", "Codigo da sala")
-	if online_status_label:
-		online_status_label.text = _t("Waiting for players...", "Aguardando jogadores...")
-	if online_host_start_button:
-		online_host_start_button.text = _t("Start Game", "Iniciar jogo")
-	if online_host_leave_button:
-		online_host_leave_button.text = _t("Leave Room", "Sair da sala")
-	if online_join_code_input:
-		online_join_code_input.placeholder_text = _t("Enter room code", "Digite o codigo")
-	if online_join_ip_input:
-		online_join_ip_input.placeholder_text = "127.0.0.1"
-	if online_join_status:
-		online_join_status.text = ""
-	if online_join_connect_button:
-		online_join_connect_button.text = _t("Join", "Entrar")
-	if online_join_cancel_button:
-		online_join_cancel_button.text = _t("Cancel", "Cancelar")
-	_update_online_panel_visibility(false, false)
-	_update_online_status("", false)
-
-
-func _update_online_panel_visibility(show_host: bool, show_join: bool) -> void:
-	if online_host_lobby:
-		online_host_lobby.visible = show_host
-	if online_join_panel:
-		online_join_panel.visible = show_join
-
-
-func _update_online_status(text: String, is_error: bool = false) -> void:
-	if online_status_label:
-		online_status_label.text = text
-		online_status_label.add_theme_color_override(
-			"font_color", Color(0.8, 0.2, 0.2) if is_error else Color(0.1, 0.1, 0.1)
-		)
-	if online_join_status:
-		online_join_status.text = text
-		online_join_status.add_theme_color_override(
-			"font_color", Color(0.8, 0.2, 0.2) if is_error else Color(0.1, 0.1, 0.1)
-		)
-
-
-func _shutdown_online_session() -> void:
-	if online_peer:
-		online_peer.close()
-	online_peer = null
-	online_is_host = false
-	online_active = false
-	online_room_code = ""
-	online_host_peer_id = -1
-	local_player_index = -1
-	online_players.clear()
-	_update_online_panel_visibility(false, false)
-	_update_online_status("", false)
-	_refresh_controller_join_ui()
-
-
 func _apply_theme_styles() -> void:
 	if theme_styler == null:
 		return
@@ -902,29 +747,22 @@ func _apply_theme_styles() -> void:
 		verse_text_label,
 		verse_reference_label,
 		title_screen_title,
-		settings_title_label,
 		title_label,
 		q_category_label,
 		q_value_label,
 		q_text_label,
 		result_label,
 		turn_label,
-		player_select_title,
 		settings_language_label,
 		music_label,
 		pause_title_label,
-		player_info_label,
 		final_wager_label,
 		final_wager_panel,
 		final_wager_input,
-		settings_back_button,
-		settings_exit_button,
-		player_start_button,
 		pause_resume_button,
 		pause_main_menu_button,
 		pause_settings_button,
 		language_option,
-		player_count_option,
 		final_wager_button,
 		final_clue_button,
 		controller_title_label,
@@ -942,12 +780,6 @@ func _apply_theme_styles() -> void:
 		verse_reference_label,
 		settings_language_label,
 		music_label,
-		settings_back_button,
-		settings_exit_button,
-		player_select_title,
-		player_count_option,
-		player_info_label,
-		player_start_button,
 		title_label,
 		turn_label,
 		q_category_label,
@@ -969,8 +801,8 @@ func _apply_theme_styles() -> void:
 		controller_slot_labels[2] if controller_slot_labels.size() > 2 else null,
 		controller_ai_label,
 		controller_ai_option,
-		controller_start_button,
-		controller_cancel_button,
+		controller_continue_button,
+		controller_back_button,
 		character_select_title_label,
 		character_select_subtitle_label,
 		character_prompt_label,
@@ -979,38 +811,18 @@ func _apply_theme_styles() -> void:
 		character_slot_labels[2] if character_slot_labels.size() > 2 else null,
 		character_slot_hints[0] if character_slot_hints.size() > 0 else null,
 		character_slot_hints[1] if character_slot_hints.size() > 1 else null,
-		character_slot_hints[2] if character_slot_hints.size() > 2 else null,
-		online_title_label,
-		online_code_label,
-		online_code_value,
-		online_status_label,
-		online_slot_labels[0] if online_slot_labels.size() > 0 else null,
-		online_slot_labels[1] if online_slot_labels.size() > 1 else null,
-		online_slot_labels[2] if online_slot_labels.size() > 2 else null,
-		online_join_status,
-		online_join_code_input,
-		online_join_ip_input
+		character_slot_hints[2] if character_slot_hints.size() > 2 else null
 	]
 
 	var button_controls := [
-		settings_back_button,
-		settings_exit_button,
-		player_start_button,
 		pause_resume_button,
 		pause_main_menu_button,
 		pause_settings_button,
 		final_wager_button,
 		final_clue_button,
-		controller_start_button,
-		controller_cancel_button,
-		character_back_button,
-		online_host_button,
-		online_join_button,
-		online_back_button,
-		online_host_start_button,
-		online_host_leave_button,
-		online_join_connect_button,
-		online_join_cancel_button
+		controller_continue_button,
+		controller_back_button,
+		character_back_button
 	]
 
 	var pause_panel := (
@@ -1149,22 +961,18 @@ func _play_select_sfx() -> void:
 
 
 func _show_title() -> void:
-	_shutdown_online_session()
 	if main_menu_screen:
 		main_menu_screen.show_title()
 	if controller_connect_panel:
 		controller_connect_panel.visible = false
 	if character_select_panel:
 		character_select_panel.visible = false
-	if online_panel:
-		online_panel.visible = false
 	pending_player_inputs.clear()
 	selected_player_characters.clear()
 	player_characters.clear()
 	character_selection_index = 0
 	character_human_count = 0
 	controller_join_active = false
-	online_active = false
 	local_player_index = -1
 	_close_pause_menu()
 	if title_play_button and nav_focus_enabled:
@@ -1197,52 +1005,9 @@ func _on_settings_back_pressed() -> void:
 			game_state_machine.transition_to(GameStateMachine.State.MAIN_MENU, {}, true)
 
 
-func _on_online_pressed() -> void:
-	_play_select_sfx()
-	_show_online_menu()
-
-
-func _on_online_host_pressed() -> void:
-	_play_select_sfx()
-	_update_online_status(
-		_t("Online play is disabled in this build.", "Online desativado nesta versao."), true
-	)
-
-
-func _on_online_join_pressed() -> void:
-	_play_select_sfx()
-	_update_online_status(
-		_t("Online play is disabled in this build.", "Online desativado nesta versao."), true
-	)
-
-
-func _on_online_back_pressed() -> void:
-	_play_select_sfx()
-	if game_state_machine:
-		game_state_machine.transition_to(GameStateMachine.State.MAIN_MENU, {}, true)
-
-
-func _show_online_menu() -> void:
-	title_panel.visible = false
-	settings_panel.visible = false
-	player_select_panel.visible = false
-	_close_pause_menu()
-	if controller_connect_panel:
-		controller_connect_panel.visible = false
-	if online_panel:
-		online_panel.visible = true
-	_update_online_panel_visibility(true, false)
-	_update_online_status(
-		_t("Online play is disabled in this build.", "Online desativado nesta versao."), true
-	)
-	if nav_focus_enabled and online_back_button:
-		online_back_button.grab_focus()
-
-
 func _open_controller_connect(restore_inputs: Array = []) -> void:
 	title_panel.visible = false
 	settings_panel.visible = false
-	player_select_panel.visible = false
 	controller_join_active = true
 	join_inputs = restore_inputs.duplicate(true)
 	if controller_connect_panel == null:
@@ -1257,10 +1022,10 @@ func _open_controller_connect(restore_inputs: Array = []) -> void:
 	_refresh_controller_join_ui()
 	if controller_connect_panel:
 		controller_connect_panel.visible = true
-	if controller_start_button:
-		controller_start_button.disabled = false
+	if controller_continue_button:
+		controller_continue_button.disabled = false
 		if nav_focus_enabled:
-			controller_start_button.grab_focus()
+			controller_continue_button.grab_focus()
 	_update_ai_difficulty_visibility()
 
 
@@ -1582,7 +1347,6 @@ func _on_ai_difficulty_selected(idx: int) -> void:
 func _start_game(selected_inputs: Array = [], allow_keyboard_fallback: bool = true) -> void:
 	title_panel.visible = false
 	settings_panel.visible = false
-	player_select_panel.visible = false
 	if controller_connect_panel:
 		controller_connect_panel.visible = false
 	if character_select_panel:
@@ -1730,7 +1494,7 @@ func _input(event: InputEvent) -> void:
 
 
 func _can_open_pause_menu() -> bool:
-	return player_select_panel.visible or game_root.visible or question_panel.visible
+	return game_root.visible or question_panel.visible
 
 
 func _open_pause_menu() -> void:
@@ -1907,11 +1671,6 @@ func _on_final_clue_pressed() -> void:
 	_show_result(hint + _t(" (-10% wager)", " (-10% da aposta)"), Color(0.9, 0.7, 0.1))
 
 
-func _on_player_start_pressed() -> void:
-	_play_select_sfx()
-	_open_controller_connect()
-
-
 func _on_music_slider_changed(value: float) -> void:
 	if audio_controller:
 		var db_value := value
@@ -1993,16 +1752,7 @@ func _setup_players(
 			}
 		)
 
-	_update_player_info_label()
 	_sync_team_names_from_players()
-
-
-func _update_player_info_label() -> void:
-	if board_screen:
-		board_screen.update_player_info_label(
-			player_info_label,
-			func(en_text: String, pt_text: String) -> String: return _t(en_text, pt_text)
-		)
 
 
 func _sync_team_names_from_players() -> void:
@@ -2598,7 +2348,6 @@ func _restart_to_main_menu() -> void:
 	question_panel.visible = false
 	game_root.visible = false
 	_close_pause_menu()
-	_populate_player_count()
 	_reset_round_state()
 	_show_title()
 	_play_background_music()
@@ -2686,8 +2435,8 @@ func _maybe_focus_for_nav() -> void:
 	var current_focus := get_viewport().gui_get_focus_owner()
 	if current_focus and current_focus.visible:
 		return
-	if controller_connect_panel and controller_connect_panel.visible and controller_start_button:
-		controller_start_button.grab_focus()
+	if controller_connect_panel and controller_connect_panel.visible and controller_continue_button:
+		controller_continue_button.grab_focus()
 		return
 	if character_select_panel and character_select_panel.visible:
 		if not character_option_buttons.is_empty() and character_option_buttons[0]:

@@ -5,7 +5,6 @@ const VerseData = preload("res://src/data/verse_data.gd")
 
 var title_panel: Control
 var settings_panel: Control
-var player_select_panel: Control
 var verse_panel: Control
 var verse_title_label: Label
 var verse_text_label: Label
@@ -16,10 +15,6 @@ var settings_language_label: Label
 var music_label: Label
 var settings_back_button: Button
 var settings_exit_button: Button
-var player_select_title: Label
-var player_count_option: OptionButton
-var player_info_label: Label
-var player_start_button: Button
 var pause_title_label: Label
 var pause_resume_button: Button
 var pause_main_menu_button: Button
@@ -40,7 +35,6 @@ var translator: Callable
 func _init(
 	title_panel: Control,
 	settings_panel: Control,
-	player_select_panel: Control,
 	verse_panel: Control,
 	verse_title_label: Label,
 	verse_text_label: Label,
@@ -51,10 +45,6 @@ func _init(
 	music_label: Label,
 	settings_back_button: Button,
 	settings_exit_button: Button,
-	player_select_title: Label,
-	player_count_option: OptionButton,
-	player_info_label: Label,
-	player_start_button: Button,
 	pause_title_label: Label,
 	pause_resume_button: Button,
 	pause_main_menu_button: Button,
@@ -73,7 +63,6 @@ func _init(
 ) -> void:
 	self.title_panel = title_panel
 	self.settings_panel = settings_panel
-	self.player_select_panel = player_select_panel
 	self.verse_panel = verse_panel
 	self.verse_title_label = verse_title_label
 	self.verse_text_label = verse_text_label
@@ -84,10 +73,6 @@ func _init(
 	self.music_label = music_label
 	self.settings_back_button = settings_back_button
 	self.settings_exit_button = settings_exit_button
-	self.player_select_title = player_select_title
-	self.player_count_option = player_count_option
-	self.player_info_label = player_info_label
-	self.player_start_button = player_start_button
 	self.pause_title_label = pause_title_label
 	self.pause_resume_button = pause_resume_button
 	self.pause_main_menu_button = pause_main_menu_button
@@ -119,10 +104,6 @@ func apply_language_texts(current_language: String, set_language_callable: Calla
 
 	settings_language_label.text = translator.call("Language", "Idioma")
 	music_label.text = translator.call("Music Volume", "Volume da musica")
-	settings_back_button.text = translator.call("Back", "Voltar")
-	settings_exit_button.text = translator.call("Exit Game", "Sair do jogo")
-	player_select_title.text = translator.call("Select Players", "Selecionar jogadores")
-	player_start_button.text = translator.call("Start Game", "Iniciar jogo")
 
 	# Sync dropdown selection to current language
 	language_option.select(1 if is_pt else 0)
@@ -182,8 +163,6 @@ func show_title() -> void:
 		title_panel.visible = true
 	if settings_panel:
 		settings_panel.visible = false
-	if player_select_panel:
-		player_select_panel.visible = false
 	if game_root:
 		game_root.visible = false
 	if question_panel:
