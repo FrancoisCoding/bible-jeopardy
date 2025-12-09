@@ -4,7 +4,7 @@ class_name GameStateMachine
 signal state_changed(old_state: int, new_state: int, payload: Dictionary)
 
 # Flow:
-# MAIN_MENU -> CONTROLLER_SETUP -> CHARACTER_SELECT -> ROUND_1 -> ROUND_1_TO_2_TRANSITION
+# MAIN_MENU -> CONTROLLER_SETUP -> ROUND_1 -> ROUND_1_TO_2_TRANSITION
 # -> ROUND_2 -> FINAL_JEOPARDY_WAGER -> FINAL_JEOPARDY_QUESTION -> RESULTS
 # PAUSED can overlay any state and will resume back to the previous one.
 enum State {

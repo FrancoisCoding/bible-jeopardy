@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtwavah46mwt3"
-path="res://.godot/imported/bible_jeopardy_logo.png-eed452ddb94336f780d24704c6259e88.ctex"
+uid="uid://dkpesrkueqn2r"
+path="res://.godot/imported/logo.png-cca8726399059c8d4f806e28e356b14d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://bible_jeopardy_logo.png"
-dest_files=["res://.godot/imported/bible_jeopardy_logo.png-eed452ddb94336f780d24704c6259e88.ctex"]
+source_file="res://logo.png"
+dest_files=["res://.godot/imported/logo.png-cca8726399059c8d4f806e28e356b14d.ctex"]
 
 [params]
 

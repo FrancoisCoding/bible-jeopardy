@@ -1,7 +1,7 @@
 extends Control
 
 @export var game_font: Font = preload("res://fonts/troika.otf")
-@export var title_texture: Texture2D = preload("res://bible_jeopardy_logo.png")
+@export var title_texture: Texture2D = preload("res://logo.png")
 @export var bible_character_textures: Array[Texture2D] = []
 @export var show_state_debug: bool = false
 
@@ -138,6 +138,17 @@ const CHARACTER_ROSTER := [
 		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer3/Panel/MarginContainer/VBoxContainer/Label2"
 	)
 ]
+@onready var controller_slot_status_labels: Array[Label] = [
+	get_node_or_null(
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer1/Panel/MarginContainer/VBoxContainer/Label2"
+	),
+	get_node_or_null(
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer2/Panel/MarginContainer/VBoxContainer/Label2"
+	),
+	get_node_or_null(
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer3/Panel/MarginContainer/VBoxContainer/Label2"
+	)
+]
 @onready var controller_status_label: Label = get_node_or_null(
 	"ConnectControllersPanel/Content/VBox/StatusLabel"
 )
@@ -155,45 +166,6 @@ const CHARACTER_ROSTER := [
 )
 @onready
 var controller_connect_content: PanelContainer = get_node_or_null("ConnectControllersPanel/Content")
-
-# Character Select UI
-@onready var character_select_panel: Control = get_node_or_null("CharacterSelectPanel")
-@onready var character_select_title_label: Label = get_node_or_null(
-	"CharacterSelectPanel/Content/VBox/SelectTitle"
-)
-@onready var character_select_subtitle_label: Label = get_node_or_null(
-	"CharacterSelectPanel/Content/VBox/SelectSubtitle"
-)
-@onready
-var character_select_content: PanelContainer = get_node_or_null("CharacterSelectPanel/Content")
-@onready
-var character_prompt_label: Label = get_node_or_null("CharacterSelectPanel/Content/VBox/Prompt")
-@onready var character_option_grid: GridContainer = get_node_or_null(
-	"CharacterSelectPanel/Content/VBox/Options"
-)
-@onready var character_back_button: Button = get_node_or_null(
-	"CharacterSelectPanel/Content/VBox/CharacterButtonRow/CharacterBackButton"
-)
-@onready var character_slot_panels: Array[PanelContainer] = [
-	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot1"),
-	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot2"),
-	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot3")
-]
-@onready var character_slot_portraits: Array[ColorRect] = [
-	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox/Portrait"),
-	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox/Portrait"),
-	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox/Portrait")
-]
-@onready var character_slot_labels: Array[Label] = [
-	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox/SlotLabel"),
-	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox/SlotLabel"),
-	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox/SlotLabel")
-]
-@onready var character_slot_hints: Array[Label] = [
-	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox/SlotHint"),
-	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox/SlotHint"),
-	get_node_or_null("CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox/SlotHint")
-]
 
 # Game UI
 @onready var game_root: Control = get_node_or_null("RootVBox")
@@ -255,10 +227,6 @@ var bible_data: LoadedBibleData = LoadedBibleData.new()
 var join_inputs: Array[Dictionary] = []  # Ordered join list of controllers/keyboard
 var pending_player_inputs: Array[Dictionary] = []
 var pending_allow_keyboard_fallback: bool = true
-var selected_player_characters: Array[Dictionary] = []
-var character_selection_index: int = 0
-var character_human_count: int = 0
-var character_option_buttons: Array[Button] = []
 var player_characters: Array[Dictionary] = []
 var controller_join_active: bool = false
 var answering_input_lock: Dictionary = {}
@@ -286,7 +254,7 @@ var final_wager_header_labels: Array[Label] = []
 var current_turn_team: int = 0
 var answering_player: int = -1
 var background_rect: TextureRect
-var theme_body_color: Color = Color(0.05, 0.08, 0.2)
+var theme_body_color: Color = Color("#633005")
 var category_deck: Array = []
 var loading_settings: bool = false
 var verse_data := VerseData.new()
@@ -448,8 +416,6 @@ func _ready() -> void:
 					b.add_theme_stylebox_override("pressed", pressed)
 					b.add_theme_stylebox_override("disabled", disabled)
 		game_root.add_child(play_again_button)
-	if character_back_button:
-		character_back_button.pressed.connect(_on_character_back_pressed)
 	if title_texture:
 		if title_logo:
 			title_logo.texture = title_texture
@@ -514,7 +480,6 @@ func _apply_language_texts() -> void:
 			current_language, func(lang: String) -> void: LoadedBibleData.set_language(lang)
 		)
 	_apply_controller_connect_text()
-	_apply_character_select_text()
 	_update_verse_of_day()
 
 
@@ -627,8 +592,6 @@ func _handle_state_enter(state: int, payload: Dictionary = {}) -> void:
 			_enter_main_menu_state()
 		GameStateMachine.State.CONTROLLER_SETUP:
 			_enter_controller_setup_state()
-		GameStateMachine.State.CHARACTER_SELECT:
-			_enter_character_select_state()
 		GameStateMachine.State.ROUND_1:
 			_enter_round_one_state(payload)
 		GameStateMachine.State.ROUND_1_TO_2_TRANSITION:
@@ -653,12 +616,6 @@ func _enter_main_menu_state() -> void:
 
 func _enter_controller_setup_state() -> void:
 	_open_controller_connect(join_inputs)
-
-
-func _enter_character_select_state() -> void:
-	if pending_player_inputs.is_empty():
-		pending_player_inputs = join_inputs.duplicate(true)
-	_open_character_select(pending_player_inputs)
 
 
 func _enter_round_one_state(payload: Dictionary = {}) -> void:
@@ -704,13 +661,6 @@ func _enter_pause_state() -> void:
 
 
 func _apply_controller_connect_text() -> void:
-	if controller_title_label:
-		controller_title_label.text = _t("Connect Controllers", "Conecte os controles")
-	if controller_subtitle_label:
-		controller_subtitle_label.text = _t(
-			"Press any button to claim Players 1-3. Remaining slots become AI.",
-			"Aperte qualquer botao para assumir os Jogadores 1-3. Vagas restantes viram IA."
-		)
 	if controller_ai_label:
 		controller_ai_label.text = _t("AI Difficulty", "Dificuldade da IA")
 	if _safe_clear_option(controller_ai_option, "Controller AI option"):
@@ -718,24 +668,7 @@ func _apply_controller_connect_text() -> void:
 		controller_ai_option.add_item(_t("Normal", "Normal"), 1)
 		controller_ai_option.add_item(_t("Hard", "Dificil"), 2)
 		controller_ai_option.select(1)
-	if controller_continue_button:
-		controller_continue_button.text = _t("Continue", "Continuar")
-	if controller_back_button:
-		controller_back_button.text = _t("Back", "Voltar")
 	_refresh_controller_join_ui()
-
-
-func _apply_character_select_text() -> void:
-	if character_select_title_label:
-		character_select_title_label.text = _t("Choose Your Character", "Escolha seu personagem")
-	if character_select_subtitle_label:
-		character_select_subtitle_label.text = _t(
-			"Each player picks a unique hero. AI players are randomized.",
-			"Cada jogador escolhe um heroi unico. IAs sao aleatorias."
-		)
-	if character_back_button:
-		character_back_button.text = _t("Back", "Voltar")
-	_update_character_prompt()
 
 
 func _apply_theme_styles() -> void:
@@ -765,12 +698,10 @@ func _apply_theme_styles() -> void:
 		language_option,
 		final_wager_button,
 		final_clue_button,
-		controller_title_label,
-		controller_subtitle_label,
 		controller_status_label,
 		controller_slot_labels[0] if controller_slot_labels.size() > 0 else null,
 		controller_slot_labels[1] if controller_slot_labels.size() > 1 else null,
-		controller_slot_labels[2] if controller_slot_labels.size() > 2 else null
+		controller_slot_labels[2] if controller_slot_labels.size() > 2 else null,
 	]
 	theme_styler.apply_game_font(game_font, font_controls)
 
@@ -793,25 +724,12 @@ func _apply_theme_styles() -> void:
 		language_option,
 		music_slider,
 		answer_timer_label,
-		controller_title_label,
-		controller_subtitle_label,
 		controller_status_label,
 		controller_slot_labels[0] if controller_slot_labels.size() > 0 else null,
 		controller_slot_labels[1] if controller_slot_labels.size() > 1 else null,
 		controller_slot_labels[2] if controller_slot_labels.size() > 2 else null,
 		controller_ai_label,
-		controller_ai_option,
-		controller_continue_button,
-		controller_back_button,
-		character_select_title_label,
-		character_select_subtitle_label,
-		character_prompt_label,
-		character_slot_labels[0] if character_slot_labels.size() > 0 else null,
-		character_slot_labels[1] if character_slot_labels.size() > 1 else null,
-		character_slot_labels[2] if character_slot_labels.size() > 2 else null,
-		character_slot_hints[0] if character_slot_hints.size() > 0 else null,
-		character_slot_hints[1] if character_slot_hints.size() > 1 else null,
-		character_slot_hints[2] if character_slot_hints.size() > 2 else null
+		controller_ai_option
 	]
 
 	var button_controls := [
@@ -819,10 +737,7 @@ func _apply_theme_styles() -> void:
 		pause_main_menu_button,
 		pause_settings_button,
 		final_wager_button,
-		final_clue_button,
-		controller_continue_button,
-		controller_back_button,
-		character_back_button
+		final_clue_button
 	]
 
 	var pause_panel := (
@@ -846,21 +761,17 @@ func _apply_theme_styles() -> void:
 		verse_title_label.add_theme_font_size_override("font_size", 20)
 	if verse_reference_label:
 		verse_reference_label.add_theme_font_size_override("font_size", 20)
-		verse_reference_label.add_theme_color_override("font_color", Color(0.25, 0.22, 0.2))
+		verse_reference_label.add_theme_color_override("font_color", theme_styler.theme_body_color)
 		verse_reference_label.add_theme_font_override("font", game_font)
 	if verse_reference_label:
 		verse_reference_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if verse_text_label:
 		verse_text_label.add_theme_font_size_override("font_size", 18)
 		verse_text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		verse_text_label.add_theme_color_override("font_color", Color(0.25, 0.22, 0.2))
+		verse_text_label.add_theme_color_override("font_color", theme_styler.theme_body_color)
 
 	if controller_connect_content and question_panel_base_style:
 		controller_connect_content.add_theme_stylebox_override(
-			"panel", question_panel_base_style.duplicate()
-		)
-	if character_select_content and question_panel_base_style:
-		character_select_content.add_theme_stylebox_override(
 			"panel", question_panel_base_style.duplicate()
 		)
 	_refresh_controller_join_ui()
@@ -965,13 +876,8 @@ func _show_title() -> void:
 		main_menu_screen.show_title()
 	if controller_connect_panel:
 		controller_connect_panel.visible = false
-	if character_select_panel:
-		character_select_panel.visible = false
 	pending_player_inputs.clear()
-	selected_player_characters.clear()
 	player_characters.clear()
-	character_selection_index = 0
-	character_human_count = 0
 	controller_join_active = false
 	local_player_index = -1
 	_close_pause_menu()
@@ -1045,7 +951,11 @@ func _on_controller_connect_confirm_pressed() -> void:
 	pending_player_inputs = devices.duplicate(true)
 	pending_allow_keyboard_fallback = false
 	if game_state_machine:
-		game_state_machine.transition_to(GameStateMachine.State.CHARACTER_SELECT)
+		game_state_machine.transition_to(
+			GameStateMachine.State.ROUND_1, {"allow_keyboard_fallback": false}
+		)
+	else:
+		_start_game(pending_player_inputs, false)
 
 
 func _on_controller_connect_cancel_pressed() -> void:
@@ -1054,280 +964,6 @@ func _on_controller_connect_cancel_pressed() -> void:
 	_close_controller_connect()
 	if game_state_machine:
 		game_state_machine.transition_to(GameStateMachine.State.MAIN_MENU)
-
-
-func _open_character_select(selected_inputs: Array) -> void:
-	controller_join_active = false
-	pending_player_inputs = selected_inputs.duplicate(true)
-	selected_player_characters.clear()
-	selected_player_characters.resize(3)
-	player_characters.clear()
-	character_selection_index = 0
-	character_human_count = min(3, pending_player_inputs.size())
-	if character_select_panel:
-		character_select_panel.visible = true
-	if character_human_count == 0:
-		character_selection_index = -1
-		_assign_ai_characters()
-		_finalize_character_select()
-		return
-	_refresh_character_slots_ui(true)
-	_build_character_option_grid()
-	_update_character_prompt()
-	if nav_focus_enabled:
-		_maybe_focus_for_nav()
-
-
-func _close_character_select() -> void:
-	if character_select_panel:
-		character_select_panel.visible = false
-
-
-func _on_character_back_pressed() -> void:
-	_play_select_sfx()
-	var restore_inputs := pending_player_inputs.duplicate(true)
-	_close_character_select()
-	join_inputs = restore_inputs
-	pending_player_inputs = restore_inputs
-	if game_state_machine:
-		game_state_machine.transition_to(GameStateMachine.State.CONTROLLER_SETUP)
-
-
-func _build_character_option_grid() -> void:
-	if character_option_grid == null or not is_instance_valid(character_option_grid):
-		return
-	_clear_children(character_option_grid)
-	character_option_buttons.clear()
-	for char_data: Dictionary in CHARACTER_ROSTER:
-		var name := str(char_data.get("name", ""))
-		var btn := Button.new()
-		btn.text = name
-		btn.custom_minimum_size = Vector2(180, 90)
-		btn.focus_mode = Control.FOCUS_ALL
-		var bg: Color = char_data.get("bg", Color(0.25, 0.25, 0.25))
-		var accent: Color = char_data.get("accent", bg.darkened(0.2))
-		var normal := StyleBoxFlat.new()
-		normal.bg_color = bg
-		normal.set_border_width_all(3)
-		normal.border_color = accent
-		normal.set_corner_radius_all(18)
-		var hover := normal.duplicate()
-		hover.bg_color = bg.lightened(0.08)
-		var pressed := normal.duplicate()
-		pressed.bg_color = bg.darkened(0.08)
-		btn.add_theme_stylebox_override("normal", normal)
-		btn.add_theme_stylebox_override("hover", hover)
-		btn.add_theme_stylebox_override("pressed", pressed)
-		btn.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1))
-		btn.add_theme_font_size_override("font_size", 20)
-		if theme_styler:
-			theme_styler.apply_font_override(btn, game_font)
-			theme_styler.apply_body_color(btn)
-		btn.pressed.connect(func() -> void: _on_character_option_pressed(name))
-		character_option_grid.add_child(btn)
-		character_option_buttons.append(btn)
-	_refresh_character_option_states()
-
-
-func _refresh_character_option_states() -> void:
-	for btn in character_option_buttons:
-		if btn == null:
-			continue
-		var taken := _is_character_taken(btn.text)
-		btn.disabled = taken
-
-
-func _on_character_option_pressed(name: String) -> void:
-	if character_selection_index == -1:
-		return
-	if _is_character_taken(name):
-		return
-	var slot := _current_human_slot()
-	if slot == -1:
-		return
-	selected_player_characters[slot] = _character_data_for(name)
-	_refresh_character_slots_ui()
-	character_selection_index = _next_human_slot(slot + 1)
-	if character_selection_index == -1:
-		_assign_ai_characters()
-		_finalize_character_select()
-	else:
-		_update_character_prompt()
-		_refresh_character_option_states()
-		if nav_focus_enabled:
-			_maybe_focus_for_nav()
-
-
-func _current_human_slot() -> int:
-	if character_selection_index < 0:
-		return -1
-	if character_selection_index >= character_human_count:
-		return -1
-	return character_selection_index
-
-
-func _next_human_slot(start_idx: int) -> int:
-	for i in range(start_idx, character_human_count):
-		if (
-			selected_player_characters[i] == null
-			or (selected_player_characters[i] as Dictionary).is_empty()
-		):
-			return i
-	return -1
-
-
-func _assign_ai_characters() -> void:
-	var available := _available_character_names()
-	for i in range(character_human_count, 3):
-		if available.is_empty():
-			available = _available_character_names(true)
-		if available.is_empty():
-			break
-		var pick_idx := rng.randi_range(0, available.size() - 1)
-		var pick := available[pick_idx]
-		available.remove_at(pick_idx)
-		selected_player_characters[i] = _character_data_for(pick)
-	_refresh_character_slots_ui()
-
-
-func _available_character_names(ignore_taken: bool = false) -> Array[String]:
-	var names: Array[String] = []
-	for c in CHARACTER_ROSTER:
-		var n := str((c as Dictionary).get("name", ""))
-		if n == "":
-			continue
-		if not ignore_taken and _is_character_taken(n):
-			continue
-		names.append(n)
-	return names
-
-
-func _is_character_taken(name: String) -> bool:
-	for entry in selected_player_characters:
-		if typeof(entry) != TYPE_DICTIONARY:
-			continue
-		if str((entry as Dictionary).get("name", "")).to_lower() == name.to_lower():
-			return true
-	return false
-
-
-func _character_data_for(name: String) -> Dictionary:
-	for c in CHARACTER_ROSTER:
-		if str((c as Dictionary).get("name", "")).to_lower() == name.to_lower():
-			return (c as Dictionary).duplicate(true)
-	return {"name": name, "bg": Color(0.2, 0.2, 0.2), "accent": Color(0.3, 0.3, 0.3)}
-
-
-func _update_character_prompt() -> void:
-	if character_prompt_label == null:
-		return
-	var slot := _current_human_slot()
-	if slot == -1:
-		if character_human_count == 0:
-			character_prompt_label.text = _t(
-				"AI characters will be assigned.", "Personagens IA serao definidos."
-			)
-		else:
-			character_prompt_label.text = _t(
-				"Finalizing characters...", "Finalizando personagens..."
-			)
-		return
-	var input_desc := _human_input_description(slot)
-	character_prompt_label.text = (
-		_t("Player %d (%s): Choose a character", "Jogador %d (%s): Escolha um personagem")
-		% [slot + 1, input_desc]
-	)
-
-
-func _human_input_description(slot: int) -> String:
-	if slot < pending_player_inputs.size():
-		var entry := pending_player_inputs[slot]
-		var t := str((entry as Dictionary).get("type", "keyboard"))
-		if t == "keyboard":
-			return _t("Keyboard", "Teclado")
-		return _t("Controller", "Controle")
-	return _t("Player", "Jogador")
-
-
-func _refresh_character_slots_ui(reset_empty: bool = false) -> void:
-	for i in range(3):
-		var label_text := _t("Player %d", "Jogador %d") % (i + 1)
-		if i < character_human_count:
-			label_text = "%s (%s)" % [label_text, _human_input_description(i)]
-		else:
-			label_text = _t("AI Slot %d", "Slot IA %d") % (i + 1)
-		if character_slot_labels.size() > i and character_slot_labels[i]:
-			character_slot_labels[i].text = label_text
-
-		var has_selection := (
-			i < selected_player_characters.size()
-			and typeof(selected_player_characters[i]) == TYPE_DICTIONARY
-			and not (selected_player_characters[i] as Dictionary).is_empty()
-		)
-		var hint_text := ""
-		if has_selection:
-			hint_text = str((selected_player_characters[i] as Dictionary).get("name", ""))
-			if i >= character_human_count:
-				hint_text += _t(" (AI)", " (IA)")
-		else:
-			hint_text = (
-				_t("Select a character", "Selecione um personagem")
-				if i < character_human_count
-				else _t("Random (AI)", "Aleatorio (IA)")
-			)
-		if character_slot_hints.size() > i and character_slot_hints[i]:
-			character_slot_hints[i].text = hint_text
-
-		var color := Color(0.18, 0.18, 0.18, 1.0)
-		if has_selection:
-			color = (selected_player_characters[i] as Dictionary).get("bg", color)
-		if character_slot_portraits.size() > i and character_slot_portraits[i]:
-			character_slot_portraits[i].color = color
-
-		if character_slot_panels.size() > i and character_slot_panels[i] and theme_styler:
-			var tone := theme_styler.team_color(i)
-			theme_styler.apply_team_card_style(character_slot_panels[i], tone, has_selection)
-	_refresh_character_option_states()
-	_update_character_prompt()
-
-
-func _auto_assign_default_characters() -> void:
-	player_characters.clear()
-	var available := _available_character_names(true)
-	for i in range(players.size()):
-		if available.is_empty():
-			available = _available_character_names(true)
-		if available.is_empty():
-			player_characters.append({})
-			continue
-		var idx := rng.randi_range(0, available.size() - 1)
-		var pick := available[idx]
-		available.remove_at(idx)
-		player_characters.append(_character_data_for(pick))
-
-
-func _finalize_character_select() -> void:
-	player_characters = selected_player_characters.duplicate(true)
-	for i in range(3):
-		var missing := (
-			i >= player_characters.size()
-			or typeof(player_characters[i]) != TYPE_DICTIONARY
-			or (player_characters[i] as Dictionary).is_empty()
-		)
-		if missing:
-			if i >= player_characters.size():
-				player_characters.append(_character_data_for("Player %d" % (i + 1)))
-			else:
-				player_characters[i] = _character_data_for("Player %d" % (i + 1))
-	_close_character_select()
-	pending_allow_keyboard_fallback = false
-	if game_state_machine:
-		game_state_machine.transition_to(
-			GameStateMachine.State.ROUND_1, {"allow_keyboard_fallback": false}
-		)
-	else:
-		_start_game(pending_player_inputs, false)
-		pending_player_inputs.clear()
 
 
 func _on_ai_difficulty_selected(idx: int) -> void:
@@ -1344,13 +980,43 @@ func _on_ai_difficulty_selected(idx: int) -> void:
 	_refresh_controller_join_ui()
 
 
+func _character_data_for(name: String) -> Dictionary:
+	for c in CHARACTER_ROSTER:
+		if str((c as Dictionary).get("name", "")).to_lower() == name.to_lower():
+			return (c as Dictionary).duplicate(true)
+	return {"name": name, "bg": Color(0.2, 0.2, 0.2), "accent": Color(0.3, 0.3, 0.3)}
+
+
+func _available_character_names() -> Array[String]:
+	var names: Array[String] = []
+	for c in CHARACTER_ROSTER:
+		var n := str((c as Dictionary).get("name", ""))
+		if n == "":
+			continue
+		names.append(n)
+	return names
+
+
+func _auto_assign_default_characters() -> void:
+	player_characters.clear()
+	var available := _available_character_names()
+	for i in range(players.size()):
+		if available.is_empty():
+			available = _available_character_names()
+		if available.is_empty():
+			player_characters.append({})
+			continue
+		var idx := rng.randi_range(0, available.size() - 1)
+		var pick := available[idx]
+		available.remove_at(idx)
+		player_characters.append(_character_data_for(pick))
+
+
 func _start_game(selected_inputs: Array = [], allow_keyboard_fallback: bool = true) -> void:
 	title_panel.visible = false
 	settings_panel.visible = false
 	if controller_connect_panel:
 		controller_connect_panel.visible = false
-	if character_select_panel:
-		character_select_panel.visible = false
 	controller_join_active = false
 	_reset_round_state()
 	_setup_players(3, selected_inputs, allow_keyboard_fallback)
@@ -1400,9 +1066,9 @@ func _register_keyboard_join(enable_focus: bool = false) -> bool:
 
 
 func _refresh_controller_join_ui() -> void:
-	for i in range(3):
-		if controller_slot_labels.size() > i and controller_slot_labels[i]:
-			controller_slot_labels[i].text = _controller_slot_text(i + 1)
+	for i in range(controller_slot_status_labels.size()):
+		if controller_slot_status_labels[i]:
+			controller_slot_status_labels[i].text = _controller_slot_status_text(i + 1)
 	var connected := Input.get_connected_joypads().size()
 	if controller_status_label:
 		controller_status_label.text = (
@@ -1428,18 +1094,18 @@ func _update_ai_difficulty_visibility() -> void:
 	_refresh_controller_join_ui()
 
 
-func _controller_slot_text(slot_index: int) -> String:
+func _controller_slot_status_text(slot_index: int) -> String:
 	if slot_index - 1 < join_inputs.size():
 		var entry := join_inputs[slot_index - 1]
 		var type := str(entry.get("type", ""))
 		if type == "keyboard":
-			return _t("Player %d: Keyboard", "Jogador %d: Teclado") % slot_index
+			return _t("Keyboard", "Teclado")
 		var dev_id := int(entry.get("device_id", -1))
 		var joy_name := Input.get_joy_name(dev_id)
 		if joy_name.strip_edges() == "":
-			joy_name = _t("Controller %d", "Controle %d") % slot_index
-		return _t("Player %d: %s", "Jogador %d: %s") % [slot_index, joy_name]
-	return _t("Player %d: Press any button", "Jogador %d: Aperte qualquer botao") % slot_index
+			joy_name = _t("Controller", "Controle")
+		return joy_name
+	return _t("Press any button", "Aperte qualquer botao")
 
 
 func _human_player_count_planned() -> int:
@@ -2335,7 +2001,6 @@ func _restart_to_main_menu() -> void:
 	team_wager_labels.clear()
 	pending_allow_keyboard_fallback = true
 	player_characters.clear()
-	selected_player_characters.clear()
 	_stop_team_card_pulse()
 	_clear_children(scoreboard)
 	_clear_children(board_grid)
@@ -2438,13 +2103,6 @@ func _maybe_focus_for_nav() -> void:
 	if controller_connect_panel and controller_connect_panel.visible and controller_continue_button:
 		controller_continue_button.grab_focus()
 		return
-	if character_select_panel and character_select_panel.visible:
-		if not character_option_buttons.is_empty() and character_option_buttons[0]:
-			character_option_buttons[0].grab_focus()
-			return
-		if character_back_button:
-			character_back_button.grab_focus()
-			return
 	if settings_panel and settings_panel.visible and language_option:
 		language_option.grab_focus()
 		return
