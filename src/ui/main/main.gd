@@ -2068,7 +2068,6 @@ func _on_answer_selected(answer_text: String) -> void:
 		_play_wrong_sfx()
 		_show_result(_t("Wrong. %s -%d", "Errado. %s -%d") % [player_name, value])
 		all_attempted_after = attempted_players.size() >= players.size()
-	_end_question_audio()
 	_stop_timers(true)
 	_disable_answer_buttons()
 	_safe_set_visible(answer_container, false)
@@ -2083,6 +2082,7 @@ func _on_answer_selected(answer_text: String) -> void:
 	await get_tree().create_timer(selected_choice_display_seconds).timeout
 
 	if is_correct:
+		_end_question_audio()
 		_mark_clue_answered()
 		_safe_set_visible(question_panel, false)
 		_clear_selected_choice()
@@ -2097,6 +2097,7 @@ func _on_answer_selected(answer_text: String) -> void:
 		_show_result(correct_text)
 		_safe_set_visible(result_container, true)
 		await get_tree().create_timer(selected_choice_display_seconds).timeout
+		_end_question_audio()
 		_safe_set_visible(question_panel, false)
 		_clear_selected_choice()
 		_safe_set_visible(result_container, false)
