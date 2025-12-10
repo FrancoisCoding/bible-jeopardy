@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://88jpn26ij3hx"]
+[gd_scene load_steps=50 format=3 uid="uid://88jpn26ij3hx"]
 
 [ext_resource type="Script" uid="uid://bpdw75wca58c" path="res://src/ui/main/main.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://x3pbbp33v43u" path="res://main_background.png" id="2_w48qg"]
@@ -19,7 +19,9 @@
 [ext_resource type="Texture2D" uid="uid://cytiw6df58i4c" path="res://tile_pressed.png" id="17_074og"]
 [ext_resource type="Script" uid="uid://bc8ydx2bysb6m" path="res://src/ui/screens/game_board.gd" id="18_gboard"]
 [ext_resource type="Texture2D" uid="uid://envnfcx03ek3" path="res://empty_box_small.png" id="20_getpj"]
+[ext_resource type="Texture2D" uid="uid://mrqa3i8mu0gd" path="res://answer_tile.png" id="21_getpj"]
 [ext_resource type="Texture2D" uid="uid://cn4kfuk1ifv83" path="res://question_panel.png" id="21_ryguw"]
+[ext_resource type="Texture2D" uid="uid://dpehd480pbjr4" path="res://answer_tile_pressed.png" id="22_ryguw"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kek77"]
 texture = ExtResource("3_vivmo")
@@ -107,6 +109,23 @@ texture = ExtResource("20_getpj")
 texture = ExtResource("21_ryguw")
 expand_margin_bottom = 30.0
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jq2sk"]
+texture = ExtResource("21_getpj")
+expand_margin_left = 15.0
+expand_margin_top = 15.0
+expand_margin_right = 15.0
+expand_margin_bottom = 15.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0rl1p"]
+texture = ExtResource("22_ryguw")
+expand_margin_left = 15.0
+expand_margin_top = 15.0
+expand_margin_right = 15.0
+expand_margin_bottom = 15.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4k2k6"]
+texture = ExtResource("21_getpj")
+
 [node name="Main" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -115,6 +134,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
+show_state_debug = true
+ai_buzz_delay_seconds = 2.5
+ai_board_pick_delay_seconds = 3.0
 
 [node name="MainMenu" type="MarginContainer" parent="."]
 visible = false
@@ -1488,7 +1510,7 @@ layout_mode = 2
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_constants/outline_size = 16
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 48
 text = "CATEGORY"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1498,20 +1520,20 @@ custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 48
 text = "$400"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+[node name="QuestionContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
 custom_minimum_size = Vector2(800, 300)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 theme_override_constants/margin_bottom = 50
 
-[node name="QuestionText" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/MarginContainer"]
-custom_minimum_size = Vector2(0, 250)
+[node name="QuestionText" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/QuestionContainer"]
+custom_minimum_size = Vector2(800, 250)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
@@ -1519,9 +1541,177 @@ theme_override_font_sizes/font_size = 40
 text = "WHERE IS THIS VERSE FROM?"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 2
 
-[node name="ResultLabel" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+[node name="ResultContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+visible = false
+custom_minimum_size = Vector2(800, 300)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_constants/margin_bottom = 50
+
+[node name="ResultLabel" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/ResultContainer"]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 40
+text = "John 3:16"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnswerContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+visible = false
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_constants/margin_bottom = 50
+
+[node name="GridContainer" type="GridContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 64
+columns = 2
+
+[node name="AnswerContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
+custom_minimum_size = Vector2(400, 110)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="AnswerButton" type="Button" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_jq2sk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
+theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
+
+[node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer/AnswerButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "Answer"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnswerContainer2" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
+custom_minimum_size = Vector2(400, 110)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="AnswerButton" type="Button" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer2"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_jq2sk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
+theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
+
+[node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer2/AnswerButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "Answer"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnswerContainer3" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
+custom_minimum_size = Vector2(400, 110)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="AnswerButton" type="Button" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer3"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_jq2sk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
+theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
+
+[node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer3/AnswerButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "Answer"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnswerContainer4" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
+custom_minimum_size = Vector2(400, 110)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="AnswerButton" type="Button" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer4"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_jq2sk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
+theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
+
+[node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer4/AnswerButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "Answer"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SelectedChoice" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+visible = false
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_constants/margin_bottom = 50
+
+[node name="MarginContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/SelectedChoice"]
+layout_mode = 2
+
+[node name="ChoiceContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/SelectedChoice/MarginContainer"]
+custom_minimum_size = Vector2(600, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ChoicePanel" type="Panel" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/SelectedChoice/MarginContainer/ChoiceContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_4k2k6")
+
+[node name="ChoiceLabel" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/SelectedChoice/MarginContainer/ChoiceContainer/ChoicePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 48
+text = "Answer"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 

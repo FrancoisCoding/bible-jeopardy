@@ -39,6 +39,17 @@ func _ready() -> void:
 	_collect_tiles()
 
 
+func set_tiles_enabled(enabled: bool) -> void:
+	for i in range(tile_entries.size()):
+		var entry := tile_entries[i]
+		var btn: BaseButton = entry.get("button") as BaseButton
+		if btn:
+			var answered := false
+			if i < tile_states.size():
+				answered = tile_states[i].get("answered", false)
+			btn.disabled = (not enabled) or answered
+
+
 func _collect_tiles() -> void:
 	if grid_container == null:
 		return
@@ -152,6 +163,7 @@ func _bind_tiles_from_categories(categories: Array) -> void:
 			)
 			if lbl:
 				lbl.text = str(display_value) if display_value != 0 else ""
+				lbl.visible = true
 
 			if grid_index >= tile_states.size():
 				tile_states.resize(grid_index + 1)
@@ -168,6 +180,7 @@ func _bind_tiles_from_categories(categories: Array) -> void:
 
 			var btn: BaseButton = entry.get("button") as BaseButton
 			if btn:
+				btn.visible = true
 				btn.disabled = false
 
 	# Disable/clear any extra or unused tiles
@@ -178,8 +191,10 @@ func _bind_tiles_from_categories(categories: Array) -> void:
 			var lbl: Label = entry.get("label") as Label
 			if btn:
 				btn.disabled = true
+				btn.visible = false
 			if lbl:
 				lbl.text = ""
+				lbl.visible = false
 			if i < tile_states.size():
 				tile_states[i] = {"answered": true}
 
@@ -218,8 +233,10 @@ func mark_tile_answered(tile_idx: int) -> void:
 	var lbl: Label = entry.get("label") as Label
 	if btn:
 		btn.disabled = true
+		btn.visible = false
 	if lbl:
 		lbl.text = ""
+		lbl.visible = false
 	_check_round_complete()
 
 
