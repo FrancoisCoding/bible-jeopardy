@@ -64,7 +64,6 @@ func setup_background(parent: Control, existing: TextureRect) -> TextureRect:
 
 func apply_bible_theme(
 	title_screen_title: Label,
-	title_label: Label,
 	primary_controls: Array,
 	settings_language_label: Label,
 	music_label: Label,
@@ -81,10 +80,6 @@ func apply_bible_theme(
 		title_screen_title.add_theme_color_override("font_color", title_color)
 		title_screen_title.add_theme_font_size_override("font_size", 48)
 		title_screen_title.visible = false
-	if title_label:
-		title_label.add_theme_color_override("font_color", title_color)
-		title_label.add_theme_font_size_override("font_size", 42)
-		title_label.visible = false
 
 	for ctrl in primary_controls:
 		if ctrl and ctrl is Control:

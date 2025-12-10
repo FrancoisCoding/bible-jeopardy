@@ -26,7 +26,6 @@ var final_wager_label: Label
 var final_wager_input: LineEdit
 var final_wager_button: Button
 var final_clue_button: Button
-var game_root: Control
 var question_panel: Control
 var verse_data: VerseData
 var translator: Callable
@@ -56,7 +55,6 @@ func _init(
 	final_wager_input: LineEdit,
 	final_wager_button: Button,
 	final_clue_button: Button,
-	game_root: Control,
 	question_panel: Control,
 	verse_data: VerseData,
 	translator: Callable
@@ -84,7 +82,6 @@ func _init(
 	self.final_wager_input = final_wager_input
 	self.final_wager_button = final_wager_button
 	self.final_clue_button = final_clue_button
-	self.game_root = game_root
 	self.question_panel = question_panel
 	self.verse_data = verse_data
 	self.translator = translator
@@ -93,12 +90,7 @@ func _init(
 func apply_language_texts(current_language: String, set_language_callable: Callable) -> void:
 	var is_pt := current_language == "pt"
 	set_language_callable.call(current_language)
-	if title_play_button:
-		if title_play_button is Button:
-			(title_play_button as Button).text = ""
-	if title_settings_button:
-		if title_settings_button is Button:
-			(title_settings_button as Button).text = ""
+	_set_button_label(title_play_button, translator.call("Play", "Jogar"))
 	if verse_title_label:
 		verse_title_label.text = translator.call("Verse of the Day", "Verso do dia")
 
@@ -111,7 +103,8 @@ func apply_language_texts(current_language: String, set_language_callable: Calla
 	pause_title_label.text = translator.call("Paused", "Pausado")
 	pause_resume_button.text = translator.call("Resume", "Retomar")
 	pause_main_menu_button.text = translator.call("Main Menu", "Menu principal")
-	pause_settings_button.text = translator.call("Settings", "Configuracoes")
+	_set_button_label(settings_back_button, translator.call("Back", "Voltar"))
+	_set_button_label(settings_exit_button, translator.call("Exit Game", "Sair do jogo"))
 	if final_wager_label:
 		final_wager_label.text = translator.call("Set Final Wager", "Definir aposta final")
 	if final_wager_input:
@@ -120,6 +113,18 @@ func apply_language_texts(current_language: String, set_language_callable: Calla
 		final_wager_button.text = translator.call("Set Wager", "Confirmar aposta")
 	if final_clue_button:
 		final_clue_button.text = translator.call("Get Clue (-10%)", "Dica (-10%)")
+
+
+func _set_button_label(button: BaseButton, text: String) -> void:
+	if button == null or not is_instance_valid(button):
+		return
+	var label := button.get_node_or_null("Label") as Label
+	if label:
+		label.text = text
+		if button is Button:
+			(button as Button).text = ""
+	elif button is Button:
+		(button as Button).text = text
 
 
 func update_verse_of_day(current_language: String, today_key: String) -> void:
@@ -163,7 +168,5 @@ func show_title() -> void:
 		title_panel.visible = true
 	if settings_panel:
 		settings_panel.visible = false
-	if game_root:
-		game_root.visible = false
 	if question_panel:
 		question_panel.visible = false

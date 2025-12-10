@@ -12,7 +12,6 @@ const GameStateMachine = preload("res://src/ui/main/game_state_machine.gd")
 const ThemeStyler = preload("res://src/ui/main/theme_styler.gd")
 const AudioController = preload("res://src/ui/main/audio_controller.gd")
 const MainMenuScreen = preload("res://src/ui/screens/main_menu_screen.gd")
-const BoardScreen = preload("res://src/ui/screens/board_screen.gd")
 const SettingsScreen = preload("res://src/ui/screens/settings_screen.gd")
 const MUSIC_BACKGROUND := preload("res://music/background music.mp3")
 const MUSIC_QUESTION := preload("res://music/question music.mp3")
@@ -20,6 +19,9 @@ const SFX_CORRECT := preload("res://music/correct.mp3")
 const SFX_WRONG := preload("res://music/wrong answer.mp3")
 const SFX_SELECT := preload("res://music/select_001.ogg")
 const TEAM_COLORS := [Color(0.9, 0.2, 0.2), Color(0.2, 0.45, 0.95), Color(0.15, 0.75, 0.35)]  # Red  # Blue  # Green
+const BOARD_CATEGORY_COUNT := 4
+const BOARD_TILE_ROWS := 3
+const BOARD_TILE_COUNT := BOARD_CATEGORY_COUNT * BOARD_TILE_ROWS
 
 const QUESTION_CHAR_DELAY := 0.03
 const AI_BUZZ_DELAY := 5.0
@@ -56,7 +58,7 @@ const CHARACTER_ROSTER := [
 @onready var title_logo: TextureRect = get_node_or_null(
 	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/TitleLogo"
 )
-@onready var title_logo_main: TextureRect = get_node_or_null("RootVBox/TitleLogoMain")
+@onready var title_logo_main: TextureRect = get_node_or_null("TitleLogoMain")
 @onready var title_screen_title: Label = get_node_or_null(
 	"MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/Title"
 )
@@ -121,10 +123,10 @@ const CHARACTER_ROSTER := [
 		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer1/Panel/MarginContainer/VBoxContainer/Label"
 	),
 	get_node_or_null(
-		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer2/Panel/MarginContainer/VBoxContainer/Label"
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer2/Panel2/MarginContainer/VBoxContainer/Label"
 	),
 	get_node_or_null(
-		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer3/Panel/MarginContainer/VBoxContainer/Label"
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer3/Panel2/MarginContainer/VBoxContainer/Label"
 	)
 ]
 @onready var controller_slot_panels: Array[PanelContainer] = [
@@ -132,10 +134,10 @@ const CHARACTER_ROSTER := [
 		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer1/Panel/MarginContainer/VBoxContainer/Label2"
 	),
 	get_node_or_null(
-		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer2/Panel/MarginContainer/VBoxContainer/Label2"
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer2/Panel2/MarginContainer/VBoxContainer/Label2"
 	),
 	get_node_or_null(
-		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer3/Panel/MarginContainer/VBoxContainer/Label2"
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer3/Panel2/MarginContainer/VBoxContainer/Label2"
 	)
 ]
 @onready var controller_slot_status_labels: Array[Label] = [
@@ -143,20 +145,23 @@ const CHARACTER_ROSTER := [
 		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer1/Panel/MarginContainer/VBoxContainer/Label2"
 	),
 	get_node_or_null(
-		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer2/Panel/MarginContainer/VBoxContainer/Label2"
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer2/Panel2/MarginContainer/VBoxContainer/Label2"
 	),
 	get_node_or_null(
-		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer3/Panel/MarginContainer/VBoxContainer/Label2"
+		"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer3/Panel2/MarginContainer/VBoxContainer/Label2"
 	)
 ]
 @onready var controller_status_label: Label = get_node_or_null(
 	"ConnectControllersPanel/Content/VBox/StatusLabel"
 )
+@onready var controller_difficulty_label: Label = get_node_or_null(
+	"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxDiffultyContainer/Label"
+)
 @onready var controller_ai_label: Label = get_node_or_null(
-	"ConnectControllersPanel/Content/VBox/AIDifficultyLabel"
+	"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxDiffultyContainer/Label"
 )
 @onready var controller_ai_option: OptionButton = get_node_or_null(
-	"ConnectControllersPanel/Content/VBox/AIDifficultyOption"
+	"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxDiffultyContainer/OptionButton"
 )
 @onready var controller_continue_button: Button = get_node_or_null(
 	"ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxButtonContainer/ContinueContainer/ContinueButton"
@@ -168,33 +173,48 @@ const CHARACTER_ROSTER := [
 var controller_connect_content: PanelContainer = get_node_or_null("ConnectControllersPanel/Content")
 
 # Game UI
-@onready var game_root: Control = get_node_or_null("RootVBox")
-@onready var title_label: Label = get_node_or_null("RootVBox/TitleLabel")
-@onready var scoreboard: HBoxContainer = get_node_or_null("RootVBox/Scoreboard")
-@onready var turn_label: Label = get_node_or_null("RootVBox/TurnLabel")
-@onready var board_grid: GridContainer = get_node_or_null("RootVBox/BoardMargin/BoardGrid")
-var play_again_button: Button = null
-
-@onready var question_panel: PanelContainer = get_node_or_null("QuestionPanel")
+@onready var question_panel: Control = get_node_or_null("QuestionPanel")
+@onready var q_category_label: Label = get_node_or_null(
+	"QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/VBoxContainer2/QuestionCategory"
+)
+@onready var q_value_label: Label = get_node_or_null(
+	"QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/VBoxContainer2/QuestionValue"
+)
+@onready var q_text_label: Label = get_node_or_null(
+	"QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/MarginContainer/QuestionText"
+)
+@onready var result_label: Label = get_node_or_null(
+	"QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/ResultLabel"
+)
+@onready var answer_timer_label: Label = get_node_or_null(
+	"QuestionPanel/Content/VBoxContainer/TimerMarginContainer/Panel/Timer"
+)
+@onready var answer_buttons: Control = get_node_or_null(
+	"QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerButtons"
+)
 @onready
-var q_category_label: Label = get_node_or_null("QuestionPanel/QuestionVBox/QuestionCategory")
-@onready var q_value_label: Label = get_node_or_null("QuestionPanel/QuestionVBox/QuestionValue")
-@onready var q_text_label: Label = get_node_or_null("QuestionPanel/QuestionVBox/QuestionText")
-@onready var result_label: Label = get_node_or_null("QuestionPanel/QuestionVBox/ResultLabel")
-@onready var answer_timer_label: Label = get_node_or_null("QuestionPanel/AnswerTimer")
-@onready var answer_buttons: Control = get_node_or_null("QuestionPanel/QuestionVBox/AnswerButtons")
-@onready var answer_timer_bar = get_node_or_null("QuestionPanel/QuestionVBox/TimerBar")
-@onready var final_wager_panel: Control = get_node_or_null("QuestionPanel/FinalWager")
-@onready var final_wager_label: Label = get_node_or_null("QuestionPanel/FinalWager/WagerLabel")
-@onready var final_wager_input: LineEdit = get_node_or_null("QuestionPanel/FinalWager/WagerInput")
-@onready var final_wager_button: Button = get_node_or_null("QuestionPanel/FinalWager/SetWagerButton")
-@onready var final_clue_button: Button = get_node_or_null("QuestionPanel/FinalWager/FinalClueButton")
+var final_wager_panel: Control = get_node_or_null("QuestionPanel/QuestionPanelOLD/FinalWager")
+@onready var final_wager_label: Label = get_node_or_null(
+	"QuestionPanel/QuestionPanelOLD/FinalWager/WagerLabel"
+)
+@onready var final_wager_input: LineEdit = get_node_or_null(
+	"QuestionPanel/QuestionPanelOLD/FinalWager/WagerInput"
+)
+@onready var final_wager_button: Button = get_node_or_null(
+	"QuestionPanel/QuestionPanelOLD/FinalWager/SetWagerButton"
+)
+@onready var final_clue_button: Button = get_node_or_null(
+	"QuestionPanel/QuestionPanelOLD/FinalWager/FinalClueButton"
+)
 @onready var character_left: TextureRect = get_node_or_null(
-	"QuestionPanel/QuestionVBox/Characters/LeftCharacter"
+	"QuestionPanel/QuestionPanelOLD/QuestionVBox/Characters/LeftCharacter"
 )
 @onready var character_right: TextureRect = get_node_or_null(
-	"QuestionPanel/QuestionVBox/Characters/RightCharacter"
+	"QuestionPanel/QuestionPanelOLD/QuestionVBox/Characters/RightCharacter"
 )
+
+# Game Board UI
+@onready var game_board: GameBoard = get_node_or_null("GameBoard")
 
 # Settings
 @onready var play_button: Button = get_node_or_null(
@@ -202,6 +222,8 @@ var q_category_label: Label = get_node_or_null("QuestionPanel/QuestionVBox/Quest
 )
 
 var answer_button_nodes: Array[Button] = []
+var answer_countdown_timer: SceneTreeTimer = null
+var answer_time_left: int = 0
 
 var team_names: Array[String] = []
 var players: Array[Dictionary] = []  # {name, is_ai, device_id, uses_keyboard}
@@ -263,7 +285,6 @@ var theme_styler: ThemeStyler
 var audio_controller: AudioController
 var game_state_machine: GameStateMachine
 var main_menu_screen: MainMenuScreen
-var board_screen: BoardScreen
 var settings_screen: SettingsScreen
 var state_debug_label: Label
 var default_game_alignment: int = BoxContainer.ALIGNMENT_CENTER
@@ -299,6 +320,23 @@ func _safe_clear_option(option_button: OptionButton, label: String) -> bool:
 		return true
 	push_warning("%s missing; skipping clear" % label)
 	return false
+
+
+func _set_button_label_text(button: BaseButton, text: String) -> void:
+	if button == null or not is_instance_valid(button):
+		return
+	var lbl: Label = button.get_node_or_null("Label") as Label
+	if lbl:
+		lbl.text = text
+		if button is Button:
+			(button as Button).text = ""
+	elif button is Button:
+		(button as Button).text = text
+
+
+func _safe_set_visible(node: Node, value: bool) -> void:
+	if node and is_instance_valid(node):
+		node.visible = value
 
 
 func _ready() -> void:
@@ -340,18 +378,12 @@ func _ready() -> void:
 		final_wager_input,
 		final_wager_button,
 		final_clue_button,
-		game_root,
 		question_panel,
 		verse_data,
 		func(en_text: String, pt_text: String) -> String: return _t(en_text, pt_text)
 	)
-	board_screen = BoardScreen.new(theme_styler, game_font)
-	settings_screen = SettingsScreen.new(
-		title_panel, settings_panel, pause_menu, game_root, question_panel
-	)
+	settings_screen = SettingsScreen.new(title_panel, settings_panel, pause_menu, question_panel)
 
-	if game_root and game_root is BoxContainer:
-		default_game_alignment = (game_root as BoxContainer).alignment
 	if question_panel:
 		question_panel.visibility_changed.connect(_on_question_panel_visibility_changed)
 
@@ -381,41 +413,12 @@ func _ready() -> void:
 	_safe_connect_item_selected(
 		controller_ai_option, func(idx: int) -> void: _on_ai_difficulty_selected(idx), "AI option"
 	)
+	if game_board:
+		if not game_board.tile_pressed.is_connected(_on_game_board_tile_pressed):
+			game_board.tile_pressed.connect(_on_game_board_tile_pressed)
+		if not game_board.round_complete.is_connected(_on_game_board_round_complete):
+			game_board.round_complete.connect(_on_game_board_round_complete)
 
-	# Add play again button for final screen
-	if game_root and is_instance_valid(game_root):
-		play_again_button = Button.new()
-		play_again_button.text = _t("Play Again", "Jogar novamente")
-		play_again_button.visible = false
-		play_again_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		play_again_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-		play_again_button.custom_minimum_size = Vector2(300, 64)
-		play_again_button.focus_mode = Control.FOCUS_ALL
-		play_again_button.pressed.connect(_on_play_again_pressed)
-		if theme_styler:
-			var btns := [play_again_button]
-			theme_styler.apply_game_font(game_font, btns)
-			var body_color := theme_styler.theme_body_color
-			for b in btns:
-				if b:
-					b.add_theme_color_override("font_color", body_color)
-					var normal := StyleBoxFlat.new()
-					normal.bg_color = Color(0.92, 0.18, 0.18)
-					normal.set_border_width_all(3)
-					normal.border_color = Color(0.05, 0.08, 0.2)
-					normal.set_corner_radius_all(10)
-					var hover := normal.duplicate()
-					hover.bg_color = Color(1.0, 0.25, 0.25)
-					var pressed := normal.duplicate()
-					pressed.bg_color = Color(0.75, 0.12, 0.12)
-					var disabled := normal.duplicate()
-					disabled.bg_color = Color(0.7, 0.7, 0.7)
-					disabled.border_color = Color(0.4, 0.4, 0.4)
-					b.add_theme_stylebox_override("normal", normal)
-					b.add_theme_stylebox_override("hover", hover)
-					b.add_theme_stylebox_override("pressed", pressed)
-					b.add_theme_stylebox_override("disabled", disabled)
-		game_root.add_child(play_again_button)
 	if title_texture:
 		if title_logo:
 			title_logo.texture = title_texture
@@ -441,15 +444,8 @@ func _ready() -> void:
 	_load_settings()
 	_apply_language_texts()
 	_setup_accessible_text()
-	if answer_timer_label:
-		answer_timer_label.visible = false
-	if answer_timer_bar:
-		answer_timer_bar.visible = false
-		if answer_timer_bar.has_signal("timeout"):
-			if not answer_timer_bar.timeout.is_connected(_on_answer_timer_timeout):
-				answer_timer_bar.timeout.connect(_on_answer_timer_timeout)
-	if final_wager_panel:
-		final_wager_panel.visible = false
+	_safe_set_visible(answer_timer_label, false)
+	_safe_set_visible(final_wager_panel, false)
 	_apply_theme_styles()
 	_reset_round_state(0)
 	if game_state_machine:
@@ -484,11 +480,6 @@ func _apply_language_texts() -> void:
 
 
 func _setup_accessible_text() -> void:
-	if q_text_label:
-		q_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-		q_text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		q_text_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		q_text_label.add_theme_font_size_override("font_size", 32)
 	if verse_text_label:
 		verse_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD
 		verse_text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -497,14 +488,65 @@ func _setup_accessible_text() -> void:
 	if verse_title_label:
 		verse_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
-	if q_category_label:
-		q_category_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	if q_value_label:
-		q_value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+func _show_game_board(show: bool) -> void:
+	_safe_set_visible(game_board, show)
+
+
+func _sync_game_board_players() -> void:
+	if game_board == null:
+		return
+	var enriched: Array = []
+	for i in range(players.size()):
+		var p: Dictionary = players[i].duplicate(true)
+		var score: int = team_scores[i] if team_scores.size() > i else 0
+		p["score"] = score
+		enriched.append(p)
+	game_board.set_players(enriched)
+
+
+func _update_game_board_score(idx: int) -> void:
+	if game_board == null:
+		return
+	var score: int = team_scores[idx] if team_scores.size() > idx else 0
+	game_board.update_player_score(idx, score)
+
+
+func _trim_category_for_round(cat: Dictionary) -> Dictionary:
+	var copy := cat.duplicate(true)
+	var values: Array = copy.get("values", [])
+	var trimmed: Array = []
+	var round_idx: int = clamp(round_index, 0, ROUND_VALUES.size() - 1)
+	var round_values: Array = ROUND_VALUES[round_idx] as Array
+	for row in range(BOARD_TILE_ROWS):
+		if row >= values.size():
+			break
+		var val_entry := (values[row] as Dictionary).duplicate(true)
+		if round_values.size() > row:
+			val_entry["value"] = round_values[row]
+		trimmed.append(val_entry)
+	copy["values"] = trimmed
+	return copy
+
+
+func _bind_round_to_board(refresh_categories: bool = true) -> void:
+	if game_board == null:
+		return
+	if refresh_categories or current_categories.is_empty():
+		var all_cats: Array = LoadedBibleData.get_categories()
+		current_categories.clear()
+		var cat_count: int = min(BOARD_CATEGORY_COUNT, all_cats.size())
+		for i in range(cat_count):
+			var entry: Variant = all_cats[i]
+			if typeof(entry) == TYPE_DICTIONARY:
+				current_categories.append(_trim_category_for_round(entry as Dictionary))
+			else:
+				current_categories.append({"name": str(entry), "values": []})
+	_select_hidden_double(current_categories.size(), BOARD_TILE_ROWS)
+	total_clues_this_round = current_categories.size() * BOARD_TILE_ROWS
+	game_board.bind_round(current_categories)
 	if result_label:
 		result_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	if answer_timer_label:
-		answer_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	if main_menu_screen:
 		main_menu_screen.setup_accessible_text()
 
@@ -633,12 +675,13 @@ func _enter_round_two_transition_state() -> void:
 		game_state_machine.transition_to(GameStateMachine.State.ROUND_2)
 	else:
 		_reset_round_state(1, false)
-		_build_board()
 
 
 func _enter_round_two_state() -> void:
-	_reset_round_state(1, false)
-	_build_board()
+	_reset_round_state(1)
+	_bind_round_to_board(true)
+	_show_game_board(true)
+	_sync_game_board_players()
 
 
 func _enter_final_wager_state() -> void:
@@ -652,8 +695,6 @@ func _enter_final_question_state() -> void:
 
 func _enter_results_state() -> void:
 	_show_winner_trophies()
-	if play_again_button:
-		play_again_button.visible = true
 
 
 func _enter_pause_state() -> void:
@@ -661,13 +702,28 @@ func _enter_pause_state() -> void:
 
 
 func _apply_controller_connect_text() -> void:
+	if controller_title_label:
+		controller_title_label.text = _t("Connect Controllers", "Conectar controles")
+	if controller_subtitle_label:
+		controller_subtitle_label.text = _t(
+			"Press any button to claim Players 1-3. Remaining slots become AI.",
+			"Aperte qualquer botao para assumir Jogadores 1-3. Vagas restantes viram IA."
+		)
+	if controller_difficulty_label:
+		controller_difficulty_label.text = _t("Difficulty:", "Dificuldade:")
+		controller_difficulty_label.add_theme_font_size_override("font_size", 16)
 	if controller_ai_label:
-		controller_ai_label.text = _t("AI Difficulty", "Dificuldade da IA")
+		controller_ai_label.text = _t("Difficulty:", "Dificuldade:")
+		controller_ai_label.add_theme_font_size_override("font_size", 16)
 	if _safe_clear_option(controller_ai_option, "Controller AI option"):
 		controller_ai_option.add_item(_t("Easy", "Facil"), 0)
 		controller_ai_option.add_item(_t("Normal", "Normal"), 1)
 		controller_ai_option.add_item(_t("Hard", "Dificil"), 2)
 		controller_ai_option.select(1)
+	if controller_ai_option:
+		controller_ai_option.add_theme_font_size_override("font_size", 16)
+	_set_button_label_text(controller_continue_button, _t("Continue", "Continuar"))
+	_set_button_label_text(controller_back_button, _t("Back", "Voltar"))
 	_refresh_controller_join_ui()
 
 
@@ -680,24 +736,13 @@ func _apply_theme_styles() -> void:
 		verse_text_label,
 		verse_reference_label,
 		title_screen_title,
-		title_label,
-		q_category_label,
-		q_value_label,
-		q_text_label,
-		result_label,
-		turn_label,
 		settings_language_label,
 		music_label,
 		pause_title_label,
-		final_wager_label,
-		final_wager_panel,
-		final_wager_input,
 		pause_resume_button,
 		pause_main_menu_button,
 		pause_settings_button,
 		language_option,
-		final_wager_button,
-		final_clue_button,
 		controller_status_label,
 		controller_slot_labels[0] if controller_slot_labels.size() > 0 else null,
 		controller_slot_labels[1] if controller_slot_labels.size() > 1 else null,
@@ -711,19 +756,12 @@ func _apply_theme_styles() -> void:
 		verse_reference_label,
 		settings_language_label,
 		music_label,
-		title_label,
-		turn_label,
-		q_category_label,
-		q_value_label,
-		q_text_label,
-		result_label,
 		pause_title_label,
 		pause_resume_button,
 		pause_main_menu_button,
 		pause_settings_button,
 		language_option,
 		music_slider,
-		answer_timer_label,
 		controller_status_label,
 		controller_slot_labels[0] if controller_slot_labels.size() > 0 else null,
 		controller_slot_labels[1] if controller_slot_labels.size() > 1 else null,
@@ -745,16 +783,15 @@ func _apply_theme_styles() -> void:
 	)
 	question_panel_base_style = theme_styler.apply_bible_theme(
 		title_screen_title,
-		title_label,
 		primary_controls,
 		settings_language_label,
 		music_label,
-		answer_timer_label,
-		question_panel,
+		null,
+		null,
 		pause_panel,
 		button_controls,
 		game_font,
-		answer_timer_bar,
+		null,
 		ANSWER_TIME
 	)
 	if verse_title_label:
@@ -810,35 +847,20 @@ func _start_team_card_pulse(idx: int) -> void:
 
 
 func _set_active_team(idx: int) -> void:
-	if idx < 0 or idx >= team_cards.size():
-		current_turn_team = clamp(idx, 0, max(0, team_cards.size() - 1))
-	else:
-		current_turn_team = idx
+	var max_team: int = max(0, players.size() - 1)
+	current_turn_team = clamp(idx, 0, max_team)
 	if theme_styler:
 		theme_styler.refresh_team_highlight(team_cards, current_turn_team)
 		_start_team_card_pulse(current_turn_team)
 
 
-func _set_question_panel_color(color: Color) -> void:
-	if theme_styler and question_panel_base_style:
-		theme_styler.set_question_panel_color(question_panel, question_panel_base_style, color)
-
-
 func _reset_question_panel_color() -> void:
-	if theme_styler and question_panel_base_style:
-		theme_styler.reset_question_panel_color(question_panel, question_panel_base_style)
+	# Visual styling is controlled in the editor; nothing to reset in code.
+	pass
 
 
 func _on_question_panel_visibility_changed() -> void:
 	var showing := question_panel != null and question_panel.visible
-	if game_root and game_root is BoxContainer:
-		(game_root as BoxContainer).alignment = (
-			BoxContainer.ALIGNMENT_BEGIN if showing else default_game_alignment
-		)
-	if scoreboard:
-		scoreboard.z_index = 2 if showing else 0
-	if turn_label:
-		turn_label.z_index = 2 if showing else 0
 
 
 func _play_background_music() -> void:
@@ -874,8 +896,8 @@ func _play_select_sfx() -> void:
 func _show_title() -> void:
 	if main_menu_screen:
 		main_menu_screen.show_title()
-	if controller_connect_panel:
-		controller_connect_panel.visible = false
+	_safe_set_visible(controller_connect_panel, false)
+	_show_game_board(false)
 	pending_player_inputs.clear()
 	player_characters.clear()
 	controller_join_active = false
@@ -912,8 +934,9 @@ func _on_settings_back_pressed() -> void:
 
 
 func _open_controller_connect(restore_inputs: Array = []) -> void:
-	title_panel.visible = false
-	settings_panel.visible = false
+	_safe_set_visible(title_panel, false)
+	_safe_set_visible(settings_panel, false)
+	_show_game_board(false)
 	controller_join_active = true
 	join_inputs = restore_inputs.duplicate(true)
 	if controller_connect_panel == null:
@@ -926,8 +949,7 @@ func _open_controller_connect(restore_inputs: Array = []) -> void:
 			)
 		return
 	_refresh_controller_join_ui()
-	if controller_connect_panel:
-		controller_connect_panel.visible = true
+	_safe_set_visible(controller_connect_panel, true)
 	if controller_continue_button:
 		controller_continue_button.disabled = false
 		if nav_focus_enabled:
@@ -937,8 +959,7 @@ func _open_controller_connect(restore_inputs: Array = []) -> void:
 
 func _close_controller_connect() -> void:
 	controller_join_active = false
-	if controller_connect_panel:
-		controller_connect_panel.visible = false
+	_safe_set_visible(controller_connect_panel, false)
 
 
 func _on_controller_connect_confirm_pressed() -> void:
@@ -1013,21 +1034,19 @@ func _auto_assign_default_characters() -> void:
 
 
 func _start_game(selected_inputs: Array = [], allow_keyboard_fallback: bool = true) -> void:
-	title_panel.visible = false
-	settings_panel.visible = false
-	if controller_connect_panel:
-		controller_connect_panel.visible = false
+	_safe_set_visible(title_panel, false)
+	_safe_set_visible(settings_panel, false)
+	_safe_set_visible(controller_connect_panel, false)
 	controller_join_active = false
 	_reset_round_state()
 	_setup_players(3, selected_inputs, allow_keyboard_fallback)
 	if player_characters.is_empty():
 		_auto_assign_default_characters()
 	_apply_player_characters()
-	game_root.visible = true
-	question_panel.visible = false
-	_build_teams()
-	_build_board()
-	_set_header_visible(true)
+	_sync_game_board_players()
+	_bind_round_to_board(true)
+	_show_game_board(true)
+	_safe_set_visible(question_panel, false)
 
 
 func _register_joined_controller(device_id: int) -> bool:
@@ -1066,6 +1085,9 @@ func _register_keyboard_join(enable_focus: bool = false) -> bool:
 
 
 func _refresh_controller_join_ui() -> void:
+	for i in range(controller_slot_labels.size()):
+		if controller_slot_labels[i]:
+			controller_slot_labels[i].text = _t("Player %d", "Jogador %d") % (i + 1)
 	for i in range(controller_slot_status_labels.size()):
 		if controller_slot_status_labels[i]:
 			controller_slot_status_labels[i].text = _controller_slot_status_text(i + 1)
@@ -1160,23 +1182,23 @@ func _input(event: InputEvent) -> void:
 
 
 func _can_open_pause_menu() -> bool:
-	return game_root.visible or question_panel.visible
+	var qp_visible := (
+		question_panel and is_instance_valid(question_panel) and question_panel.visible
+	)
+	return qp_visible
 
 
 func _open_pause_menu() -> void:
 	nav_focus_enabled = true
-	if settings_panel:
-		settings_panel.visible = false
-	if pause_menu:
-		pause_menu.visible = true
+	_safe_set_visible(settings_panel, false)
+	_safe_set_visible(pause_menu, true)
 	if pause_resume_button:
 		pause_resume_button.grab_focus()
 	_maybe_focus_for_nav()
 
 
 func _close_pause_menu() -> void:
-	if pause_menu:
-		pause_menu.visible = false
+	_safe_set_visible(pause_menu, false)
 	get_viewport().set_input_as_handled()
 
 
@@ -1275,10 +1297,7 @@ func _on_language_selected(index: int) -> void:
 	FinalJeopardyData.set_language(current_language)
 	_apply_language_texts()
 	_save_settings()
-	_build_board()
-	_build_teams()
-	if final_wager_panel:
-		final_wager_panel.visible = false
+	_safe_set_visible(final_wager_panel, false)
 
 
 func _on_set_wager_pressed() -> void:
@@ -1322,8 +1341,7 @@ func _on_final_clue_pressed() -> void:
 		final_clue_button.disabled = true
 	var penalty := int(ceil(float(current_wager) * 0.1))
 	team_scores[final_wager_player] -= penalty
-	if final_wager_player < team_score_labels.size():
-		_set_score_label(final_wager_player)
+	_update_game_board_score(final_wager_player)
 	var ans: String = str(current_clue.get("answer", ""))
 	var hint: String = ""
 	if ans.length() > 0:
@@ -1419,6 +1437,10 @@ func _setup_players(
 		)
 
 	_sync_team_names_from_players()
+	team_scores.resize(players.size())
+	for i in range(team_scores.size()):
+		team_scores[i] = 0
+	_sync_game_board_players()
 
 
 func _sync_team_names_from_players() -> void:
@@ -1439,6 +1461,7 @@ func _apply_player_characters() -> void:
 		players[i]["character"] = char_data
 		players[i]["name"] = display_name
 	_sync_team_names_from_players()
+	_sync_game_board_players()
 
 
 func _clear_children(container: Node) -> void:
@@ -1448,51 +1471,15 @@ func _clear_children(container: Node) -> void:
 		child.queue_free()
 
 
-func _build_teams() -> void:
-	_stop_team_card_pulse()
-	if board_screen:
-		board_screen.build_teams(
-			team_names,
-			team_scores,
-			team_score_labels,
-			team_cards,
-			team_trophies,
-			team_wager_labels,
-			player_characters,
-			scoreboard,
-			func(en_text: String, pt_text: String) -> String: return _t(en_text, pt_text),
-			players
-		)
-		_clear_trophies()
-		_clear_wager_labels()
-
-	if team_score_labels.size() > 0:
-		_set_active_team(current_turn_team)
-		turn_label.text = ""
-	else:
-		turn_label.text = _t("No teams configured", "Nenhum time configurado")
-
-
-func _set_score_label(idx: int) -> void:
-	if board_screen:
-		board_screen.set_score_label(
-			idx,
-			team_scores,
-			team_score_labels,
-			func(en_text: String, pt_text: String) -> String: return _t(en_text, pt_text)
-		)
-
-
 func _clear_trophies() -> void:
 	for t in team_trophies:
-		if t and is_instance_valid(t):
-			t.visible = false
+		_safe_set_visible(t, false)
 
 
 func _clear_wager_labels() -> void:
 	for w in team_wager_labels:
 		if w and is_instance_valid(w):
-			w.visible = false
+			_safe_set_visible(w, false)
 			w.text = ""
 
 
@@ -1510,109 +1497,49 @@ func _show_winner_trophies() -> void:
 			continue
 		if i < team_trophies.size():
 			var trophy: Label = team_trophies[i] as Label
-			if trophy and is_instance_valid(trophy):
-				trophy.visible = true
+			_safe_set_visible(trophy, true)
 		var name := team_names[i] if team_names.size() > i else "Player %d" % (i + 1)
 		winners.append(name)
 	if not winners.is_empty():
 		_show_result(_t("Winner: %s", "Vencedor: %s") % ", ".join(winners), Color(0.2, 0.6, 0.2))
 
 
-func _build_board() -> void:
-	question_panel.visible = false
-	_set_header_visible(true)
-	_show_result("", Color(0.1, 0.1, 0.1))
-	turn_label.text = ""
-
-	if board_grid == null or not is_instance_valid(board_grid):
-		push_warning("Board grid node missing; cannot build board.")
+func _start_clue_for_indices(
+	cat_index: int,
+	clue_index: int,
+	score_value_hint: int = -1,
+	tile_idx: int = -1,
+	button: Button = null
+) -> void:
+	if cat_index < 0 or clue_index < 0:
 		return
-
-	_clear_children(board_grid)
-	board_grid.add_theme_constant_override("h_separation", 24)
-	board_grid.add_theme_constant_override("v_separation", 24)
-
-	if category_deck.is_empty():
-		category_deck = LoadedBibleData.get_categories()
-	var requested: int = min(3, category_deck.size())
-	current_categories.clear()
-	for i in range(requested):
-		current_categories.append(category_deck.pop_back())
-	if current_categories.is_empty():
-		return
-
-	var num_categories := current_categories.size()
-	board_grid.columns = num_categories
-	var num_clues: int = min(ROUND_CLUE_COUNT, (current_categories[0]["values"] as Array).size())
-	total_clues_this_round = num_categories * num_clues
-	_select_hidden_double(num_categories, num_clues)
-
-	# First row: category titles
-	for cat_data: Dictionary in current_categories:
-		var cat_label := Label.new()
-		cat_label.text = str(cat_data["name"])
-		cat_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		if theme_styler:
-			theme_styler.apply_font_override(cat_label, game_font)
-			theme_styler.apply_body_color(cat_label)
-		cat_label.add_theme_font_size_override("font_size", 32)
-		board_grid.add_child(cat_label)
-
-	for clue_index in range(num_clues):
-		for cat_index in range(num_categories):
-			var btn := Button.new()
-			var score_value: int = ROUND_VALUES[round_index][clue_index]
-			btn.text = str(score_value)
-			btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			btn.custom_minimum_size = Vector2(300, 160)
-			btn.pivot_offset = btn.custom_minimum_size * 0.5
-			btn.focus_mode = Control.FOCUS_ALL
-			if theme_styler:
-				theme_styler.apply_font_override(btn, game_font)
-				theme_styler.apply_body_color(btn)
-			btn.add_theme_font_size_override("font_size", 36)
-
-			btn.set_meta("cat_index", cat_index)
-			btn.set_meta("clue_index", clue_index)
-			btn.set_meta("score_value", score_value)
-
-			btn.pressed.connect(func() -> void: _on_clue_button_pressed(btn))
-
-			board_grid.add_child(btn)
-
-	_set_board_input_enabled(true)
-
-
-func _on_clue_button_pressed(button: Button) -> void:
-	var cat_index: int = button.get_meta("cat_index")
-	var clue_index: int = button.get_meta("clue_index")
 	var key := "%d-%d" % [cat_index, clue_index]
-
 	if answered_map.has(key):
 		return  # Already used
+
 	_play_select_sfx()
 	_reset_question_panel_color()
-	await _flip_card(button)
+	if button:
+		await _flip_card(button)
 	result_label.text = ""
 
-	if current_categories.is_empty():
-		_build_board()
-	if current_categories.is_empty():
-		return
 	if cat_index >= current_categories.size():
 		return
-
 	var cat_data: Dictionary = current_categories[cat_index] as Dictionary
-	var values: Array = cat_data["values"] as Array
+	var values: Array = cat_data.get("values", [])
+	if clue_index >= values.size():
+		return
 	var value_entry: Dictionary = values[clue_index] as Dictionary
-	var pool: Array = value_entry["pool"] as Array
+	var pool: Array = value_entry.get("pool", [])
 	if pool.is_empty():
 		return
 	var random_index := rng.randi_range(0, pool.size() - 1)
 	var clue: Dictionary = pool[random_index] as Dictionary
 	pool.remove_at(random_index)
-	var question_text := str(clue["question"])
-	var score_value: int = button.get_meta("score_value", value_entry["value"])
+	var question_text := str(clue.get("question", ""))
+	var score_value: int = (
+		score_value_hint if score_value_hint >= 0 else int(value_entry.get("value", 0))
+	)
 	var is_double := hidden_double_key != "" and hidden_double_key == key
 	if is_double:
 		score_value *= 2
@@ -1624,31 +1551,49 @@ func _on_clue_button_pressed(button: Button) -> void:
 	current_clue = {
 		"cat_index": cat_index,
 		"clue_index": clue_index,
+		"tile_index": tile_idx,
 		"value": score_value,
-		"button": button,
-		"answer": clue["answer"],
+		"answer": clue.get("answer", ""),
 		"is_double": is_double
 	}
+	if button:
+		current_clue["button"] = button
 
-	q_category_label.text = _t("Category: %s", "Categoria: %s") % str(cat_data["name"])
+	q_category_label.text = _t("Category: %s", "Categoria: %s") % str(cat_data.get("name", ""))
 	q_value_label.text = _t("Value: %s", "Valor: %s") % str(score_value)
 	q_text_label.text = ""
 	current_options.clear()
-	if answer_timer_bar:
-		answer_timer_bar.stop()
 	_cancel_ai_buzz_timer()
 	buzzed_player = -1
 	attempted_players.clear()
 
-	question_panel.visible = true
-	board_grid.visible = false
-	_set_header_visible(false)
-	_set_board_input_enabled(false)
-	if final_wager_panel:
-		final_wager_panel.visible = _is_final_wager_state() and final_wager_player != -1
+	_safe_set_visible(question_panel, true)
+	_safe_set_visible(final_wager_panel, _is_final_wager_state() and final_wager_player != -1)
 	_build_answer_options(clue)
 	_begin_question_audio()
 	_start_question_flow(question_text)
+
+
+func _on_clue_button_pressed(button: Button) -> void:
+	if button == null:
+		return
+	var cat_index: int = int(button.get_meta("cat_index"))
+	var clue_index: int = int(button.get_meta("clue_index"))
+	var score_value: int = int(button.get_meta("score_value", -1))
+	await _start_clue_for_indices(cat_index, clue_index, score_value, -1, button)
+
+
+func _on_game_board_tile_pressed(tile_state: Dictionary, tile_idx: int) -> void:
+	var cat_index: int = int(tile_state.get("category_index", -1))
+	var clue_index: int = int(tile_state.get("value_index", -1))
+	var score_value: int = int(tile_state.get("value", -1))
+	if tile_state.get("answered", false):
+		return
+	await _start_clue_for_indices(cat_index, clue_index, score_value, tile_idx, null)
+
+
+func _on_game_board_round_complete() -> void:
+	_advance_round_if_needed()
 
 
 func _start_question_flow(question_text: String) -> void:
@@ -1700,7 +1645,7 @@ func _build_answer_options(clue: Dictionary) -> void:
 
 	_clear_children(answer_buttons)
 	answer_button_nodes.clear()
-	answer_buttons.visible = false
+	_safe_set_visible(answer_buttons, false)
 	answer_buttons.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	answer_buttons.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
@@ -1742,12 +1687,11 @@ func _build_answer_options(clue: Dictionary) -> void:
 
 
 func _open_answer_buttons_for(player_index: int) -> void:
-	answer_buttons.visible = true
+	_safe_set_visible(answer_buttons, true)
 	for btn in answer_button_nodes:
 		btn.disabled = false
 	if nav_focus_enabled and not answer_button_nodes.is_empty() and answer_button_nodes[0]:
 		answer_button_nodes[0].grab_focus()
-	turn_label.text = "Buzzed: %s" % players[player_index]["name"]
 
 
 func _on_player_buzz(player_index: int) -> void:
@@ -1762,8 +1706,6 @@ func _on_player_buzz(player_index: int) -> void:
 	answering_player = player_index
 	_lock_answering_input(player_index)
 	_set_active_team(player_index)
-	if theme_styler:
-		_set_question_panel_color(theme_styler.team_color(player_index))
 	var is_ai: bool = players[player_index].get("is_ai", false)
 
 	if _is_final_phase():
@@ -1771,9 +1713,6 @@ func _on_player_buzz(player_index: int) -> void:
 
 	if is_ai:
 		_disable_answer_buttons()
-		turn_label.text = (
-			_t("AI answering: %s", "IA respondendo: %s") % players[player_index].get("name", "AI")
-		)
 		# Fresh 30s for AI answer
 		_start_answer_timer()
 		_queue_ai_answer()
@@ -1803,7 +1742,7 @@ func _on_answer_selected(answer_text: String) -> void:
 		value = current_wager
 	if given == correct_answer:
 		team_scores[buzzed_player] += value
-		_set_score_label(buzzed_player)
+		_update_game_board_score(buzzed_player)
 		_set_active_team(buzzed_player)
 		_stop_timers()
 		_play_correct_sfx()
@@ -1815,22 +1754,18 @@ func _on_answer_selected(answer_text: String) -> void:
 			),
 			Color(0.2, 0.7, 0.2)
 		)
-		turn_label.text = (
-			_t("Correct: %s", "Correto: %s") % players[buzzed_player].get("name", "Player")
-		)
 		_mark_clue_answered()
 
 		# If we just transitioned into the final round, don't hide the wager UI.
 		if _is_final_phase():
 			return
 
-		question_panel.visible = false
-		_set_board_input_enabled(true)
+		_safe_set_visible(question_panel, false)
 
 	else:
 		attempted_players.append(buzzed_player)
 		team_scores[buzzed_player] -= value
-		_set_score_label(buzzed_player)
+		_update_game_board_score(buzzed_player)
 		buzzed_player = -1
 		answering_input_lock.clear()
 		_reset_question_panel_color()
@@ -1842,8 +1777,6 @@ func _on_answer_selected(answer_text: String) -> void:
 				_t("Wrong answer. Others may buzz in.", "Resposta errada. Outros podem tentar."),
 				Color(0.8, 0.2, 0.2)
 			)
-			turn_label.text = _t("Wrong. Waiting for buzz...", "Errado. Aguardando outro buzzer...")
-			_update_turn_label_waiting()
 			_disable_answer_buttons()
 			var eligible_ai := _get_eligible_ai_players()
 			if not eligible_ai.is_empty():
@@ -1851,14 +1784,10 @@ func _on_answer_selected(answer_text: String) -> void:
 				_start_ai_buzz_timer(wait_delay)
 
 
-func _update_turn_label_waiting() -> void:
-	turn_label.text = _t("Waiting for buzz...", "Aguardando buzzer...")
-
-
 func _disable_answer_buttons() -> void:
 	for btn in answer_button_nodes:
 		btn.disabled = true
-	answer_buttons.visible = false
+	_safe_set_visible(answer_buttons, false)
 
 
 func _handle_all_attempted() -> void:
@@ -1872,28 +1801,56 @@ func _handle_all_attempted() -> void:
 	if _is_final_phase():
 		return
 
-	turn_label.text = ""
 	if question_panel:
-		question_panel.visible = false
-	_set_board_input_enabled(true)
+		_safe_set_visible(question_panel, false)
 
 
 func _is_answer_timer_active() -> bool:
-	return (
-		answer_timer_bar != null
-		and is_instance_valid(answer_timer_bar)
-		and answer_timer_bar.has_method("is_running")
-		and answer_timer_bar.is_running()
-	)
+	return answer_countdown_timer != null
 
 
 func _start_answer_timer() -> void:
-	if (
-		answer_timer_bar
-		and is_instance_valid(answer_timer_bar)
-		and answer_timer_bar.has_method("restart")
-	):
-		answer_timer_bar.restart(ANSWER_TIME)  # full 30s, from scratch
+	_cancel_answer_timer()
+	answer_time_left = int(ANSWER_TIME)
+	_update_timer_label(answer_time_left)
+	_start_answer_timer_tick()
+
+
+func _start_answer_timer_tick() -> void:
+	_cancel_answer_timer(false)
+	if answer_time_left <= 0:
+		_update_timer_label(0)
+		_on_answer_timer_timeout()
+		return
+	answer_countdown_timer = get_tree().create_timer(1.0)
+	answer_countdown_timer.timeout.connect(_on_answer_timer_tick)
+
+
+func _on_answer_timer_tick() -> void:
+	answer_countdown_timer = null
+	answer_time_left -= 1
+	if answer_time_left < 0:
+		answer_time_left = 0
+	_update_timer_label(answer_time_left)
+	if answer_time_left <= 0:
+		_on_answer_timer_timeout()
+		return
+	_start_answer_timer_tick()
+
+
+func _cancel_answer_timer(reset_time: bool = true) -> void:
+	if answer_countdown_timer:
+		if answer_countdown_timer.timeout.is_connected(_on_answer_timer_tick):
+			answer_countdown_timer.timeout.disconnect(_on_answer_timer_tick)
+		answer_countdown_timer = null
+	if reset_time:
+		answer_time_left = 0
+
+
+func _update_timer_label(value: int) -> void:
+	if answer_timer_label:
+		answer_timer_label.text = "%02d" % max(0, value)
+		_safe_set_visible(answer_timer_label, true)
 
 
 func _on_answer_timer_timeout() -> void:
@@ -1904,12 +1861,6 @@ func _on_answer_timer_timeout() -> void:
 		if final_question_revealed and buzzed_player != -1:
 			_record_final_answer("")
 			return
-	if (
-		answer_timer_bar
-		and is_instance_valid(answer_timer_bar)
-		and answer_timer_bar.has_method("stop")
-	):
-		answer_timer_bar.stop()
 	# Time up, nobody got it right
 	_show_result(_t("Time's up!", "Tempo esgotado!"), Color(0.8, 0.4, 0.0))
 	_end_question_audio()
@@ -1919,16 +1870,16 @@ func _on_answer_timer_timeout() -> void:
 	if _is_final_phase():
 		return
 
-	turn_label.text = _t("Time's up. Choose another clue.", "Tempo esgotado. Escolha outra pista.")
-	question_panel.visible = false
+	if question_panel:
+		_safe_set_visible(question_panel, false)
 	_disable_answer_buttons()
-	_set_board_input_enabled(true)
 
 
 func _mark_clue_answered() -> void:
 	var cat_index: int = current_clue.get("cat_index", -1)
 	var clue_index: int = current_clue.get("clue_index", -1)
 	var button: Button = current_clue.get("button", null)
+	var tile_index: int = current_clue.get("tile_index", -1)
 
 	if cat_index == -1 or clue_index == -1:
 		current_clue.clear()
@@ -1940,6 +1891,8 @@ func _mark_clue_answered() -> void:
 	if button:
 		button.disabled = true
 		button.text = ""
+	if tile_index != -1 and game_board:
+		game_board.mark_tile_answered(tile_index)
 
 	buzzed_player = -1
 	attempted_players.clear()
@@ -1950,18 +1903,12 @@ func _mark_clue_answered() -> void:
 	answering_player = -1
 	current_clue.clear()
 	if _is_final_phase():
-		board_grid.visible = false
-		turn_label.text = _t("Final scores", "Pontuacao final")
-		if final_wager_panel:
-			final_wager_panel.visible = false
+		_safe_set_visible(final_wager_panel, false)
 		if final_clue_button:
 			final_clue_button.disabled = false
 		final_wager_set = false
 		_show_winner_trophies()
 	else:
-		board_grid.visible = true
-		_set_header_visible(true)
-		turn_label.text = ""
 		_advance_round_if_needed()
 		_maybe_trigger_ai_board_choice()
 
@@ -1980,8 +1927,7 @@ func _restart_to_main_menu() -> void:
 	join_inputs.clear()
 	controller_join_active = false
 	nav_focus_enabled = false
-	if controller_connect_panel:
-		controller_connect_panel.visible = false
+	_safe_set_visible(controller_connect_panel, false)
 	hidden_double_key = ""
 	current_wager = 0
 	final_question.clear()
@@ -2002,16 +1948,13 @@ func _restart_to_main_menu() -> void:
 	pending_allow_keyboard_fallback = true
 	player_characters.clear()
 	_stop_team_card_pulse()
-	_clear_children(scoreboard)
-	_clear_children(board_grid)
-	board_grid.columns = 1
 	result_label.text = ""
 	q_text_label.text = ""
 	q_category_label.text = ""
 	q_value_label.text = ""
-	turn_label.text = ""
-	question_panel.visible = false
-	game_root.visible = false
+	if question_panel:
+		_safe_set_visible(question_panel, false)
+	_show_game_board(false)
 	_close_pause_menu()
 	_reset_round_state()
 	_show_title()
@@ -2025,8 +1968,6 @@ func _on_exit_pressed() -> void:
 
 func _on_play_again_pressed() -> void:
 	_play_select_sfx()
-	if play_again_button:
-		play_again_button.visible = false
 	if game_state_machine:
 		game_state_machine.transition_to(GameStateMachine.State.MAIN_MENU)
 		await get_tree().process_frame
@@ -2038,60 +1979,20 @@ func _on_play_again_pressed() -> void:
 
 
 func _stop_timers(preserve_result: bool = false) -> void:
-	if (
-		answer_timer_bar
-		and is_instance_valid(answer_timer_bar)
-		and answer_timer_bar.has_method("stop")
-	):
-		answer_timer_bar.stop()
+	_cancel_answer_timer()
 	_cancel_ai_buzz_timer()
 	_cancel_wager_timer()
 
 	if not preserve_result:
-		result_label.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1))
-		result_label.text = ""
-
-
-func _set_board_input_enabled(enabled: bool) -> void:
-	if board_grid == null or not is_instance_valid(board_grid):
-		return
-	for child in board_grid.get_children():
-		if child is Button:
-			var btn := child as Button
-			if not btn.has_meta("cat_index") or not btn.has_meta("clue_index"):
-				continue
-			var cat_index: int = btn.get_meta("cat_index")
-			var clue_index: int = btn.get_meta("clue_index")
-			var key := "%d-%d" % [cat_index, clue_index]
-			if answered_map.has(key):
-				btn.disabled = true
-				btn.text = ""
-			else:
-				btn.disabled = not enabled
-	board_grid.visible = enabled
-	if enabled:
-		_focus_first_board_button()
+		if result_label:
+			result_label.add_theme_color_override("font_color", Color(0.1, 0.1, 0.1))
+			result_label.text = ""
 
 
 func _show_result(text: String, color: Color = Color(0.1, 0.1, 0.1)) -> void:
-	result_label.text = text
-	result_label.add_theme_color_override("font_color", color)
-
-
-func _focus_first_board_button() -> void:
-	if board_grid == null or not is_instance_valid(board_grid):
-		return
-	if not board_grid.visible:
-		return
-	if not nav_focus_enabled:
-		return
-	for child in board_grid.get_children():
-		if child is Button:
-			var btn := child as Button
-			if btn.disabled:
-				continue
-			btn.grab_focus()
-			return
+	if result_label:
+		result_label.text = text
+		result_label.add_theme_color_override("font_color", color)
 
 
 func _maybe_focus_for_nav() -> void:
@@ -2109,8 +2010,6 @@ func _maybe_focus_for_nav() -> void:
 	if title_panel and title_panel.visible and title_play_button:
 		title_play_button.grab_focus()
 		return
-	if board_grid and board_grid.visible:
-		_focus_first_board_button()
 
 
 func _lock_answering_input(player_index: int) -> void:
@@ -2171,24 +2070,24 @@ func _event_for_player(idx: int, event: InputEvent) -> bool:
 func _maybe_trigger_ai_board_choice() -> void:
 	if not _is_round_play_state():
 		return
+	if not current_clue.is_empty():
+		return
 	if current_turn_team < 0 or current_turn_team >= players.size():
 		return
 	var p := players[current_turn_team]
 	if not p.get("is_ai", false):
 		return
 	await get_tree().create_timer(AI_BOARD_PICK_DELAY).timeout
-	var available: Array[Button] = []
-	if board_grid and is_instance_valid(board_grid):
-		for child in board_grid.get_children():
-			if child is Button:
-				var btn := child as Button
-				if btn.disabled:
-					continue
-				available.append(btn)
+	if not _is_round_play_state() or not current_clue.is_empty():
+		return
+	if game_board == null:
+		return
+	var available := game_board.get_unanswered_tile_indices()
 	if available.is_empty():
 		return
-	var pick := available[rng.randi_range(0, available.size() - 1)]
-	_on_clue_button_pressed(pick)
+	var pick_idx := available[rng.randi_range(0, available.size() - 1)]
+	var tile_state := game_board.get_tile_state(pick_idx)
+	_on_game_board_tile_pressed(tile_state, pick_idx)
 
 
 func _reset_round_state(new_round_index: int = 0, refresh_category_deck: bool = true) -> void:
@@ -2217,18 +2116,12 @@ func _reset_round_state(new_round_index: int = 0, refresh_category_deck: bool = 
 	team_trophies.clear()
 	team_wager_labels.clear()
 	_clear_wager_labels()
-	if final_wager_panel:
-		final_wager_panel.visible = false
+	_safe_set_visible(final_wager_panel, false)
 	if final_clue_button:
 		final_clue_button.disabled = false
 	if final_wager_input:
 		final_wager_input.text = ""
 	_reset_question_panel_color()
-	_set_header_visible(true)
-	if scoreboard:
-		scoreboard.visible = true
-	if play_again_button:
-		play_again_button.visible = false
 
 
 func _select_hidden_double(num_categories: int, num_clues: int) -> void:
@@ -2261,7 +2154,6 @@ func _advance_round_if_needed() -> void:
 				_show_result(
 					_t("Round %d!", "Rodada %d!") % (round_index + 1), Color(0.6, 0.8, 1.0)
 				)
-				_build_board()
 
 
 func _start_final_round() -> void:
@@ -2289,16 +2181,9 @@ func _start_final_round() -> void:
 
 	_stop_timers(true)
 	_end_question_audio()
-	_clear_children(board_grid)
-	board_grid.visible = false
-	_set_header_visible(true)
 
 	current_clue.clear()
 	current_categories = []
-
-	# Optional: use the main title for context
-	if title_label:
-		title_label.text = _t("Final Wagers", "Apostas Finais")
 
 	# Clear old question text - we use the cards to show wager info
 	q_category_label.text = ""
@@ -2307,13 +2192,10 @@ func _start_final_round() -> void:
 	result_label.text = ""
 
 	_disable_answer_buttons()
-	if final_wager_panel:
-		final_wager_panel.visible = false
+	_safe_set_visible(final_wager_panel, false)
 	if final_clue_button:
 		final_clue_button.disabled = true
-	question_panel.visible = true
-	game_root.visible = true
-	_set_board_input_enabled(false)
+	_safe_set_visible(question_panel, true)
 
 	# --- NEW: handle the "everyone negative" case explicitly ---
 	var all_negative := true
@@ -2373,10 +2255,7 @@ func _build_parallel_wager_ui() -> void:
 		final_wager_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 
 	# Hide normal question timer UI during wagers
-	if answer_timer_label:
-		answer_timer_label.visible = false
-	if answer_timer_bar:
-		answer_timer_bar.visible = false
+	_safe_set_visible(answer_timer_label, false)
 
 	final_wager_player = -1
 	final_wager_set = false
@@ -2384,14 +2263,12 @@ func _build_parallel_wager_ui() -> void:
 
 	if final_wager_panel:
 		_clear_children(final_wager_panel)
-		final_wager_panel.visible = true
-	if final_wager_input:
-		final_wager_input.visible = false
-	if final_wager_button:
-		final_wager_button.visible = false
+		_safe_set_visible(final_wager_panel, true)
+	_safe_set_visible(final_wager_input, false)
+	_safe_set_visible(final_wager_button, false)
 	if final_clue_button:
 		final_clue_button.disabled = true
-		final_clue_button.visible = false
+		_safe_set_visible(final_clue_button, false)
 
 	var title := Label.new()
 	title.text = _t("Final Wagers", "Apostas Finais")
@@ -2587,8 +2464,6 @@ func _update_wager_header_text(idx: int) -> void:
 
 
 func _show_wager_labels_then_reveal() -> void:
-	if scoreboard:
-		scoreboard.visible = true
 	for i in range(players.size()):
 		if i >= final_wager_values.size():
 			continue
@@ -2596,7 +2471,7 @@ func _show_wager_labels_then_reveal() -> void:
 			var lbl: Label = team_wager_labels[i] as Label
 			if lbl and is_instance_valid(lbl):
 				lbl.text = _t("Wager: %d", "Aposta: %d") % final_wager_values[i]
-				lbl.visible = true
+				_safe_set_visible(lbl, true)
 				print_debug(
 					"Wager summary label -> player=%d wager=%d" % [i, final_wager_values[i]]
 				)
@@ -2636,10 +2511,8 @@ func _reveal_final_question() -> void:
 	_cancel_ai_buzz_timer()
 	_disable_answer_buttons()
 	_clear_wager_labels()
-	if final_wager_panel:
-		final_wager_panel.visible = false
-	question_panel.visible = true
-	_set_header_visible(true)
+	_safe_set_visible(final_wager_panel, false)
+	_safe_set_visible(question_panel, true)
 
 	var clue := final_question
 	if clue.is_empty():
@@ -2713,17 +2586,13 @@ func _prompt_final_answer_for(idx: int) -> void:
 	buzzed_player = idx
 	answering_player = idx
 	_lock_answering_input(idx)
-	if theme_styler:
-		_set_question_panel_color(theme_styler.team_color(idx))
 	_set_active_team(idx)
 	var name: String = players[idx].get("name", "Player %d" % (idx + 1))
-	turn_label.text = _t("Answer: %s", "Responder: %s") % name
 	result_label.text = _t("Choose an answer (30s).", "Escolha uma resposta (30s).")
 	for btn in answer_button_nodes:
 		if btn:
 			btn.disabled = false
-	if answer_buttons:
-		answer_buttons.visible = true
+	_safe_set_visible(answer_buttons, true)
 	if nav_focus_enabled and not answer_button_nodes.is_empty() and answer_button_nodes[0]:
 		answer_button_nodes[0].grab_focus()
 	_start_answer_timer()
@@ -2767,35 +2636,20 @@ func _resolve_final_answers() -> void:
 			team_scores[i] += wager
 		else:
 			team_scores[i] -= wager
-		if i < team_score_labels.size():
-			_set_score_label(i)
+		_update_game_board_score(i)
 
 	result_label.text = _t("Answer: %s", "Resposta: %s") % str(current_clue.get("answer", ""))
 	_show_result("", Color(0.1, 0.1, 0.1))
-	turn_label.text = _t("Final scores", "Pontuacao final")
-	if scoreboard:
-		scoreboard.visible = true
-	if title_label:
-		title_label.visible = false
 	if question_panel:
-		question_panel.visible = false
+		_safe_set_visible(question_panel, false)
 	q_category_label.text = ""
 	q_value_label.text = ""
 	q_text_label.text = ""
 	result_label.text = ""
-	_set_header_visible(true)
 	if game_state_machine:
 		game_state_machine.transition_to(GameStateMachine.State.RESULTS)
 		return
-	if play_again_button:
-		play_again_button.visible = true
 	_show_winner_trophies()
-
-
-func _set_header_visible(visible: bool) -> void:
-	title_label.visible = visible
-	scoreboard.visible = true
-	turn_label.visible = true
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -3103,7 +2957,7 @@ func _handle_escape_input(event: InputEvent) -> bool:
 			if settings_screen:
 				settings_screen.back_to_pause()
 			else:
-				settings_panel.visible = false
+				_safe_set_visible(settings_panel, false)
 				_open_pause_menu()
 		elif pause_menu.visible:
 			_play_select_sfx()

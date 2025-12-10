@@ -1,24 +1,25 @@
-[gd_scene load_steps=37 format=3 uid="uid://88jpn26ij3hx"]
+[gd_scene load_steps=45 format=3 uid="uid://88jpn26ij3hx"]
 
 [ext_resource type="Script" uid="uid://bpdw75wca58c" path="res://src/ui/main/main.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://x3pbbp33v43u" path="res://main_background.png" id="2_w48qg"]
-[ext_resource type="Script" uid="uid://c8ooxfpwprdxg" path="res://src/ui/components/timer_bar.gd" id="3"]
 [ext_resource type="Texture2D" uid="uid://cw6in2itrdruo" path="res://settings_button.png" id="3_vivmo"]
 [ext_resource type="Texture2D" uid="uid://bw4qwjx2mi133" path="res://settings_button_pressed.png" id="4_5vw27"]
 [ext_resource type="Texture2D" uid="uid://dkpesrkueqn2r" path="res://logo.png" id="5_cegan"]
-[ext_resource type="Texture2D" uid="uid://d4etpp6i60fnp" path="res://play_button.png" id="5_kek77"]
 [ext_resource type="Texture2D" uid="uid://brjflaubeqjug" path="res://scroll.png" id="6_2cqfq"]
-[ext_resource type="Texture2D" uid="uid://dttchpj052hny" path="res://play_button_pressed.png" id="8_kek77"]
+[ext_resource type="Texture2D" uid="uid://dxun2nvrutyi8" path="res://blank_button.png" id="7_ycdy4"]
+[ext_resource type="Texture2D" uid="uid://dhdgnch32vpg" path="res://blank_button_pressed.png" id="8_w48qg"]
 [ext_resource type="Texture2D" uid="uid://7a20jgte1nqa" path="res://secondary_background.png" id="9_w48qg"]
 [ext_resource type="FontFile" uid="uid://b2dtthqjcbvu1" path="res://fonts/troika.otf" id="10_cegan"]
-[ext_resource type="Texture2D" uid="uid://c463g0mj1ebje" path="res://back_button.png" id="10_yaehf"]
-[ext_resource type="Texture2D" uid="uid://cwaj638g8wed3" path="res://back_button_pressed.png" id="11_074og"]
-[ext_resource type="Texture2D" uid="uid://pqs3jwehh6cm" path="res://exit_button.png" id="12_cegan"]
-[ext_resource type="Texture2D" uid="uid://ktr2foxrm5nq" path="res://exit_button_pressed.png" id="13_82xsv"]
-[ext_resource type="Texture2D" uid="uid://cmf4664txyj6m" path="res://continue_button.png" id="14_2cqfq"]
+[ext_resource type="Texture2D" uid="uid://cqtunn57fy7h4" path="res://player.png" id="13_w48qg"]
+[ext_resource type="Texture2D" uid="uid://c0t0dxw87e3bm" path="res://category_box.png" id="14_vivmo"]
+[ext_resource type="Texture2D" uid="uid://blk0gapnd51m7" path="res://board_bg.png" id="15_2cqfq"]
 [ext_resource type="Texture2D" uid="uid://cbnxlx01lndyb" path="res://connect_controllers_bg.png" id="15_82xsv"]
-[ext_resource type="Texture2D" uid="uid://c53biyh8brel7" path="res://continue_button_pressed.png" id="15_yaehf"]
 [ext_resource type="Texture2D" uid="uid://c2vy28maqj5i6" path="res://square_button_bg.png" id="16_getpj"]
+[ext_resource type="Texture2D" uid="uid://drygj2vcjsdsc" path="res://tile.png" id="16_yaehf"]
+[ext_resource type="Texture2D" uid="uid://cytiw6df58i4c" path="res://tile_pressed.png" id="17_074og"]
+[ext_resource type="Script" uid="uid://bc8ydx2bysb6m" path="res://src/ui/screens/game_board.gd" id="18_gboard"]
+[ext_resource type="Texture2D" uid="uid://envnfcx03ek3" path="res://empty_box_small.png" id="20_getpj"]
+[ext_resource type="Texture2D" uid="uid://cn4kfuk1ifv83" path="res://question_panel.png" id="21_ryguw"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kek77"]
 texture = ExtResource("3_vivmo")
@@ -36,30 +37,31 @@ expand_margin_bottom = 316.0
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ycdy4"]
 texture = ExtResource("6_2cqfq")
 expand_margin_left = 15.0
+expand_margin_top = 12.0
 expand_margin_right = 15.0
-expand_margin_bottom = 30.0
+expand_margin_bottom = 45.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_efxa6"]
-texture = ExtResource("5_kek77")
+texture = ExtResource("7_ycdy4")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dg77c"]
-texture = ExtResource("8_kek77")
+texture = ExtResource("8_w48qg")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vivmo"]
 texture = ExtResource("6_2cqfq")
 expand_margin_bottom = 45.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_getpj"]
-texture = ExtResource("10_yaehf")
+texture = ExtResource("7_ycdy4")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ryguw"]
-texture = ExtResource("11_074og")
+texture = ExtResource("8_w48qg")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d13ii"]
-texture = ExtResource("12_cegan")
+texture = ExtResource("7_ycdy4")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1u8w0"]
-texture = ExtResource("13_82xsv")
+texture = ExtResource("8_w48qg")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lswn8"]
 texture = ExtResource("15_82xsv")
@@ -68,16 +70,42 @@ texture = ExtResource("15_82xsv")
 texture = ExtResource("16_getpj")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_074og"]
-texture = ExtResource("14_2cqfq")
+texture = ExtResource("7_ycdy4")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cegan"]
-texture = ExtResource("15_yaehf")
+texture = ExtResource("8_w48qg")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_82xsv"]
-texture = ExtResource("10_yaehf")
+texture = ExtResource("7_ycdy4")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0odxb"]
-texture = ExtResource("11_074og")
+texture = ExtResource("8_w48qg")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2cqfq"]
+texture = ExtResource("13_w48qg")
+expand_margin_left = 30.0
+expand_margin_top = 20.0
+expand_margin_right = 30.0
+expand_margin_bottom = 30.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yaehf"]
+texture = ExtResource("14_vivmo")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xuqvo"]
+texture = ExtResource("15_2cqfq")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qsp4k"]
+texture = ExtResource("16_yaehf")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kq58d"]
+texture = ExtResource("17_074og")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_seu75"]
+texture = ExtResource("20_getpj")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_htxhm"]
+texture = ExtResource("21_ryguw")
+expand_margin_bottom = 30.0
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -89,6 +117,7 @@ grow_vertical = 2
 script = ExtResource("1")
 
 [node name="MainMenu" type="MarginContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -147,7 +176,7 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_w48qg")
 
 [node name="VerseMarginContainer" type="MarginContainer" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(450, 275)
+custom_minimum_size = Vector2(450, 300)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -158,12 +187,13 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_ycdy4")
 
 [node name="MarginContainer" type="MarginContainer" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay"]
+custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="CardVBox" type="VBoxContainer" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer"]
-custom_minimum_size = Vector2(320, 150)
+custom_minimum_size = Vector2(280, 140)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -175,7 +205,7 @@ text = "SCRIPTURE OF THE DAY"
 horizontal_alignment = 1
 
 [node name="VerseText" type="Label" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/VerseMarginContainer/VerseOfDay/MarginContainer/CardVBox"]
-custom_minimum_size = Vector2(315, 0)
+custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 text = "Loading..."
 horizontal_alignment = 1
@@ -197,6 +227,26 @@ layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_efxa6")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_dg77c")
 theme_override_styles/hover = SubResource("StyleBoxTexture_dg77c")
+
+[node name="Label" type="Label" parent="MainMenu/baseMenuScreen/NinePatchRect/MarginContainer/VBoxContainer/PlayMarginContainer/PlayButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 48
+text = "PLAY"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SettingsPanel" type="Control" parent="."]
 visible = false
@@ -300,6 +350,24 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_ryguw")
 text = "
 "
 
+[node name="Label" type="Label" parent="SettingsPanel/Content/SettingsGUI/CenterContainer/VBoxContainer/HBoxContainer/BackButtonContainer/BackButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 48
+text = "BACK"
+
 [node name="ExitButtonContainer" type="MarginContainer" parent="SettingsPanel/Content/SettingsGUI/CenterContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(339.5, 100)
 layout_mode = 2
@@ -312,6 +380,24 @@ layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_d13ii")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_1u8w0")
 theme_override_styles/hover = SubResource("StyleBoxTexture_1u8w0")
+
+[node name="Label" type="Label" parent="SettingsPanel/Content/SettingsGUI/CenterContainer/VBoxContainer/HBoxContainer/ExitButtonContainer/ExitButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 48
+text = "EXIT GAME"
 
 [node name="ConnectControllersPanel" type="Control" parent="."]
 visible = false
@@ -365,8 +451,8 @@ layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
-theme_override_font_sizes/font_size = 20
-text = "Press any button to clain Players 1-3. Remaining slots A.I."
+theme_override_font_sizes/font_size = 16
+text = "Press any button to claim Players 1-3. Remaining slots A.I."
 autowrap_mode = 2
 
 [node name="HBoxPlayerContainer" type="HBoxContainer" parent="ConnectControllersPanel/MarginContainer/PanelContainer/VBox"]
@@ -413,7 +499,7 @@ vertical_alignment = 1
 [node name="Label2" type="Label" parent="ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer1/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "Press any button"
 horizontal_alignment = 1
 
@@ -453,7 +539,7 @@ vertical_alignment = 1
 [node name="Label2" type="Label" parent="ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer2/Panel2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "Press any button"
 horizontal_alignment = 1
 
@@ -493,7 +579,7 @@ vertical_alignment = 1
 [node name="Label2" type="Label" parent="ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxPlayerContainer/MarginPlayerContainer3/Panel2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "Press any button"
 horizontal_alignment = 1
 
@@ -539,6 +625,24 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_074og")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_cegan")
 theme_override_styles/hover = SubResource("StyleBoxTexture_cegan")
 
+[node name="Label" type="Label" parent="ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxButtonContainer/ContinueContainer/ContinueButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -41.5
+offset_top = -11.5
+offset_right = 41.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 48
+text = "CONTINUE"
+
 [node name="BackContainer" type="MarginContainer" parent="ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxButtonContainer"]
 custom_minimum_size = Vector2(272, 80)
 layout_mode = 2
@@ -552,7 +656,25 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_82xsv")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_0odxb")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0odxb")
 
-[node name="CharacterSelectPanel" type="Control" parent="."]
+[node name="Label" type="Label" parent="ConnectControllersPanel/MarginContainer/PanelContainer/VBox/HBoxButtonContainer/BackContainer/BackButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -21.0
+offset_top = -11.5
+offset_right = 21.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 48
+text = "BACK"
+
+[node name="GameBoard" type="Control" parent="."]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -560,157 +682,108 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("18_gboard")
 
-[node name="Dimmer" type="ColorRect" parent="CharacterSelectPanel"]
+[node name="Content" type="MarginContainer" parent="GameBoard"]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="GameBoard/Content"]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 2
+texture = ExtResource("9_w48qg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameBoard/Content"]
+layout_mode = 2
+
+[node name="SettingsMarginContainer" type="MarginContainer" parent="GameBoard/Content/VBoxContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_top = 70
+theme_override_constants/margin_right = 80
+
+[node name="SettingsButton" type="Button" parent="GameBoard/Content/VBoxContainer/SettingsMarginContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_kek77")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_4c57u")
+theme_override_styles/hover = SubResource("StyleBoxTexture_4c57u")
+
+[node name="HBoxPlayerContainer" type="HBoxContainer" parent="GameBoard/Content/VBoxContainer"]
+custom_minimum_size = Vector2(1400, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="Player1Panel" type="Panel" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 0.32)
-
-[node name="Content" type="PanelContainer" parent="CharacterSelectPanel"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.18
-anchor_top = 0.14
-anchor_right = 0.82
-anchor_bottom = 0.86
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 1
-
-[node name="VBox" type="VBoxContainer" parent="CharacterSelectPanel/Content"]
-layout_mode = 2
-theme_override_constants/separation = 14
 alignment = 1
 
-[node name="SelectTitle" type="Label" parent="CharacterSelectPanel/Content/VBox"]
+[node name="Control" type="Control" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 120)
 layout_mode = 2
-text = "Choose Your Character"
-horizontal_alignment = 1
 
-[node name="SelectSubtitle" type="Label" parent="CharacterSelectPanel/Content/VBox"]
-layout_mode = 2
-text = "Each player picks a unique hero. AI players are randomized."
-horizontal_alignment = 1
-autowrap_mode = 2
-
-[node name="Slots" type="HBoxContainer" parent="CharacterSelectPanel/Content/VBox"]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 12
+size_flags_vertical = 4
 alignment = 1
 
-[node name="Slot1" type="PanelContainer" parent="CharacterSelectPanel/Content/VBox/Slots"]
-custom_minimum_size = Vector2(240, 170)
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="SlotVBox" type="VBoxContainer" parent="CharacterSelectPanel/Content/VBox/Slots/Slot1"]
-layout_mode = 2
-theme_override_constants/separation = 6
-alignment = 1
-
-[node name="Portrait" type="ColorRect" parent="CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox"]
-custom_minimum_size = Vector2(120, 120)
-layout_mode = 2
-color = Color(0.18, 0.18, 0.18, 1)
-
-[node name="SlotLabel" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox"]
-layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
 text = "Player 1"
 horizontal_alignment = 1
-autowrap_mode = 2
+vertical_alignment = 1
 
-[node name="SlotHint" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot1/SlotVBox"]
+[node name="Label2" type="Label" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer/VBoxContainer"]
 layout_mode = 2
-text = "Waiting"
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "$0"
 horizontal_alignment = 1
-autowrap_mode = 2
+vertical_alignment = 1
 
-[node name="Slot2" type="PanelContainer" parent="CharacterSelectPanel/Content/VBox/Slots"]
-custom_minimum_size = Vector2(240, 170)
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="SlotVBox" type="VBoxContainer" parent="CharacterSelectPanel/Content/VBox/Slots/Slot2"]
-layout_mode = 2
-theme_override_constants/separation = 6
-alignment = 1
-
-[node name="Portrait" type="ColorRect" parent="CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox"]
-custom_minimum_size = Vector2(120, 120)
-layout_mode = 2
-color = Color(0.18, 0.18, 0.18, 1)
-
-[node name="SlotLabel" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox"]
-layout_mode = 2
-text = "Player 2"
-horizontal_alignment = 1
-autowrap_mode = 2
-
-[node name="SlotHint" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot2/SlotVBox"]
-layout_mode = 2
-text = "Waiting"
-horizontal_alignment = 1
-autowrap_mode = 2
-
-[node name="Slot3" type="PanelContainer" parent="CharacterSelectPanel/Content/VBox/Slots"]
-custom_minimum_size = Vector2(240, 170)
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="SlotVBox" type="VBoxContainer" parent="CharacterSelectPanel/Content/VBox/Slots/Slot3"]
-layout_mode = 2
-theme_override_constants/separation = 6
-alignment = 1
-
-[node name="Portrait" type="ColorRect" parent="CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox"]
-custom_minimum_size = Vector2(120, 120)
-layout_mode = 2
-color = Color(0.18, 0.18, 0.18, 1)
-
-[node name="SlotLabel" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox"]
-layout_mode = 2
-text = "Player 3"
-horizontal_alignment = 1
-autowrap_mode = 2
-
-[node name="SlotHint" type="Label" parent="CharacterSelectPanel/Content/VBox/Slots/Slot3/SlotVBox"]
-layout_mode = 2
-text = "Waiting"
-horizontal_alignment = 1
-autowrap_mode = 2
-
-[node name="Prompt" type="Label" parent="CharacterSelectPanel/Content/VBox"]
-layout_mode = 2
-text = "Player 1: Choose a character"
-horizontal_alignment = 1
-autowrap_mode = 2
-
-[node name="Options" type="GridContainer" parent="CharacterSelectPanel/Content/VBox"]
+[node name="Player2Panel" type="Panel" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer"]
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_constants/h_separation = 10
-theme_override_constants/v_separation = 10
-columns = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
 
-[node name="CharacterButtonRow" type="HBoxContainer" parent="CharacterSelectPanel/Content/VBox"]
-layout_mode = 2
-theme_override_constants/separation = 12
-alignment = 1
-
-[node name="CharacterBackButton" type="Button" parent="CharacterSelectPanel/Content/VBox/CharacterButtonRow"]
-custom_minimum_size = Vector2(160, 0)
-layout_mode = 2
-text = "Back"
-
-[node name="RootVBox" type="VBoxContainer" parent="."]
-visible = false
+[node name="VBoxContainer" type="VBoxContainer" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -719,116 +792,735 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="TitleLogoMain" type="TextureRect" parent="RootVBox"]
-visible = false
-custom_minimum_size = Vector2(1100, 300)
+[node name="Control" type="Control" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 120)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-expand_mode = 2
-stretch_mode = 6
-
-[node name="TitleLabel" type="Label" parent="RootVBox"]
-visible = false
-layout_mode = 2
-
-[node name="Scoreboard" type="HBoxContainer" parent="RootVBox"]
-layout_mode = 2
 alignment = 1
 
-[node name="TurnLabel" type="Label" parent="RootVBox"]
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "Player 2"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="BoardMargin" type="MarginContainer" parent="RootVBox"]
+[node name="Label2" type="Label" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 40
-theme_override_constants/margin_bottom = 20
-
-[node name="BoardGrid" type="GridContainer" parent="RootVBox/BoardMargin"]
-layout_mode = 2
-columns = 3
-
-[node name="QuestionPanel" type="PanelContainer" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.08
-anchor_top = 0.24
-anchor_right = 0.92
-anchor_bottom = 0.96
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="QuestionVBox" type="VBoxContainer" parent="QuestionPanel"]
-layout_mode = 2
-alignment = 1
-
-[node name="QuestionCategory" type="Label" parent="QuestionPanel/QuestionVBox"]
-layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "$0"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="QuestionValue" type="Label" parent="QuestionPanel/QuestionVBox"]
-layout_mode = 2
-horizontal_alignment = 1
-
-[node name="QuestionText" type="Label" parent="QuestionPanel/QuestionVBox"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-horizontal_alignment = 1
-autowrap_mode = 2
-
-[node name="ResultLabel" type="Label" parent="QuestionPanel/QuestionVBox"]
-layout_mode = 2
-horizontal_alignment = 1
-
-[node name="Characters" type="HBoxContainer" parent="QuestionPanel/QuestionVBox"]
-layout_mode = 2
-alignment = 1
-
-[node name="LeftCharacter" type="TextureRect" parent="QuestionPanel/QuestionVBox/Characters"]
-layout_mode = 2
-
-[node name="RightCharacter" type="TextureRect" parent="QuestionPanel/QuestionVBox/Characters"]
-layout_mode = 2
-
-[node name="AnswerButtons" type="Control" parent="QuestionPanel/QuestionVBox"]
-layout_mode = 2
-
-[node name="TimerBar" type="Control" parent="QuestionPanel/QuestionVBox"]
-custom_minimum_size = Vector2(800, 28)
+[node name="Player3Panel" type="Panel" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer"]
+custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 4
-script = ExtResource("3")
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
 
-[node name="FinalWager" type="VBoxContainer" parent="QuestionPanel"]
-visible = false
-layout_mode = 2
-theme_override_constants/separation = 32
+[node name="VBoxContainer" type="VBoxContainer" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 alignment = 1
 
-[node name="WagerLabel" type="Label" parent="QuestionPanel/FinalWager"]
+[node name="Control" type="Control" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 120)
 layout_mode = 2
-text = "Set Final Wager"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "Player 3"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="WagerInput" type="LineEdit" parent="QuestionPanel/FinalWager"]
+[node name="Label2" type="Label" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer/VBoxContainer"]
 layout_mode = 2
-placeholder_text = "Enter wager"
-caret_blink = true
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="SetWagerButton" type="Button" parent="QuestionPanel/FinalWager"]
+[node name="HBoxCategoryContainer" type="HBoxContainer" parent="GameBoard/Content/VBoxContainer"]
+custom_minimum_size = Vector2(1200, 120)
 layout_mode = 2
-text = "Set Wager"
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
 
-[node name="FinalClueButton" type="Button" parent="QuestionPanel/FinalWager"]
+[node name="CategoryPanel1" type="Panel" parent="GameBoard/Content/VBoxContainer/HBoxCategoryContainer"]
+custom_minimum_size = Vector2(300, 70)
 layout_mode = 2
-text = "Get Clue (-10%)"
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_yaehf")
 
-[node name="AnswerTimer" type="Label" parent="QuestionPanel"]
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/HBoxCategoryContainer/CategoryPanel1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "CATEGORY"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="CategoryPanel2" type="Panel" parent="GameBoard/Content/VBoxContainer/HBoxCategoryContainer"]
+custom_minimum_size = Vector2(300, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_yaehf")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/HBoxCategoryContainer/CategoryPanel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "CATEGORY"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="CategoryPanel3" type="Panel" parent="GameBoard/Content/VBoxContainer/HBoxCategoryContainer"]
+custom_minimum_size = Vector2(300, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_yaehf")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/HBoxCategoryContainer/CategoryPanel3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "CATEGORY"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="CategoryPanel4" type="Panel" parent="GameBoard/Content/VBoxContainer/HBoxCategoryContainer"]
+custom_minimum_size = Vector2(300, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_yaehf")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/HBoxCategoryContainer/CategoryPanel4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "CATEGORY"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="MarginBoardContainer" type="MarginContainer" parent="GameBoard/Content/VBoxContainer"]
+custom_minimum_size = Vector2(1200, 520)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Panel" type="Panel" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_xuqvo")
+
+[node name="GridGameContainer" type="GridContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer"]
+custom_minimum_size = Vector2(1100, 400)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 112
+theme_override_constants/v_separation = 24
+columns = 4
+
+[node name="MarginTileContainer" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginTileContainer2" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer2"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginTileContainer3" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer3"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginTileContainer4" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer4"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer4"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginTileContainer5" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer5"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer5"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginTileContainer6" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer6"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer6"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginTileContainer7" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer7"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer7"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginTileContainer8" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer8"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer8"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginTileContainer9" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer9"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer9"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginTileContainer10" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer10"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer10"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginTileContainer11" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer11"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer11"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginTileContainer12" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer12"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
+
+[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer12"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="QuestionPanel" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("18_gboard")
+
+[node name="Content" type="MarginContainer" parent="QuestionPanel"]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="QuestionPanel/Content"]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 2
+texture = ExtResource("9_w48qg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QuestionPanel/Content"]
+layout_mode = 2
+
+[node name="TimerMarginContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_top = 70
+theme_override_constants/margin_right = 80
+
+[node name="Panel" type="Panel" parent="QuestionPanel/Content/VBoxContainer/TimerMarginContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_seu75")
+
+[node name="Timer" type="Label" parent="QuestionPanel/Content/VBoxContainer/TimerMarginContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "30"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxPlayerContainer" type="HBoxContainer" parent="QuestionPanel/Content/VBoxContainer"]
+custom_minimum_size = Vector2(1400, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="Player1Panel" type="Panel" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Control" type="Control" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 120)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "Player 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player2Panel" type="Panel" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Control" type="Control" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 120)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "Player 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player3Panel" type="Panel" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Control" type="Control" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 120)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "Player 3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="QuestionPanel" type="Panel" parent="QuestionPanel/Content/VBoxContainer"]
+custom_minimum_size = Vector2(1200, 600)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_htxhm")
+
+[node name="MarginContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel"]
+custom_minimum_size = Vector2(800, 550)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -275.0
+offset_right = 400.0
+offset_bottom = 275.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_bottom = 50
+
+[node name="QuestionVBox" type="VBoxContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+custom_minimum_size = Vector2(800, 160)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -10
+alignment = 1
+
+[node name="QuestionCategory" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 64
+text = "CATEGORY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="QuestionValue" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 64
+text = "$400"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_constants/margin_bottom = 50
+
+[node name="QuestionText" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/MarginContainer"]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 40
+text = "WHERE IS THIS VERSE FROM?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResultLabel" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
 layout_mode = 2
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
