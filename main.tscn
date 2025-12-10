@@ -752,7 +752,7 @@ theme_override_constants/separation = 64
 alignment = 1
 
 [node name="Player1Panel" type="Panel" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer"]
-custom_minimum_size = Vector2(200, 200)
+custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -768,11 +768,11 @@ grow_vertical = 2
 alignment = 1
 
 [node name="Control" type="Control" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 120)
+custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 80)
+custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -799,7 +799,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Player2Panel" type="Panel" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer"]
-custom_minimum_size = Vector2(200, 200)
+custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -815,11 +815,11 @@ grow_vertical = 2
 alignment = 1
 
 [node name="Control" type="Control" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 120)
+custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 80)
+custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -832,7 +832,7 @@ theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.0196078
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 20
-text = "Player 2"
+text = "Player 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -846,7 +846,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Player3Panel" type="Panel" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer"]
-custom_minimum_size = Vector2(200, 200)
+custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -862,11 +862,11 @@ grow_vertical = 2
 alignment = 1
 
 [node name="Control" type="Control" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 120)
+custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 80)
+custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -879,7 +879,7 @@ theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.0196078
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 20
-text = "Player 3"
+text = "Player 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -1329,7 +1329,7 @@ theme_override_constants/separation = 64
 alignment = 1
 
 [node name="Player1Panel" type="Panel" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer"]
-custom_minimum_size = Vector2(200, 200)
+custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -1345,11 +1345,11 @@ grow_vertical = 2
 alignment = 1
 
 [node name="Control" type="Control" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 120)
+custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 80)
+custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -1376,7 +1376,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Player2Panel" type="Panel" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer"]
-custom_minimum_size = Vector2(200, 200)
+custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -1392,11 +1392,11 @@ grow_vertical = 2
 alignment = 1
 
 [node name="Control" type="Control" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 120)
+custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 80)
+custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -1409,7 +1409,7 @@ theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.0196078
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 20
-text = "Player 2"
+text = "Player 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -1423,7 +1423,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Player3Panel" type="Panel" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer"]
-custom_minimum_size = Vector2(200, 200)
+custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -1439,11 +1439,11 @@ grow_vertical = 2
 alignment = 1
 
 [node name="Control" type="Control" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 120)
+custom_minimum_size = Vector2(200, 100)
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer"]
-custom_minimum_size = Vector2(200, 80)
+custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -1456,7 +1456,7 @@ theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.0196078
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 20
-text = "Player 3"
+text = "Player 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -1526,6 +1526,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="QuestionContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+visible = false
 custom_minimum_size = Vector2(800, 300)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -1544,7 +1545,6 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="ResultContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
-visible = false
 custom_minimum_size = Vector2(800, 300)
 layout_mode = 2
 size_flags_horizontal = 4

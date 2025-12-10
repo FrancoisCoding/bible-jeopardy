@@ -30,6 +30,8 @@ const QUESTION_CHAR_DELAY := 0.03
 @export var selected_choice_display_seconds: float = 1.0
 @export var ai_buzz_delay_seconds: float = 1.0
 @export var ai_board_pick_delay_seconds: float = 5.0
+@export var active_player_scale: float = 1.5
+@export var inactive_player_opacity: float = 0.5
 const FINAL_WAGER_TIME := 30.0
 const AI_DIFFICULTY_RATES := {"easy": 0.2, "normal": 0.4, "hard": 0.7}
 const ROUND_VALUES := [[400, 800, 1200], [800, 1200, 2000]]
@@ -183,6 +185,9 @@ var controller_connect_content: PanelContainer = get_node_or_null("ConnectContro
 @onready var q_value_label: Label = get_node_or_null(
 	"QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/VBoxContainer2/QuestionValue"
 )
+@onready var question_header_container: Control = get_node_or_null(
+	"QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/VBoxContainer2"
+)
 @onready var q_text_label: Label = get_node_or_null(
 	"QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/QuestionContainer/QuestionText"
 )
@@ -244,6 +249,16 @@ var controller_connect_content: PanelContainer = get_node_or_null("ConnectContro
 		"QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer/VBoxContainer/Label2"
 	)
 ]
+@onready var board_player_panels: Array[Control] = [
+	get_node_or_null("GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel"),
+	get_node_or_null("GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel"),
+	get_node_or_null("GameBoard/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel")
+]
+@onready var question_player_panels: Array[Control] = [
+	get_node_or_null("QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel"),
+	get_node_or_null("QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel"),
+	get_node_or_null("QuestionPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel")
+]
 @onready
 var final_wager_panel: Control = get_node_or_null("QuestionPanel/QuestionPanelOLD/FinalWager")
 @onready var final_wager_label: Label = get_node_or_null(
@@ -267,6 +282,9 @@ var final_wager_panel: Control = get_node_or_null("QuestionPanel/QuestionPanelOL
 
 # Game Board UI
 @onready var game_board: GameBoard = get_node_or_null("GameBoard")
+@onready var board_settings_button: Button = get_node_or_null(
+	"GameBoard/Content/VBoxContainer/SettingsMarginContainer/SettingsButton"
+)
 
 # Settings
 @onready var play_button: Button = get_node_or_null(
@@ -285,6 +303,10 @@ var team_cards: Array[PanelContainer] = []
 var team_trophies: Array[Label] = []
 var team_wager_labels: Array[Label] = []
 var team_card_pulse_tween: Tween = null
+var base_board_sizes: Array[Vector2] = []
+var base_question_sizes: Array[Vector2] = []
+var base_board_inner_heights: Array[float] = []
+var base_question_inner_heights: Array[float] = []
 
 enum QuestionPhase { IDLE, READING, ANSWERING, SHOWING_SELECTED, SHOWING_RESULT }
 
@@ -491,6 +513,7 @@ func _ready() -> void:
 		question_panel.visibility_changed.connect(_on_question_panel_visibility_changed)
 
 	_initialize_answer_buttons()
+	_collect_player_cards()
 	_update_verse_of_day()
 	# Hook up UI
 	_safe_connect_pressed(title_play_button, _on_play_pressed, "Play button")
@@ -513,6 +536,9 @@ func _ready() -> void:
 	)
 	_safe_connect_pressed(
 		controller_back_button, _on_controller_connect_cancel_pressed, "Controller back button"
+	)
+	_safe_connect_pressed(
+		board_settings_button, _on_board_settings_pressed, "Board settings button"
 	)
 	_safe_connect_item_selected(
 		controller_ai_option, func(idx: int) -> void: _on_ai_difficulty_selected(idx), "AI option"
@@ -614,6 +640,7 @@ func _sync_game_board_players() -> void:
 		enriched.append(p)
 	game_board.set_players(enriched)
 	_sync_question_panel_players()
+	_update_player_portrait_highlight(current_turn_team)
 
 
 func _update_game_board_score(idx: int) -> void:
@@ -621,6 +648,7 @@ func _update_game_board_score(idx: int) -> void:
 	if game_board:
 		game_board.update_player_score(idx, score)
 	_update_question_panel_score(idx, score)
+	_update_player_portrait_highlight(current_turn_team)
 
 
 func _format_score_text(score: int) -> String:
@@ -650,6 +678,7 @@ func _sync_question_panel_players() -> void:
 		if name_lbl:
 			name_lbl.text = name
 		_update_question_panel_score(i, score)
+	_update_player_portrait_highlight(current_turn_team)
 
 
 func _trim_category_for_round(cat: Dictionary) -> Dictionary:
@@ -834,6 +863,7 @@ func _enter_final_question_state() -> void:
 
 
 func _enter_results_state() -> void:
+	_show_results_view()
 	_show_winner_trophies()
 
 
@@ -962,7 +992,8 @@ func _stop_team_card_pulse() -> void:
 	team_card_pulse_tween = null
 	for c in team_cards:
 		if c and is_instance_valid(c):
-			(c as Control).scale = Vector2.ONE
+			(c as Control).custom_minimum_size = Vector2.ZERO
+			(c as Control).modulate = Color(1, 1, 1, 1)
 
 
 func _start_team_card_pulse(idx: int) -> void:
@@ -986,17 +1017,143 @@ func _start_team_card_pulse(idx: int) -> void:
 	team_card_pulse_tween = tween
 
 
+func _update_player_portrait_highlight(active_idx: int) -> void:
+	# How many player slots you actually have:
+	var player_count: int = min(3, players.size())
+
+	for player_idx in range(player_count):
+		var is_active := player_idx == active_idx and active_idx >= 0
+		var factor := active_player_scale if is_active else 1.0
+		var target_alpha := 1.0 if is_active else inactive_player_opacity
+
+		# Board card
+		if player_idx < board_player_panels.size():
+			var bcard := board_player_panels[player_idx] as Control
+			if bcard and is_instance_valid(bcard):
+				var base := (
+					base_board_sizes[player_idx]
+					if player_idx < base_board_sizes.size()
+					else bcard.custom_minimum_size
+				)
+				bcard.custom_minimum_size = base * factor
+
+				var c := bcard.modulate
+				c.a = target_alpha
+				bcard.modulate = c
+
+				var b_inner := bcard.get_node_or_null("VBoxContainer/Control") as Control
+				if b_inner and is_instance_valid(b_inner):
+					var inner_size := b_inner.custom_minimum_size
+					var base_inner_h := (
+						base_board_inner_heights[player_idx]
+						if player_idx < base_board_inner_heights.size()
+						else inner_size.y
+					)
+					inner_size.y = 120.0 if is_active else base_inner_h
+					b_inner.custom_minimum_size = inner_size
+
+		# Question card
+		if player_idx < question_player_panels.size():
+			var qcard := question_player_panels[player_idx] as Control
+			if qcard and is_instance_valid(qcard):
+				var baseq := (
+					base_question_sizes[player_idx]
+					if player_idx < base_question_sizes.size()
+					else qcard.custom_minimum_size
+				)
+				qcard.custom_minimum_size = baseq * factor
+
+				var cq := qcard.modulate
+				cq.a = target_alpha
+				qcard.modulate = cq
+
+				var q_inner := qcard.get_node_or_null("VBoxContainer/Control") as Control
+				if q_inner and is_instance_valid(q_inner):
+					var innerq_size := q_inner.custom_minimum_size
+					var base_inner_hq := (
+						base_question_inner_heights[player_idx]
+						if player_idx < base_question_inner_heights.size()
+						else innerq_size.y
+					)
+					innerq_size.y = 120.0 if is_active else base_inner_hq
+					q_inner.custom_minimum_size = innerq_size
+
+		print_debug(
+			(
+				"Highlight player=%d active=%s factor=%.2f alpha=%.2f"
+				% [player_idx, str(is_active), factor, target_alpha]
+			)
+		)
+
+
 func _set_active_team(idx: int) -> void:
 	var max_team: int = max(0, players.size() - 1)
 	current_turn_team = clamp(idx, 0, max_team)
 	if theme_styler:
 		theme_styler.refresh_team_highlight(team_cards, current_turn_team)
 		_start_team_card_pulse(current_turn_team)
+	_update_player_portrait_highlight(current_turn_team)
 
 
 func _reset_question_panel_color() -> void:
 	# Visual styling is controlled in the editor; nothing to reset in code.
 	pass
+
+
+func _show_results_view() -> void:
+	_safe_set_visible(question_panel, true)
+	_safe_set_visible(question_header_container, true)
+	_safe_set_visible(result_container, true)
+	_safe_set_visible(question_container, false)
+	_safe_set_visible(answer_container, false)
+	_safe_set_visible(selected_choice_container, false)
+	_safe_set_visible(answer_buttons, false)
+	_safe_set_visible(answer_timer_label, false)
+
+
+func _collect_player_cards() -> void:
+	team_cards.clear()
+	base_board_sizes.clear()
+	base_question_sizes.clear()
+	base_board_inner_heights.clear()
+	base_question_inner_heights.clear()
+
+	for i in range(3):
+		# Board cards
+		if i < board_player_panels.size():
+			var board_card := board_player_panels[i] as Control
+			if board_card and is_instance_valid(board_card):
+				team_cards.append(board_card)
+				base_board_sizes.append(board_card.custom_minimum_size)
+				var b_inner := board_card.get_node_or_null("VBoxContainer/Control") as Control
+				base_board_inner_heights.append(
+					b_inner.custom_minimum_size.y if b_inner and is_instance_valid(b_inner) else 0.0
+				)
+			else:
+				base_board_sizes.append(Vector2.ZERO)
+				base_board_inner_heights.append(0.0)
+		else:
+			base_board_sizes.append(Vector2.ZERO)
+			base_board_inner_heights.append(0.0)
+
+		# Question cards
+		if i < question_player_panels.size():
+			var question_card := question_player_panels[i] as Control
+			if question_card and is_instance_valid(question_card):
+				team_cards.append(question_card)
+				base_question_sizes.append(question_card.custom_minimum_size)
+				var q_inner := question_card.get_node_or_null("VBoxContainer/Control") as Control
+				base_question_inner_heights.append(
+					q_inner.custom_minimum_size.y if q_inner and is_instance_valid(q_inner) else 0.0
+				)
+			else:
+				base_question_sizes.append(Vector2.ZERO)
+				base_question_inner_heights.append(0.0)
+		else:
+			base_question_sizes.append(Vector2.ZERO)
+			base_question_inner_heights.append(0.0)
+
+	_update_player_portrait_highlight(current_turn_team)
 
 
 func _on_question_panel_visibility_changed() -> void:
@@ -1060,6 +1217,14 @@ func _on_settings_pressed() -> void:
 		settings_screen.show_settings_from_title()
 	if language_option and nav_focus_enabled:
 		language_option.grab_focus()
+
+
+func _on_board_settings_pressed() -> void:
+	_play_select_sfx()
+	if game_state_machine:
+		game_state_machine.pause()
+	else:
+		_open_pause_menu()
 
 
 func _on_settings_back_pressed() -> void:
@@ -1325,7 +1490,14 @@ func _can_open_pause_menu() -> bool:
 	var qp_visible := (
 		question_panel and is_instance_valid(question_panel) and question_panel.visible
 	)
-	return qp_visible
+	var gb_visible := game_board and is_instance_valid(game_board) and game_board.visible
+	if controller_join_active:
+		return false
+	if title_panel and title_panel.visible:
+		return false
+	if settings_panel and settings_panel.visible:
+		return false
+	return qp_visible or gb_visible
 
 
 func _open_pause_menu() -> void:
