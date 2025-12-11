@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://88jpn26ij3hx"]
+[gd_scene load_steps=55 format=3 uid="uid://88jpn26ij3hx"]
 
 [ext_resource type="Script" uid="uid://bpdw75wca58c" path="res://src/ui/main/main.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://x3pbbp33v43u" path="res://main_background.png" id="2_w48qg"]
@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://mrqa3i8mu0gd" path="res://answer_tile.png" id="21_getpj"]
 [ext_resource type="Texture2D" uid="uid://cn4kfuk1ifv83" path="res://question_panel.png" id="21_ryguw"]
 [ext_resource type="Texture2D" uid="uid://dpehd480pbjr4" path="res://answer_tile_pressed.png" id="22_ryguw"]
+[ext_resource type="Texture2D" uid="uid://0gyuercbntxs" path="res://wager_box.png" id="23_d13ii"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kek77"]
 texture = ExtResource("3_vivmo")
@@ -125,6 +126,26 @@ expand_margin_bottom = 15.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4k2k6"]
 texture = ExtResource("21_getpj")
+expand_margin_left = 15.0
+expand_margin_top = 45.0
+expand_margin_right = 15.0
+expand_margin_bottom = 30.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_facbu"]
+texture = ExtResource("16_getpj")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ok6jj"]
+texture = ExtResource("23_d13ii")
+expand_margin_left = 45.0
+expand_margin_top = 15.0
+expand_margin_right = 45.0
+expand_margin_bottom = 15.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b1qrp"]
+texture = ExtResource("7_ycdy4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_come4"]
+texture = ExtResource("8_w48qg")
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -136,7 +157,8 @@ grow_vertical = 2
 script = ExtResource("1")
 show_state_debug = true
 ai_buzz_delay_seconds = 2.5
-ai_board_pick_delay_seconds = 3.0
+ai_board_pick_delay_seconds = 1.0
+result_display_seconds = 2.0
 
 [node name="MainMenu" type="MarginContainer" parent="."]
 visible = false
@@ -916,7 +938,7 @@ grow_vertical = 2
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_constants/outline_size = 16
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "CATEGORY"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -939,7 +961,7 @@ grow_vertical = 2
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_constants/outline_size = 16
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "CATEGORY"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -962,7 +984,7 @@ grow_vertical = 2
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_constants/outline_size = 16
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "CATEGORY"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -985,7 +1007,7 @@ grow_vertical = 2
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_constants/outline_size = 16
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "CATEGORY"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1263,6 +1285,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="QuestionPanel" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1510,7 +1533,7 @@ layout_mode = 2
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_constants/outline_size = 16
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 40
 text = "CATEGORY"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1520,13 +1543,12 @@ custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 40
 text = "$400"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="QuestionContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
-visible = false
 custom_minimum_size = Vector2(800, 300)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -1545,6 +1567,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="ResultContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+visible = false
 custom_minimum_size = Vector2(800, 300)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -1595,10 +1618,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 20
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="AnswerContainer2" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
 custom_minimum_size = Vector2(400, 110)
@@ -1621,10 +1645,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 20
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="AnswerContainer3" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
 custom_minimum_size = Vector2(400, 110)
@@ -1647,10 +1672,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 20
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="AnswerContainer4" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
 custom_minimum_size = Vector2(400, 110)
@@ -1673,10 +1699,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 20
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="SelectedChoice" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
 visible = false
@@ -1690,7 +1717,7 @@ theme_override_constants/margin_bottom = 50
 layout_mode = 2
 
 [node name="ChoiceContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/SelectedChoice/MarginContainer"]
-custom_minimum_size = Vector2(600, 300)
+custom_minimum_size = Vector2(500, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -1708,10 +1735,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 24
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 
@@ -1769,3 +1797,897 @@ text = "Settings"
 [node name="MainMenuButton" type="Button" parent="PauseMenu/Panel/VBox"]
 layout_mode = 2
 text = "Main Menu"
+
+[node name="WagerPanel" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("18_gboard")
+
+[node name="Content" type="MarginContainer" parent="WagerPanel"]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="WagerPanel/Content"]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 2
+texture = ExtResource("9_w48qg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WagerPanel/Content"]
+layout_mode = 2
+
+[node name="TimerMarginContainer" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_top = 70
+theme_override_constants/margin_right = 80
+
+[node name="Panel" type="Panel" parent="WagerPanel/Content/VBoxContainer/TimerMarginContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_seu75")
+
+[node name="Timer" type="Label" parent="WagerPanel/Content/VBoxContainer/TimerMarginContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "30"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxPlayerContainer" type="HBoxContainer" parent="WagerPanel/Content/VBoxContainer"]
+custom_minimum_size = Vector2(1400, 200)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="Player1Panel" type="Panel" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Control" type="Control" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "Player 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player2Panel" type="Panel" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Control" type="Control" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "Player 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player3Panel" type="Panel" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer"]
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Control" type="Control" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "Player 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="WagerPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="QuestionPanel" type="Panel" parent="WagerPanel/Content/VBoxContainer"]
+custom_minimum_size = Vector2(1200, 600)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_htxhm")
+
+[node name="MarginContainer" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel"]
+custom_minimum_size = Vector2(800, 550)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -275.0
+offset_right = 400.0
+offset_bottom = 275.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_bottom = 50
+
+[node name="QuestionVBox" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+custom_minimum_size = Vector2(800, 160)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -10
+alignment = 1
+
+[node name="QuestionCategory" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 40
+text = "CATEGORY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="QuestionContainer" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+visible = false
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_constants/margin_bottom = 50
+
+[node name="QuestionText" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/QuestionContainer"]
+custom_minimum_size = Vector2(800, 250)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 40
+text = "WHERE IS THIS VERSE FROM?"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="ResultContainer" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+visible = false
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_constants/margin_bottom = 50
+
+[node name="ResultLabel" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/ResultContainer"]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 40
+text = "John 3:16"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnswerContainer" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+custom_minimum_size = Vector2(800, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_constants/margin_bottom = 50
+
+[node name="GridContainer" type="GridContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 64
+columns = 2
+
+[node name="AnswerContainer" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
+custom_minimum_size = Vector2(400, 110)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="AnswerButton" type="Button" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_jq2sk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
+theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
+
+[node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer/AnswerButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "Answer"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="AnswerContainer2" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
+custom_minimum_size = Vector2(400, 110)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="AnswerButton" type="Button" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer2"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_jq2sk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
+theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
+
+[node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer2/AnswerButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "Answer"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="AnswerContainer3" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
+custom_minimum_size = Vector2(400, 110)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="AnswerButton" type="Button" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer3"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_jq2sk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
+theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
+
+[node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer3/AnswerButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "Answer"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="AnswerContainer4" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
+custom_minimum_size = Vector2(400, 110)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="AnswerButton" type="Button" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer4"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_jq2sk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
+theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
+
+[node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer4/AnswerButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 20
+text = "Answer"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="WagerCategory" type="Panel" parent="WagerPanel/Content/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_facbu")
+
+[node name="Category" type="Label" parent="WagerPanel/Content/VBoxContainer/WagerCategory"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "CATEGORY"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="WagerContainer" type="HBoxContainer" parent="WagerPanel/Content/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(1200, 450)
+layout_mode = 2
+alignment = 1
+
+[node name="Panel" type="Panel" parent="WagerPanel/Content/VBoxContainer/WagerContainer"]
+custom_minimum_size = Vector2(300, 500)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_ok6jj")
+
+[node name="PlayerWagerContainer1" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel"]
+custom_minimum_size = Vector2(300, 500)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="PlayerName" type="Label" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel/PlayerWagerContainer1"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 40
+text = "Player 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WagerAmount" type="Label" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel/PlayerWagerContainer1"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 24
+text = "Wager Amount: $0"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="WagerChoiceContainer" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel/PlayerWagerContainer1"]
+custom_minimum_size = Vector2(200, 260)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="WagerChoice" type="Button" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel/PlayerWagerContainer1/WagerChoiceContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_b1qrp")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_come4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_come4")
+text = "30%"
+
+[node name="WagerChoice2" type="Button" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel/PlayerWagerContainer1/WagerChoiceContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_b1qrp")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_come4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_come4")
+text = "50%"
+
+[node name="WagerChoice3" type="Button" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel/PlayerWagerContainer1/WagerChoiceContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_b1qrp")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_come4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_come4")
+text = "100%"
+
+[node name="Panel2" type="Panel" parent="WagerPanel/Content/VBoxContainer/WagerContainer"]
+custom_minimum_size = Vector2(300, 500)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_ok6jj")
+
+[node name="PlayerWagerContainer1" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel2"]
+custom_minimum_size = Vector2(300, 500)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="PlayerName" type="Label" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel2/PlayerWagerContainer1"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 40
+text = "Player 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WagerAmount" type="Label" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel2/PlayerWagerContainer1"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 24
+text = "Wager Amount: $0"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="WagerChoiceContainer" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel2/PlayerWagerContainer1"]
+custom_minimum_size = Vector2(200, 260)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="WagerChoice" type="Button" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel2/PlayerWagerContainer1/WagerChoiceContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_b1qrp")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_come4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_come4")
+text = "30%"
+
+[node name="WagerChoice2" type="Button" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel2/PlayerWagerContainer1/WagerChoiceContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_b1qrp")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_come4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_come4")
+text = "50%"
+
+[node name="WagerChoice3" type="Button" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel2/PlayerWagerContainer1/WagerChoiceContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_b1qrp")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_come4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_come4")
+text = "100%"
+
+[node name="Panel3" type="Panel" parent="WagerPanel/Content/VBoxContainer/WagerContainer"]
+custom_minimum_size = Vector2(300, 500)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_ok6jj")
+
+[node name="PlayerWagerContainer1" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel3"]
+custom_minimum_size = Vector2(300, 500)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="PlayerName" type="Label" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel3/PlayerWagerContainer1"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 40
+text = "Player 3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WagerAmount" type="Label" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel3/PlayerWagerContainer1"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 24
+text = "Wager Amount: $0"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="WagerChoiceContainer" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel3/PlayerWagerContainer1"]
+custom_minimum_size = Vector2(200, 260)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="WagerChoice" type="Button" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel3/PlayerWagerContainer1/WagerChoiceContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_b1qrp")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_come4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_come4")
+text = "30%"
+
+[node name="WagerChoice2" type="Button" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel3/PlayerWagerContainer1/WagerChoiceContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_b1qrp")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_come4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_come4")
+text = "50%"
+
+[node name="WagerChoice3" type="Button" parent="WagerPanel/Content/VBoxContainer/WagerContainer/Panel3/PlayerWagerContainer1/WagerChoiceContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_b1qrp")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_come4")
+theme_override_styles/hover = SubResource("StyleBoxTexture_come4")
+text = "100%"
+
+[node name="FinalResultsPanel" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("18_gboard")
+
+[node name="Content" type="MarginContainer" parent="FinalResultsPanel"]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="FinalResultsPanel/Content"]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 2
+texture = ExtResource("9_w48qg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content"]
+layout_mode = 2
+
+[node name="HBoxPlayerContainer" type="HBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer"]
+custom_minimum_size = Vector2(1400, 1080)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="Player1Panel" type="Panel" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer"]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Placement" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer"]
+custom_minimum_size = Vector2(300, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 40
+text = "1ST"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Control" type="Control" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 140)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer"]
+custom_minimum_size = Vector2(200, 120)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+alignment = 1
+
+[node name="Label" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "Player 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player1Panel2" type="Panel" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer"]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Placement" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel2/VBoxContainer"]
+custom_minimum_size = Vector2(300, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 40
+text = "2ND"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Control" type="Control" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel2/VBoxContainer"]
+custom_minimum_size = Vector2(200, 140)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel2/VBoxContainer"]
+custom_minimum_size = Vector2(200, 120)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+alignment = 1
+
+[node name="Label" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel2/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "Player 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel2/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player1Panel3" type="Panel" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer"]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Placement" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel3/VBoxContainer"]
+custom_minimum_size = Vector2(300, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 40
+text = "3RD"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Control" type="Control" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel3/VBoxContainer"]
+custom_minimum_size = Vector2(200, 140)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel3/VBoxContainer"]
+custom_minimum_size = Vector2(200, 120)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+alignment = 1
+
+[node name="Label" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel3/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "Player 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel3/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
+theme_override_fonts/font = ExtResource("10_cegan")
+theme_override_font_sizes/font_size = 32
+text = "$0"
+horizontal_alignment = 1
+vertical_alignment = 1
