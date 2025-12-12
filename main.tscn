@@ -159,9 +159,9 @@ show_state_debug = true
 ai_buzz_delay_seconds = 3.0
 ai_board_pick_delay_seconds = 1.0
 result_display_seconds = 2.0
-default_music_db = -400
 
 [node name="MainMenu" type="MarginContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1835,7 +1835,6 @@ layout_mode = 2
 text = "Main Menu"
 
 [node name="WagerPanel" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1894,7 +1893,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HBoxPlayerContainer" type="HBoxContainer" parent="WagerPanel/Content/VBoxContainer"]
-visible = false
 custom_minimum_size = Vector2(1400, 200)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -2068,9 +2066,12 @@ theme_override_constants/margin_bottom = 50
 
 [node name="QuestionVBox" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 alignment = 1
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+visible = false
 custom_minimum_size = Vector2(800, 160)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -2091,15 +2092,13 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="QuestionContainer" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
-visible = false
-custom_minimum_size = Vector2(800, 300)
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 6
+size_flags_vertical = 4
 theme_override_constants/margin_bottom = 50
 
 [node name="QuestionText" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/QuestionContainer"]
-custom_minimum_size = Vector2(800, 250)
+custom_minimum_size = Vector2(800, 140)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")

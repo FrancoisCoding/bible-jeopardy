@@ -8072,7 +8072,7 @@ const BASE_QA := {
 			"answer": {"en": "276", "pt": "276"},
 			"tier": 3,
 			"decoys":
-			[{"en": "120", "pt": "120"}, {"en": "70", "pt": "70"}, {"en": "300", "pt": "300"}]
+			[ {"en": "120", "pt": "120"}, {"en": "70", "pt": "70"}, {"en": "300", "pt": "300"}]
 		},
 		{
 			"question":
@@ -14411,7 +14411,7 @@ const BASE_QA := {
 				"pt":
 				"Qual festa envolvia morar em tendas para lembrar o tempo de Israel no deserto?"
 			},
-			"answer": {"en": "Feast of Tabernacles (Booths)", "pt": "Festa dos Tabernáculos"},
+			"answer": {"en": "Feast of Tabernacles", "pt": "Festa dos Tabernáculos"},
 			"tier": 1,
 			"decoys":
 			[
