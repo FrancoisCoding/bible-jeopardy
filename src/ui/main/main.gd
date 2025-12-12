@@ -10,6 +10,7 @@ const LoadedBibleData = preload("res://src/data/bible_data.gd")
 const VerseData = preload("res://src/data/verse_data.gd")
 const FinalJeopardyData = preload("res://src/data/final_jeopardy_data.gd")
 const GameStateMachine = preload("res://src/ui/main/game_state_machine.gd")
+const GameSessionState = preload("res://src/ui/main/game_session_state.gd")
 const ThemeStyler = preload("res://src/ui/main/theme_styler.gd")
 const AudioController = preload("res://src/ui/main/audio_controller.gd")
 const MainMenuScreen = preload("res://src/ui/screens/main_menu_screen.gd")
@@ -19,7 +20,7 @@ const MUSIC_QUESTION := preload("res://music/question music.mp3")
 const SFX_CORRECT := preload("res://music/correct.mp3")
 const SFX_WRONG := preload("res://music/wrong answer.mp3")
 const SFX_SELECT := preload("res://music/select_001.ogg")
-const TEAM_COLORS := [Color(0.9, 0.2, 0.2), Color(0.2, 0.45, 0.95), Color(0.15, 0.75, 0.35)]  # Red  # Blue  # Green
+const TEAM_COLORS := [Color(0.9, 0.2, 0.2), Color(0.2, 0.45, 0.95), Color(0.15, 0.75, 0.35)] # Red  # Blue  # Green
 const BOARD_CATEGORY_COUNT := 4
 const BOARD_TILE_ROWS := 3
 const BOARD_TILE_COUNT := BOARD_CATEGORY_COUNT * BOARD_TILE_ROWS
@@ -36,7 +37,7 @@ const QUESTION_CHAR_DELAY := 0.03
 @export var final_wager_summary_delay_seconds: float = 3.0
 @export var final_answer_lock_seconds: float = 3.0
 @export var final_answer_reveal_seconds: float = 3.0
-@export var final_results_duration_seconds: float = 5.0
+@export var final_results_duration_seconds: float = 10.0
 const FINAL_WAGER_TIME := 30.0
 const AI_DIFFICULTY_RATES := {"easy": 0.2, "normal": 0.4, "hard": 0.7}
 const ROUND_VALUES := [[400, 800, 1200], [800, 1200, 2000]]
@@ -373,7 +374,7 @@ var answer_countdown_timer: SceneTreeTimer = null
 var answer_time_left: int = 0
 
 var team_names: Array[String] = []
-var players: Array[Dictionary] = []  # {name, is_ai, device_id, uses_keyboard}
+var players: Array[Dictionary] = [] # {name, is_ai, device_id, uses_keyboard}
 var team_scores: Array[int] = []
 var team_score_labels: Array[Label] = []
 var team_cards: Array[PanelContainer] = []
@@ -385,10 +386,10 @@ var base_question_sizes: Array[Vector2] = []
 var base_board_inner_heights: Array[float] = []
 var base_question_inner_heights: Array[float] = []
 
-enum QuestionPhase { IDLE, READING, ANSWERING, SHOWING_SELECTED, SHOWING_RESULT }
+enum QuestionPhase {IDLE, READING, ANSWERING, SHOWING_SELECTED, SHOWING_RESULT}
 
 var current_clue: Dictionary = {}
-var answered_map: Dictionary = {}  # key: "catIndex-clueIndex" -> true
+var answered_map: Dictionary = {} # key: "catIndex-clueIndex" -> true
 var current_categories: Array = []
 var current_options: Array[String] = []
 
@@ -399,13 +400,13 @@ var ai_buzz_timer: SceneTreeTimer
 var rng := RandomNumberGenerator.new()
 var current_language: String = "en"
 var bible_data: LoadedBibleData = LoadedBibleData.new()
-var join_inputs: Array[Dictionary] = []  # Ordered join list of controllers/keyboard
+var join_inputs: Array[Dictionary] = [] # Ordered join list of controllers/keyboard
 var pending_player_inputs: Array[Dictionary] = []
 var pending_allow_keyboard_fallback: bool = true
 var player_characters: Array[Dictionary] = []
 var controller_join_active: bool = false
 var answering_input_lock: Dictionary = {}
-var nav_focus_enabled: bool = false  # Only grab focus highlights when a controller/keyboard joins
+var nav_focus_enabled: bool = false # Only grab focus highlights when a controller/keyboard joins
 var settings_opened_from_pause: bool = false
 var ai_difficulty: String = "normal"
 var ai_correct_rate: float = AI_DIFFICULTY_RATES["normal"]
@@ -428,6 +429,7 @@ var final_wager_countdown_timer: SceneTreeTimer
 var final_wager_time_left: int = 0
 var final_answer_index: int = 0
 var final_wager_header_labels: Array[Label] = []
+var final_results_timer: SceneTreeTimer
 var current_turn_team: int = 0
 var question_selector_team: int = 0
 var answering_player: int = -1
@@ -435,6 +437,7 @@ var background_rect: TextureRect
 var theme_body_color: Color = Color("#633005")
 var category_deck: Array = []
 var loading_settings: bool = false
+var settings_initialized: bool = false
 var verse_data := VerseData.new()
 var question_panel_base_style: StyleBox = null
 var theme_styler: ThemeStyler
@@ -649,7 +652,6 @@ func _ready() -> void:
 	audio_controller.configure_streams(
 		MUSIC_BACKGROUND, MUSIC_QUESTION, SFX_CORRECT, SFX_WRONG, SFX_SELECT
 	)
-	audio_controller.sync_slider_from_bus()
 	audio_controller.play_background_music()
 	_populate_languages()
 	_load_settings()
@@ -720,9 +722,11 @@ func _sync_game_board_players() -> void:
 		return
 	var enriched: Array = []
 	for i in range(players.size()):
+		var card := _player_card_data(i)
 		var p: Dictionary = players[i].duplicate(true)
-		var score: int = team_scores[i] if team_scores.size() > i else 0
-		p["score"] = score
+		p["name"] = card.get("name", p.get("name", "Player %d" % (i + 1)))
+		p["is_ai"] = card.get("is_ai", p.get("is_ai", false))
+		p["score"] = card.get("score", team_scores[i] if team_scores.size() > i else 0)
 		enriched.append(p)
 	game_board.set_players(enriched)
 	_sync_question_panel_players()
@@ -731,6 +735,7 @@ func _sync_game_board_players() -> void:
 
 func _update_game_board_score(idx: int) -> void:
 	var score: int = team_scores[idx] if team_scores.size() > idx else 0
+	_sync_session_state_score(idx)
 	if game_board:
 		game_board.update_player_score(idx, score)
 	_update_question_panel_score(idx, score)
@@ -753,8 +758,9 @@ func _update_question_panel_score(idx: int, score: int) -> void:
 
 func _sync_question_panel_players() -> void:
 	for i in range(question_player_name_labels.size()):
-		var name := _display_player_name_for_ui(i)
-		var score := team_scores[i] if i < team_scores.size() else 0
+		var card := _player_card_data(i)
+		var name := str(card.get("name", _display_player_name_for_ui(i)))
+		var score := int(card.get("score", team_scores[i] if i < team_scores.size() else 0))
 		var name_lbl: Label = question_player_name_labels[i]
 		if name_lbl:
 			name_lbl.text = name
@@ -875,6 +881,8 @@ func _handle_state_exit(state: int, _next: int) -> void:
 		GameStateMachine.State.PAUSED:
 			_close_pause_menu()
 			_resume_answer_timer_if_needed()
+		GameStateMachine.State.RESULTS:
+			_cancel_final_results_timer()
 		_:
 			pass
 
@@ -946,9 +954,22 @@ func _enter_final_question_state() -> void:
 
 
 func _enter_results_state() -> void:
+	_cancel_final_results_timer()
+	_safe_set_visible(game_board, false)
+	_safe_set_visible(wager_panel, false)
+	_safe_set_visible(final_wager_panel, false)
+	_safe_set_visible(controller_connect_panel, false)
+	_safe_set_visible(settings_panel, false)
+	_safe_set_visible(title_panel, false)
+	q_category_label.text = _t("Final Results", "Resultados finais")
+	q_value_label.text = ""
+	_safe_set_visible(q_value_label, false)
+	q_text_label.text = ""
 	_show_results_view()
 	_show_winner_trophies()
-	_safe_set_visible(wager_panel, false)
+	if final_results_duration_seconds > 0.0:
+		final_results_timer = get_tree().create_timer(final_results_duration_seconds)
+		final_results_timer.timeout.connect(_on_final_results_timeout)
 
 
 func _enter_pause_state() -> void:
@@ -1108,7 +1129,7 @@ func _start_team_card_pulse(idx: int) -> void:
 	var tween := create_tween()
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.set_ease(Tween.EASE_IN_OUT)
-	tween.set_loops()  # Continuous pulse
+	tween.set_loops() # Continuous pulse
 	tween.tween_property(card, "scale", Vector2.ONE * 1.04, 0.45)
 	tween.tween_property(card, "scale", Vector2.ONE, 0.45)
 	team_card_pulse_tween = tween
@@ -1199,6 +1220,8 @@ func _reset_question_panel_color() -> void:
 
 func _show_results_view() -> void:
 	_safe_set_visible(question_panel, true)
+	_safe_set_visible(wager_panel, false)
+	_safe_set_visible(final_wager_panel, false)
 	_safe_set_visible(question_header_container, true)
 	_safe_set_visible(result_container, true)
 	_safe_set_visible(question_container, false)
@@ -1653,11 +1676,20 @@ func _populate_languages() -> void:
 	language_option.selected = 0
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		_save_settings(true)
+
+
+func _exit_tree() -> void:
+	_save_settings(true)
+
+
 func _load_settings() -> void:
 	loading_settings = true
 	var cfg := ConfigFile.new()
 	var err := cfg.load(SETTINGS_PATH)
-	var default_db := -10.0
+	var default_db := -6.0  # Approximately 50% perceived volume
 	if music_slider:
 		music_slider.min_value = -80.0
 		default_db = clamp(default_db, music_slider.min_value, music_slider.max_value)
@@ -1666,7 +1698,11 @@ func _load_settings() -> void:
 			_on_music_slider_changed(music_slider.value)
 	if err == OK:
 		current_language = str(cfg.get_value("general", "language", current_language))
+		var has_music_key := cfg.has_section_key("audio", "music_db")
 		var saved_db := float(cfg.get_value("audio", "music_db", default_db))
+		var legacy_default := -10.0
+		if (not has_music_key) or (is_equal_approx(saved_db, legacy_default) and not is_equal_approx(default_db, legacy_default)):
+			saved_db = default_db
 		if music_slider:
 			music_slider.value = clamp(saved_db, music_slider.min_value, music_slider.max_value)
 			_on_music_slider_changed(music_slider.value)
@@ -1674,18 +1710,23 @@ func _load_settings() -> void:
 			language_option.select(1 if current_language == "pt" else 0)
 		FinalJeopardyData.set_language(current_language)
 	loading_settings = false
+	settings_initialized = true
 
 
-func _save_settings() -> void:
-	if loading_settings:
+func _save_settings(force: bool = false) -> void:
+	if loading_settings and not force:
+		return
+	if not settings_initialized and not force:
 		return
 	var cfg := ConfigFile.new()
 	cfg.set_value("general", "language", current_language)
-	var music_db := -10.0
+	var music_db := -6.0
 	if music_slider:
 		music_db = music_slider.value
 	cfg.set_value("audio", "music_db", music_db)
-	cfg.save(SETTINGS_PATH)
+	var err := cfg.save(SETTINGS_PATH)
+	if err != OK:
+		push_warning("Failed to save settings: %s" % str(err))
 
 
 func _apply_resolution(res: Vector2i) -> void:
@@ -1757,6 +1798,7 @@ func _on_final_clue_pressed() -> void:
 		final_clue_button.disabled = true
 	var penalty := int(ceil(float(current_wager) * 0.1))
 	team_scores[final_wager_player] -= penalty
+	_sync_session_state_score(final_wager_player)
 	_update_game_board_score(final_wager_player)
 	var ans: String = str(current_clue.get("answer", ""))
 	var hint: String = ""
@@ -1852,10 +1894,10 @@ func _setup_players(
 			}
 		)
 
-	_sync_team_names_from_players()
 	team_scores.resize(players.size())
 	for i in range(team_scores.size()):
 		team_scores[i] = 0
+	_sync_team_names_from_players()
 	_sync_game_board_players()
 
 
@@ -1864,6 +1906,28 @@ func _sync_team_names_from_players() -> void:
 	for p in players:
 		names.append(str(p.get("name", "Player")))
 	team_names = names
+	_sync_session_state_players()
+
+
+func _sync_session_state_players() -> void:
+	GameSessionState.set_players(players, team_scores)
+
+
+func _sync_session_state_score(idx: int) -> void:
+	if idx < 0:
+		return
+	var score_val := team_scores[idx] if idx < team_scores.size() else 0
+	GameSessionState.set_score(idx, score_val)
+
+
+func _player_card_data(idx: int) -> Dictionary:
+	var card: Dictionary = GameSessionState.get_player_card(idx)
+	if not card.is_empty():
+		return card
+	var fallback_name: String = _display_player_name_for_ui(idx)
+	var fallback_score: int = team_scores[idx] if idx < team_scores.size() else 0
+	var is_ai: bool = players[idx].get("is_ai", false) if idx < players.size() else false
+	return {"name": fallback_name, "score": fallback_score, "is_ai": is_ai}
 
 
 func _display_player_name_for_ui(idx: int) -> String:
@@ -1942,7 +2006,7 @@ func _start_clue_for_indices(
 		return
 	var key := "%d-%d" % [cat_index, clue_index]
 	if answered_map.has(key):
-		return  # Already used
+		return # Already used
 
 	_play_select_sfx()
 	_reset_question_panel_color()
@@ -2076,7 +2140,7 @@ func _build_answer_options(clue: Dictionary) -> void:
 
 	var options: Array[String] = [correct_answer]
 	options.append_array(decoys)
-	options.shuffle()  # 4 options total
+	options.shuffle() # 4 options total
 
 	current_options.clear()
 	for opt in options:
@@ -2174,12 +2238,14 @@ func _on_answer_selected(answer_text: String) -> void:
 		attempted_players.append(buzzed_player)
 	if is_correct:
 		team_scores[buzzed_player] += value
+		_sync_session_state_score(buzzed_player)
 		_update_game_board_score(buzzed_player)
 		_set_active_team(buzzed_player)
 		_play_correct_sfx()
 		_show_result(_t("Correct! %s +%d", "Correto! %s +%d") % [player_name, value])
 	else:
 		team_scores[buzzed_player] -= value
+		_sync_session_state_score(buzzed_player)
 		_update_game_board_score(buzzed_player)
 		_play_wrong_sfx()
 		_show_result(_t("Wrong. %s -%d", "Errado. %s -%d") % [player_name, value])
@@ -2397,6 +2463,8 @@ func _mark_clue_answered() -> void:
 func _restart_to_main_menu() -> void:
 	_end_question_audio()
 	_stop_timers()
+	_cancel_final_results_timer()
+	GameSessionState.reset()
 	settings_opened_from_pause = false
 	current_clue.clear()
 	current_options.clear()
@@ -2446,7 +2514,7 @@ func _restart_to_main_menu() -> void:
 
 
 func _on_exit_pressed() -> void:
-	_save_settings()
+	_save_settings(true)
 	get_tree().quit()
 
 
@@ -2711,6 +2779,7 @@ func _show_wager_panel_ui() -> void:
 	)
 	if wager_category_label:
 		wager_category_label.text = cat_name
+		_safe_set_visible(wager_category_label, true)
 
 	# Ensure arrays sized
 	_ensure_wager_arrays()
@@ -2722,22 +2791,23 @@ func _show_wager_panel_ui() -> void:
 
 	for i in range(wager_player_name_labels.size()):
 		var has_player := i < players.size()
+		var card_data := _player_card_data(i) if has_player else {}
 		var name_lbl := wager_player_name_labels[i]
 		var amt_lbl := wager_amount_labels[i] if i < wager_amount_labels.size() else null
 		var buttons: Array = wager_choice_buttons[i] if i < wager_choice_buttons.size() else []
 		if name_lbl:
 			name_lbl.visible = has_player
 			if has_player:
-				name_lbl.text = _display_player_name_for_ui(i)
+				name_lbl.text = str(card_data.get("name", _display_player_name_for_ui(i)))
 		if amt_lbl:
 			amt_lbl.visible = has_player
 			if has_player:
-				var score: int = team_scores[i] if i < team_scores.size() else 0
+				var score: int = int(card_data.get("score", 0))
 				amt_lbl.text = _t("Wager: $0 (of $%d)", "Aposta: $0 (de $%d)") % score
 		var auto_wager: int = -1
 		if has_player:
-			var is_ai: bool = players[i].get("is_ai", false)
-			var score: int = team_scores[i] if i < team_scores.size() else 0
+			var is_ai: bool = bool(card_data.get("is_ai", false))
+			var score: int = int(card_data.get("score", 0))
 			if score < 0:
 				auto_wager = int(round(abs(score) * 0.1))
 			elif is_ai:
@@ -2843,6 +2913,7 @@ func _build_parallel_wager_ui() -> void:
 
 	for i in range(players.size()):
 		var idx_copy := i
+		var player_card := _player_card_data(idx_copy)
 		var card := PanelContainer.new()
 		card.custom_minimum_size = Vector2(640, 200)
 		card.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -2867,8 +2938,9 @@ func _build_parallel_wager_ui() -> void:
 		inner.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		inner.add_theme_constant_override("separation", 8)
 
-		var name: String = players[i].get("name", "Player %d" % (i + 1))
-		var score: int = team_scores[i] if team_scores.size() > i else 0
+		var name: String = str(player_card.get("name", "Player %d" % (i + 1)))
+		var score: int = int(player_card.get("score", 0))
+		var is_ai := bool(player_card.get("is_ai", false))
 
 		var header := Label.new()
 		header.text = ""
@@ -2897,7 +2969,7 @@ func _build_parallel_wager_ui() -> void:
 			container.add_child(card)
 			continue
 
-		if players[i].get("is_ai", false):
+		if is_ai:
 			var ai_choice: int = int(round(abs(score) * 0.5))
 			final_wager_values[i] = ai_choice
 			final_wager_done[i] = true
@@ -2999,8 +3071,9 @@ func _update_wager_header_text(idx: int) -> void:
 	var header: Label = final_wager_header_labels[idx] as Label
 	if header == null or not is_instance_valid(header):
 		return
-	var name: String = players[idx].get("name", "Player %d" % (idx + 1))
-	var score_val: int = team_scores[idx] if team_scores.size() > idx else 0
+	var card := _player_card_data(idx)
+	var name: String = str(card.get("name", "Player %d" % (idx + 1)))
+	var score_val: int = int(card.get("score", 0))
 	var score_text := _t("Points: %d", "Pontos: %d") % score_val
 	var wager_text := _t("Select a wager", "Selecione uma aposta")
 	if idx < final_wager_done.size() and final_wager_done[idx]:
@@ -3094,10 +3167,11 @@ func _reveal_final_question() -> void:
 		"decoys": clue.get("decoys", [])
 	}
 
-	current_categories = [{"name": category_name, "values": []}]
+	current_categories = [ {"name": category_name, "values": []}]
 
-	q_category_label.text = _t("Final Round: %s", "Rodada final: %s") % category_name
-	q_value_label.text = _t("Select your answers", "Escolha suas respostas")
+	q_category_label.text = category_name
+	q_value_label.text = ""
+	_safe_set_visible(q_value_label, false)
 	q_text_label.text = ""
 	result_label.text = _t(
 		"Final question revealed. Answer in turn.", "Pergunta final revelada. Responda em sua vez."
@@ -3176,7 +3250,8 @@ func _resolve_final_answers() -> void:
 	_stop_timers(true)
 	_disable_answer_buttons()
 	_stop_team_card_pulse()
-	var correct_answer: String = str(current_clue.get("answer", "")).strip_edges().to_lower()
+	var correct_answer_raw := str(current_clue.get("answer", ""))
+	var correct_answer := correct_answer_raw.strip_edges().to_lower()
 	for i in range(players.size()):
 		var wager := final_wager_values[i] if i < final_wager_values.size() else 0
 		var choice := ""
@@ -3187,20 +3262,32 @@ func _resolve_final_answers() -> void:
 			team_scores[i] += wager
 		else:
 			team_scores[i] -= wager
+		_sync_session_state_score(i)
 		_update_game_board_score(i)
 
-	result_label.text = _t("Answer: %s", "Resposta: %s") % str(current_clue.get("answer", ""))
-	_show_result("", Color(0.1, 0.1, 0.1))
-	if question_panel:
-		_safe_set_visible(question_panel, false)
-	q_category_label.text = ""
-	q_value_label.text = ""
-	q_text_label.text = ""
-	result_label.text = ""
+	_safe_set_visible(answer_container, false)
+	_safe_set_visible(answer_buttons, false)
+	_safe_set_visible(selected_choice_container, false)
+	_safe_set_visible(answer_timer_label, false)
+	_safe_set_visible(game_board, false)
+	_safe_set_visible(wager_panel, false)
+	_safe_set_visible(final_wager_panel, false)
+	_safe_set_visible(question_panel, true)
+	_safe_set_visible(question_header_container, true)
+	_safe_set_visible(result_container, true)
+	_set_question_phase(QuestionPhase.SHOWING_RESULT)
+
+	var reveal_text := _t("Answer: %s", "Resposta: %s") % correct_answer_raw
+	result_label.text = reveal_text
+	_show_result(reveal_text, Color(0.1, 0.1, 0.1))
+
+	if final_answer_reveal_seconds > 0.0:
+		await get_tree().create_timer(final_answer_reveal_seconds).timeout
+
 	if game_state_machine:
 		game_state_machine.transition_to(GameStateMachine.State.RESULTS)
 		return
-	_show_winner_trophies()
+	_enter_results_state()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -3292,15 +3379,15 @@ func _flip_card(button: Button) -> void:
 	var tween := create_tween()
 	(
 		tween
-		. tween_property(button, "scale", Vector2(0.0, 1.0), 0.2)
-		. set_trans(Tween.TRANS_SINE)
-		. set_ease(Tween.EASE_IN)
+		.tween_property(button, "scale", Vector2(0.0, 1.0), 0.2)
+		.set_trans(Tween.TRANS_SINE)
+		.set_ease(Tween.EASE_IN)
 	)
 	(
 		tween
-		. tween_property(button, "scale", Vector2(1.0, 1.0), 0.2)
-		. set_trans(Tween.TRANS_SINE)
-		. set_ease(Tween.EASE_OUT)
+		.tween_property(button, "scale", Vector2(1.0, 1.0), 0.2)
+		.set_trans(Tween.TRANS_SINE)
+		.set_ease(Tween.EASE_OUT)
 	)
 	await tween.finished
 
@@ -3340,9 +3427,25 @@ func _cancel_wager_timer() -> void:
 		if is_instance_valid(final_wager_countdown_timer):
 			if final_wager_countdown_timer.timeout.is_connected(_on_wager_timer_tick):
 				final_wager_countdown_timer.timeout.disconnect(_on_wager_timer_tick)
-		final_wager_countdown_timer = null
+	final_wager_countdown_timer = null
 	final_wager_time_left = 0
 	_update_wager_timer_label(final_wager_time_left)
+
+
+func _cancel_final_results_timer() -> void:
+	if final_results_timer:
+		if is_instance_valid(final_results_timer):
+			if final_results_timer.timeout.is_connected(_on_final_results_timeout):
+				final_results_timer.timeout.disconnect(_on_final_results_timeout)
+	final_results_timer = null
+
+
+func _on_final_results_timeout() -> void:
+	final_results_timer = null
+	if game_state_machine:
+		game_state_machine.transition_to(GameStateMachine.State.MAIN_MENU, {}, true)
+	else:
+		_restart_to_main_menu()
 
 
 func _on_final_wager_timeout() -> void:

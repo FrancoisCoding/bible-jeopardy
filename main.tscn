@@ -156,12 +156,12 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
 show_state_debug = true
-ai_buzz_delay_seconds = 2.5
+ai_buzz_delay_seconds = 3.0
 ai_board_pick_delay_seconds = 1.0
 result_display_seconds = 2.0
+default_music_db = -400
 
 [node name="MainMenu" type="MarginContainer" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1549,6 +1549,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="QuestionContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
+visible = false
 custom_minimum_size = Vector2(800, 300)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -1585,7 +1586,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="AnswerContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
-visible = false
 custom_minimum_size = Vector2(800, 300)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -1594,11 +1594,12 @@ theme_override_constants/margin_bottom = 50
 
 [node name="GridContainer" type="GridContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer"]
 layout_mode = 2
-theme_override_constants/h_separation = 64
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 32
 columns = 2
 
 [node name="AnswerContainer" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
-custom_minimum_size = Vector2(400, 110)
+custom_minimum_size = Vector2(410, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -1610,10 +1611,17 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer/AnswerButton"]
+custom_minimum_size = Vector2(380, 70)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -11.5
+offset_right = 0.5
+offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
@@ -1625,7 +1633,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="AnswerContainer2" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
-custom_minimum_size = Vector2(400, 110)
+custom_minimum_size = Vector2(410, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -1637,10 +1645,17 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer2/AnswerButton"]
+custom_minimum_size = Vector2(380, 70)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -11.5
+offset_right = 0.5
+offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
@@ -1652,7 +1667,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="AnswerContainer3" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
-custom_minimum_size = Vector2(400, 110)
+custom_minimum_size = Vector2(410, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -1664,10 +1679,17 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer3/AnswerButton"]
+custom_minimum_size = Vector2(380, 70)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -11.5
+offset_right = 0.5
+offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
@@ -1679,7 +1701,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="AnswerContainer4" type="MarginContainer" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
-custom_minimum_size = Vector2(400, 110)
+custom_minimum_size = Vector2(410, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -1691,10 +1713,17 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer4/AnswerButton"]
+custom_minimum_size = Vector2(380, 70)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -11.5
+offset_right = 0.5
+offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
@@ -1727,15 +1756,22 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_4k2k6")
 
 [node name="ChoiceLabel" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/SelectedChoice/MarginContainer/ChoiceContainer/ChoicePanel"]
+custom_minimum_size = Vector2(420, 200)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -122.5
+offset_right = 0.5
+offset_bottom = 122.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1799,6 +1835,7 @@ layout_mode = 2
 text = "Main Menu"
 
 [node name="WagerPanel" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1857,6 +1894,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HBoxPlayerContainer" type="HBoxContainer" parent="WagerPanel/Content/VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(1400, 200)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -2041,15 +2079,16 @@ theme_override_constants/separation = -10
 alignment = 1
 
 [node name="QuestionCategory" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/VBoxContainer2"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_constants/outline_size = 16
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 32
 text = "CATEGORY"
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="QuestionContainer" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
 visible = false
@@ -2097,11 +2136,12 @@ theme_override_constants/margin_bottom = 50
 
 [node name="GridContainer" type="GridContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer"]
 layout_mode = 2
-theme_override_constants/h_separation = 64
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 32
 columns = 2
 
 [node name="AnswerContainer" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
-custom_minimum_size = Vector2(400, 110)
+custom_minimum_size = Vector2(410, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -2113,10 +2153,17 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer/AnswerButton"]
+custom_minimum_size = Vector2(380, 70)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -11.5
+offset_right = 0.5
+offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
@@ -2128,7 +2175,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="AnswerContainer2" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
-custom_minimum_size = Vector2(400, 110)
+custom_minimum_size = Vector2(410, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -2140,10 +2187,17 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer2/AnswerButton"]
+custom_minimum_size = Vector2(380, 70)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -11.5
+offset_right = 0.5
+offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
@@ -2155,7 +2209,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="AnswerContainer3" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
-custom_minimum_size = Vector2(400, 110)
+custom_minimum_size = Vector2(410, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -2167,10 +2221,17 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer3/AnswerButton"]
+custom_minimum_size = Vector2(380, 70)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -11.5
+offset_right = 0.5
+offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
@@ -2182,7 +2243,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="AnswerContainer4" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer"]
-custom_minimum_size = Vector2(400, 110)
+custom_minimum_size = Vector2(410, 110)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -2194,10 +2255,17 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer4/AnswerButton"]
+custom_minimum_size = Vector2(380, 70)
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -11.5
+offset_right = 0.5
+offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
@@ -2619,7 +2687,7 @@ theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.0196078
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
-text = "Player 1"
+text = "Player 2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -2679,7 +2747,7 @@ theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.0196078
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
-text = "Player 1"
+text = "Player 3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
