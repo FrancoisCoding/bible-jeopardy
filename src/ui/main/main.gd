@@ -285,14 +285,23 @@ var controller_connect_content: PanelContainer = get_node_or_null("ConnectContro
 @onready var wager_category_label: Label = get_node_or_null(
 	"WagerPanel/Content/VBoxContainer/WagerCategory/Category"
 )
+@onready var wager_category_panel: Control = get_node_or_null(
+	"WagerPanel/Content/VBoxContainer/WagerCategory"
+)
 @onready var wager_question_panel: Control = get_node_or_null(
 	"WagerPanel/Content/VBoxContainer/QuestionPanel"
+)
+@onready var wager_spacer_panel: Control = get_node_or_null(
+	"WagerPanel/Content/VBoxContainer/SpacerPanel"
 )
 @onready var wager_hbox_player_container: Control = get_node_or_null(
 	"WagerPanel/Content/VBoxContainer/HBoxPlayerContainer"
 )
 @onready var wager_timer_label: Label = get_node_or_null(
 	"WagerPanel/Content/VBoxContainer/TimerMarginContainer/Panel/Timer"
+)
+@onready var wager_timer_container: Control = get_node_or_null(
+	"WagerPanel/Content/VBoxContainer/TimerMarginContainer"
 )
 @onready
 var wager_container: Control = get_node_or_null("WagerPanel/Content/VBoxContainer/WagerContainer")
@@ -702,6 +711,7 @@ func _ready() -> void:
 	_safe_set_visible(wager_container, false)
 	_safe_set_visible(wager_hbox_player_container, false)
 	_safe_set_visible(wager_timer_label, false)
+	_safe_set_visible(wager_spacer_panel, false)
 	_safe_set_visible(final_results_panel, false)
 	_apply_theme_styles()
 	_reset_round_state(0)
@@ -761,11 +771,10 @@ func _sync_game_board_players() -> void:
 		return
 	var enriched: Array = []
 	for i in range(players.size()):
-		var card := _player_card_data(i)
 		var p: Dictionary = players[i].duplicate(true)
-		p["name"] = card.get("name", p.get("name", "Player %d" % (i + 1)))
-		p["is_ai"] = card.get("is_ai", p.get("is_ai", false))
-		p["score"] = card.get("score", team_scores[i] if team_scores.size() > i else 0)
+		p["name"] = _player_name_for_ui(i)
+		p["is_ai"] = bool(players[i].get("is_ai", false))
+		p["score"] = _player_score_for_ui(i)
 		enriched.append(p)
 	game_board.set_players(enriched)
 	_sync_question_panel_players()
@@ -779,6 +788,20 @@ func _update_game_board_score(idx: int) -> void:
 		game_board.update_player_score(idx, score)
 	_update_question_panel_score(idx, score)
 	_update_player_portrait_highlight(current_turn_team)
+
+
+func _refresh_all_score_views() -> void:
+	for i in range(min(players.size(), question_player_score_labels.size())):
+		_update_question_panel_score(i, _player_score_for_ui(i))
+
+	if game_board:
+		for i in range(players.size()):
+			game_board.update_player_score(i, _player_score_for_ui(i))
+
+	_sync_wager_top_cards()
+
+	if final_results_panel and final_results_panel.visible:
+		_sync_final_results_cards()
 
 
 func _format_score_text(score: int) -> String:
@@ -797,13 +820,10 @@ func _update_question_panel_score(idx: int, score: int) -> void:
 
 func _sync_question_panel_players() -> void:
 	for i in range(question_player_name_labels.size()):
-		var card := _player_card_data(i)
-		var name := str(card.get("name", _display_player_name_for_ui(i)))
-		var score := int(card.get("score", team_scores[i] if i < team_scores.size() else 0))
 		var name_lbl: Label = question_player_name_labels[i]
 		if name_lbl:
-			name_lbl.text = name
-		_update_question_panel_score(i, score)
+			name_lbl.text = _player_name_for_ui(i)
+		_update_question_panel_score(i, _player_score_for_ui(i))
 	_update_player_portrait_highlight(current_turn_team)
 
 
@@ -836,21 +856,37 @@ func _placement_text(idx: int) -> String:
 
 
 func _sync_final_results_cards() -> void:
-	var order: Array[int] = []
+	if (
+		final_results_name_labels.size() < 3
+		or final_results_score_labels.size() < 3
+		or final_results_place_labels.size() < 3
+	):
+		push_error("Final results labels not fully wired (need 3 of each).")
+		return
+	for i in range(3):
+		if (
+			final_results_name_labels[i] == null
+			or final_results_score_labels[i] == null
+			or final_results_place_labels[i] == null
+		):
+			push_error("Final results label missing at index %d (null node reference)." % i)
+			return
+
+	var entries: Array = []
 	for i in range(players.size()):
-		order.append(i)
-	order.sort_custom(
-		func(a: int, b: int) -> bool:
-			var sa := team_scores[a] if a < team_scores.size() else 0
-			var sb := team_scores[b] if b < team_scores.size() else 0
+		entries.append({"idx": i, "name": _player_name_for_ui(i), "score": _player_score_for_ui(i)})
+
+	entries.sort_custom(
+		func(a: Dictionary, b: Dictionary) -> bool:
+			var sa := int(a.get("score", 0))
+			var sb := int(b.get("score", 0))
 			if sa == sb:
-				return a < b
+				return int(a.get("idx", 0)) < int(b.get("idx", 0))
 			return sa > sb
 	)
 
 	for slot in range(3):
-		var has_entry := slot < order.size()
-		var idx := order[slot] if has_entry else -1
+		var has_entry := slot < entries.size()
 		var name_lbl := final_results_name_labels[slot] if slot < final_results_name_labels.size() else null
 		var score_lbl := final_results_score_labels[slot] if slot < final_results_score_labels.size() else null
 		var place_lbl := final_results_place_labels[slot] if slot < final_results_place_labels.size() else null
@@ -858,12 +894,13 @@ func _sync_final_results_cards() -> void:
 		if name_lbl:
 			name_lbl.visible = has_entry
 			if has_entry:
-				name_lbl.text = _display_player_name_for_ui(idx)
+				name_lbl.text = str(entries[slot].get("name", ""))
+
 		if score_lbl:
 			score_lbl.visible = has_entry
 			if has_entry:
-				var sc := team_scores[idx] if idx >= 0 and idx < team_scores.size() else 0
-				score_lbl.text = _format_score_text(sc)
+				score_lbl.text = _format_score_text(int(entries[slot].get("score", 0)))
+
 		if place_lbl:
 			place_lbl.visible = has_entry
 			if has_entry:
@@ -1046,6 +1083,7 @@ func _enter_round_two_state() -> void:
 
 
 func _enter_final_wager_state() -> void:
+	_hide_question_ui_for_wager()
 	_start_final_round()
 
 
@@ -1057,14 +1095,11 @@ func _enter_final_question_state() -> void:
 
 func _enter_results_state() -> void:
 	_cancel_final_results_timer()
-	_safe_set_visible(game_board, false)
-	_safe_set_visible(wager_panel, false)
-	_safe_set_visible(final_wager_panel, false)
-	_safe_set_visible(controller_connect_panel, false)
-	_safe_set_visible(settings_panel, false)
-	_safe_set_visible(title_panel, false)
-	q_category_label.text = _t("Final Results", "Resultados finais")
-	q_value_label.text = ""
+	_hide_all_views()
+	if q_category_label:
+		q_category_label.text = _t("Final Results", "Resultados finais")
+	if q_value_label:
+		q_value_label.text = ""
 	_safe_set_visible(q_value_label, false)
 	q_text_label.text = ""
 	_show_results_view()
@@ -1340,7 +1375,46 @@ func _show_results_view() -> void:
 	_safe_set_visible(answer_timer_label, false)
 	_safe_set_visible(wager_panel, false)
 	_safe_set_visible(final_wager_panel, false)
+	_safe_set_visible(wager_question_panel, false)
+	_safe_set_visible(wager_spacer_panel, false)
 	_safe_set_visible(final_results_panel, true)
+
+
+func _hide_all_views() -> void:
+	_safe_set_visible(question_panel, false)
+	_safe_set_visible(question_header_container, false)
+	_safe_set_visible(question_container, false)
+	_safe_set_visible(result_container, false)
+	_safe_set_visible(answer_container, false)
+	_safe_set_visible(answer_buttons, false)
+	_safe_set_visible(selected_choice_container, false)
+	_safe_set_visible(answer_timer_label, false)
+	_safe_set_visible(wager_panel, false)
+	_safe_set_visible(wager_question_panel, false)
+	_safe_set_visible(wager_spacer_panel, false)
+	_safe_set_visible(final_wager_panel, false)
+	_safe_set_visible(game_board, false)
+	_safe_set_visible(controller_connect_panel, false)
+	_safe_set_visible(settings_panel, false)
+	_safe_set_visible(title_panel, false)
+	_safe_set_visible(final_results_panel, false)
+
+
+func _hide_question_ui_for_wager() -> void:
+	_safe_set_visible(question_panel, false)
+	_safe_set_visible(question_header_container, false)
+	_safe_set_visible(question_container, false)
+	_safe_set_visible(result_container, false)
+	_safe_set_visible(answer_container, false)
+	_safe_set_visible(answer_buttons, false)
+	_safe_set_visible(selected_choice_container, false)
+	_safe_set_visible(answer_timer_label, false)
+	_safe_set_visible(wager_question_panel, false)
+	_safe_set_visible(wager_spacer_panel, false)
+	if result_label:
+		result_label.text = ""
+	if q_text_label:
+		q_text_label.text = ""
 
 
 func _collect_player_cards() -> void:
@@ -1711,16 +1785,23 @@ func _input(event: InputEvent) -> void:
 
 	if current_clue.is_empty() and not _event_is_for_current_turn(event):
 		var is_final_wager_ui := final_wager_panel and final_wager_panel.visible
-		if not is_final_wager_ui:
-			if not event.is_action_pressed("ui_cancel"):
-				if (
-					event is InputEventMouseButton
-					or event is InputEventJoypadButton
-					or event is InputEventJoypadMotion
-					or event is InputEventKey
-				):
-					get_viewport().set_input_as_handled()
-					return
+		var is_wager_ui := wager_panel and wager_panel.visible
+		var is_controller_ui := controller_connect_panel and controller_connect_panel.visible
+		var is_menu_ui := (title_panel and title_panel.visible) or (settings_panel and settings_panel.visible)
+
+		# If any menu-like UI is up, NEVER swallow input (let buttons work)
+		if is_final_wager_ui or is_wager_ui or is_controller_ui or is_menu_ui:
+			return
+
+		if not event.is_action_pressed("ui_cancel"):
+			if (
+				event is InputEventMouseButton
+				or event is InputEventJoypadButton
+				or event is InputEventJoypadMotion
+				or event is InputEventKey
+			):
+				get_viewport().set_input_as_handled()
+				return
 
 
 func _can_open_pause_menu() -> bool:
@@ -2015,8 +2096,8 @@ func _setup_players(
 
 func _sync_team_names_from_players() -> void:
 	var names: Array[String] = []
-	for p in players:
-		names.append(str(p.get("name", "Player")))
+	for i in range(players.size()):
+		names.append(_player_name_for_ui(i))
 	team_names = names
 	_sync_session_state_players()
 
@@ -2032,24 +2113,36 @@ func _sync_session_state_score(idx: int) -> void:
 	GameSessionState.set_score(idx, score_val)
 
 
-func _player_card_data(idx: int) -> Dictionary:
-	var card: Dictionary = GameSessionState.get_player_card(idx)
-	if not card.is_empty():
-		return card
-	var fallback_name: String = _display_player_name_for_ui(idx)
-	var fallback_score: int = team_scores[idx] if idx < team_scores.size() else 0
-	var is_ai: bool = players[idx].get("is_ai", false) if idx < players.size() else false
-	return {"name": fallback_name, "score": fallback_score, "is_ai": is_ai}
-
-
-func _display_player_name_for_ui(idx: int) -> String:
+func _player_name_for_ui(idx: int) -> String:
 	var fallback := "Player %d" % (idx + 1)
 	if idx < 0 or idx >= players.size():
 		return fallback
 	var p: Dictionary = players[idx]
-	if p.get("is_ai", false):
-		return _t("A.I.", "A.I.")
-	return str(p.get("name", fallback))
+	var n := str(p.get("name", fallback))
+	if p.get("is_ai", false) and "(AI)" not in n and "A.I." not in n:
+		n = "%s (AI)" % n
+	return n
+
+
+func _player_score_for_ui(idx: int) -> int:
+	if idx < 0:
+		return 0
+	if idx < team_scores.size():
+		return int(team_scores[idx])
+	return 0
+
+
+func _player_card_data(idx: int) -> Dictionary:
+	var name: String = _player_name_for_ui(idx)
+	var score: int = _player_score_for_ui(idx)
+	var is_ai: bool = (
+		bool(players[idx].get("is_ai", false)) if idx >= 0 and idx < players.size() else false
+	)
+	return {"name": name, "score": score, "is_ai": is_ai}
+
+
+func _display_player_name_for_ui(idx: int) -> String:
+	return _player_name_for_ui(idx)
 
 
 func _apply_player_characters() -> void:
@@ -2101,7 +2194,7 @@ func _show_winner_trophies() -> void:
 		if i < team_trophies.size():
 			var trophy: Label = team_trophies[i] as Label
 			_safe_set_visible(trophy, true)
-		var name := team_names[i] if team_names.size() > i else "Player %d" % (i + 1)
+		var name := _player_name_for_ui(i)
 		winners.append(name)
 	if not winners.is_empty():
 		_show_result(_t("Winner: %s", "Vencedor: %s") % ", ".join(winners), Color(0.2, 0.6, 0.2))
@@ -2163,8 +2256,10 @@ func _start_clue_for_indices(
 	if button:
 		current_clue["button"] = button
 
-	q_category_label.text = _t("Category: %s", "Categoria: %s") % str(cat_data.get("name", ""))
-	q_value_label.text = _t("Value: %s", "Valor: %s") % str(score_value)
+	if q_category_label:
+		q_category_label.text = _t("Category: %s", "Categoria: %s") % str(cat_data.get("name", ""))
+	if q_value_label:
+		q_value_label.text = _t("Value: %s", "Valor: %s") % str(score_value)
 	q_text_label.text = ""
 	current_options.clear()
 	_cancel_ai_buzz_timer()
@@ -2208,6 +2303,7 @@ func _start_question_flow(question_text: String) -> void:
 	_safe_set_visible(answer_buttons, false)
 	_safe_set_visible(selected_choice_container, false)
 	_safe_set_visible(result_container, false)
+	_safe_set_visible(wager_question_panel, false)
 	_show_result("", Color(0.1, 0.1, 0.1))
 	_type_out_question(question_text)
 	if _is_final_phase():
@@ -2362,6 +2458,7 @@ func _on_answer_selected(answer_text: String) -> void:
 		_play_wrong_sfx()
 		_show_result(_t("Wrong. %s -%d", "Errado. %s -%d") % [player_name, value])
 		all_attempted_after = attempted_players.size() >= players.size()
+	_refresh_all_score_views()
 	_stop_timers(true)
 	_disable_answer_buttons()
 	_safe_set_visible(answer_container, false)
@@ -2613,14 +2710,18 @@ func _restart_to_main_menu() -> void:
 	_stop_team_card_pulse()
 	result_label.text = ""
 	q_text_label.text = ""
-	q_category_label.text = ""
-	q_value_label.text = ""
+	if q_category_label:
+		q_category_label.text = ""
+	if q_value_label:
+		q_value_label.text = ""
 	_clear_selected_choice()
 	if question_panel:
 		_safe_set_visible(question_panel, false)
 	_safe_set_visible(wager_panel, false)
 	_show_game_board(false)
 	_safe_set_visible(final_results_panel, false)
+	_safe_set_visible(wager_question_panel, false)
+	_safe_set_visible(wager_spacer_panel, false)
 	_close_pause_menu()
 	_reset_round_state()
 	_show_title()
@@ -2855,14 +2956,16 @@ func _start_final_round() -> void:
 	current_clue.clear()
 	current_categories = []
 
-	q_category_label.text = ""
-	q_value_label.text = ""
+	if q_category_label:
+		q_category_label.text = ""
+	if q_value_label:
+		q_value_label.text = ""
 	q_text_label.text = ""
 	result_label.text = ""
 	_clear_selected_choice()
 
 	_disable_answer_buttons()
-	_safe_set_visible(question_panel, false)
+	_hide_question_ui_for_wager()
 	_safe_set_visible(game_board, false)
 	_safe_set_visible(final_wager_panel, false)
 	_show_wager_panel_ui()
@@ -2877,15 +2980,19 @@ func _calculate_auto_wager(idx: int) -> int:
 func _show_wager_panel_ui() -> void:
 	_cancel_wager_timer()
 	_connect_wager_buttons() # ensure wager buttons stay wired even after scene reloads
-	_safe_set_visible(question_panel, false)
+	_hide_question_ui_for_wager()
 	_safe_set_visible(wager_panel, true)
 	_safe_set_visible(wager_question_panel, false)
+	_safe_set_visible(wager_spacer_panel, true)
 	_safe_set_visible(wager_container, true)
 	_safe_set_visible(wager_hbox_player_container, true)
 	_safe_set_visible(final_results_panel, false)
 	_sync_wager_top_cards()
+	_refresh_all_score_views()
 	if answer_timer_label:
 		_safe_set_visible(answer_timer_label, false)
+	if wager_timer_container:
+		_safe_set_visible(wager_timer_container, false)
 	if wager_timer_label:
 		_safe_set_visible(wager_timer_label, false)
 
@@ -2897,6 +3004,8 @@ func _show_wager_panel_ui() -> void:
 	if wager_category_label:
 		wager_category_label.text = cat_name
 		_safe_set_visible(wager_category_label, true)
+	if wager_category_panel:
+		_safe_set_visible(wager_category_panel, true)
 
 	# Ensure arrays sized
 	_ensure_wager_arrays()
@@ -2919,8 +3028,9 @@ func _show_wager_panel_ui() -> void:
 		if amt_lbl:
 			amt_lbl.visible = has_player
 			if has_player:
-				var score: int = int(card_data.get("score", 0))
-				amt_lbl.text = _t("Wager: $0 (of $%d)", "Aposta: $0 (de $%d)") % score
+				var score_raw: int = int(card_data.get("score", 0))
+				var score_max: int = abs(score_raw)
+				amt_lbl.text = _t("Wager: $0 (of $%d)", "Aposta: $0 (de $%d)") % score_max
 		var auto_wager: int = -1
 		if has_player:
 			var is_ai: bool = bool(card_data.get("is_ai", false))
@@ -3250,6 +3360,8 @@ func _reveal_final_question() -> void:
 	_clear_wager_labels()
 	_safe_set_visible(final_wager_panel, false)
 	_safe_set_visible(wager_panel, false)
+	_safe_set_visible(wager_spacer_panel, false)
+	_safe_set_visible(wager_question_panel, false)
 	_safe_set_visible(question_panel, true)
 	_safe_set_visible(final_results_panel, false)
 
@@ -3287,9 +3399,11 @@ func _reveal_final_question() -> void:
 
 	current_categories = [ {"name": category_name, "values": []}]
 
-	q_category_label.text = ""
+	if q_category_label:
+		q_category_label.text = ""
 	_safe_set_visible(q_category_label, false)
-	q_value_label.text = ""
+	if q_value_label:
+		q_value_label.text = ""
 	_safe_set_visible(q_value_label, false)
 	q_text_label.text = ""
 	result_label.text = _t(
@@ -3391,6 +3505,7 @@ func _resolve_final_answers() -> void:
 	_safe_set_visible(game_board, false)
 	_safe_set_visible(wager_panel, false)
 	_safe_set_visible(final_wager_panel, false)
+	_safe_set_visible(wager_question_panel, false)
 	_safe_set_visible(question_panel, true)
 	_safe_set_visible(question_header_container, true)
 	_safe_set_visible(result_container, true)
@@ -3404,10 +3519,7 @@ func _resolve_final_answers() -> void:
 		await get_tree().create_timer(final_answer_reveal_seconds).timeout
 
 	# After revealing the correct answer, move to the final results view
-	_show_results_view()
-	_sync_final_results_cards()
-	_show_winner_trophies()
-
+	_refresh_all_score_views()
 	if game_state_machine:
 		game_state_machine.transition_to(GameStateMachine.State.RESULTS)
 		return

@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://88jpn26ij3hx"]
+[gd_scene load_steps=56 format=3 uid="uid://88jpn26ij3hx"]
 
 [ext_resource type="Script" uid="uid://bpdw75wca58c" path="res://src/ui/main/main.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://x3pbbp33v43u" path="res://main_background.png" id="2_w48qg"]
@@ -130,6 +130,8 @@ expand_margin_left = 15.0
 expand_margin_top = 45.0
 expand_margin_right = 15.0
 expand_margin_bottom = 30.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d13ii"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_facbu"]
 texture = ExtResource("16_getpj")
@@ -806,7 +808,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Player 1"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -815,7 +817,7 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "$0"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -853,7 +855,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Player 1"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -862,7 +864,7 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "$0"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -900,7 +902,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Player 1"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -909,7 +911,7 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "$0"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1611,7 +1613,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer/AnswerButton"]
-custom_minimum_size = Vector2(380, 70)
+custom_minimum_size = Vector2(340, 70)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1626,7 +1628,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1645,7 +1647,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer2/AnswerButton"]
-custom_minimum_size = Vector2(380, 70)
+custom_minimum_size = Vector2(340, 70)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1660,7 +1662,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1679,7 +1681,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer3/AnswerButton"]
-custom_minimum_size = Vector2(380, 70)
+custom_minimum_size = Vector2(340, 70)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1694,7 +1696,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1713,7 +1715,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="QuestionPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer4/AnswerButton"]
-custom_minimum_size = Vector2(380, 70)
+custom_minimum_size = Vector2(340, 70)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1728,7 +1730,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1866,6 +1868,14 @@ texture = ExtResource("9_w48qg")
 [node name="VBoxContainer" type="VBoxContainer" parent="WagerPanel/Content"]
 layout_mode = 2
 
+[node name="SpacerPanel" type="Panel" parent="WagerPanel/Content/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxEmpty_d13ii")
+
 [node name="TimerMarginContainer" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer"]
 custom_minimum_size = Vector2(75, 75)
 layout_mode = 2
@@ -1933,7 +1943,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Player 1"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1942,7 +1952,7 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "$0"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1980,7 +1990,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Player 1"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1989,7 +1999,7 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "$0"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2027,7 +2037,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_constants/outline_size = 8
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Player 1"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2036,7 +2046,7 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "$0"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2056,40 +2066,19 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -400.0
+offset_left = -414.0
 offset_top = -275.0
-offset_right = 400.0
+offset_right = 414.0
 offset_bottom = 275.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_bottom = 50
+theme_override_constants/margin_bottom = 80
 
 [node name="QuestionVBox" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 alignment = 1
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
-visible = false
-custom_minimum_size = Vector2(800, 160)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_constants/separation = -10
-alignment = 1
-
-[node name="QuestionCategory" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/VBoxContainer2"]
-custom_minimum_size = Vector2(0, 120)
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
-theme_override_constants/outline_size = 16
-theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 32
-text = "CATEGORY"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
 
 [node name="QuestionContainer" type="MarginContainer" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox"]
 layout_mode = 2
@@ -2102,8 +2091,8 @@ custom_minimum_size = Vector2(800, 140)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 40
-text = "WHERE IS THIS VERSE FROM?"
+theme_override_font_sizes/font_size = 32
+text = "WHERE IS THIS VERSE FROM? "
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
@@ -2152,7 +2141,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer/AnswerButton"]
-custom_minimum_size = Vector2(380, 70)
+custom_minimum_size = Vector2(340, 70)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2167,7 +2156,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2186,7 +2175,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer2/AnswerButton"]
-custom_minimum_size = Vector2(380, 70)
+custom_minimum_size = Vector2(340, 70)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2201,7 +2190,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2220,7 +2209,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer3/AnswerButton"]
-custom_minimum_size = Vector2(380, 70)
+custom_minimum_size = Vector2(340, 70)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2235,7 +2224,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2254,7 +2243,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0rl1p")
 theme_override_styles/hover = SubResource("StyleBoxTexture_0rl1p")
 
 [node name="Label" type="Label" parent="WagerPanel/Content/VBoxContainer/QuestionPanel/MarginContainer/QuestionVBox/AnswerContainer/GridContainer/AnswerContainer4/AnswerButton"]
-custom_minimum_size = Vector2(380, 70)
+custom_minimum_size = Vector2(340, 70)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2269,7 +2258,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 18
 text = "Answer"
 horizontal_alignment = 1
 vertical_alignment = 1
