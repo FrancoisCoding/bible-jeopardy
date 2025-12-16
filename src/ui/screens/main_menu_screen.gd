@@ -22,42 +22,34 @@ var pause_settings_button: Button
 var language_option: OptionButton
 var music_slider: HSlider
 var answer_timer_label: Label
-var final_wager_label: Label
-var final_wager_input: LineEdit
-var final_wager_button: Button
-var final_clue_button: Button
 var question_panel: Control
 var verse_data: VerseData
 var translator: Callable
 
 
 func _init(
-	title_panel: Control,
-	settings_panel: Control,
-	verse_panel: Control,
-	verse_title_label: Label,
-	verse_text_label: Label,
-	verse_reference_label: Label,
-	title_play_button: Button,
-	title_settings_button: BaseButton,
-	settings_language_label: Label,
-	music_label: Label,
-	settings_back_button: Button,
-	settings_exit_button: Button,
-	pause_title_label: Label,
-	pause_resume_button: Button,
-	pause_main_menu_button: Button,
-	pause_settings_button: Button,
-	language_option: OptionButton,
-	music_slider: HSlider,
-	answer_timer_label: Label,
-	final_wager_label: Label,
-	final_wager_input: LineEdit,
-	final_wager_button: Button,
-	final_clue_button: Button,
-	question_panel: Control,
-	verse_data: VerseData,
-	translator: Callable
+	title_panel: Control = null,
+	settings_panel: Control = null,
+	verse_panel: Control = null,
+	verse_title_label: Label = null,
+	verse_text_label: Label = null,
+	verse_reference_label: Label = null,
+	title_play_button: Button = null,
+	title_settings_button: BaseButton = null,
+	settings_language_label: Label = null,
+	music_label: Label = null,
+	settings_back_button: Button = null,
+	settings_exit_button: Button = null,
+	pause_title_label: Label = null,
+	pause_resume_button: Button = null,
+	pause_main_menu_button: Button = null,
+	pause_settings_button: Button = null,
+	language_option: OptionButton = null,
+	music_slider: HSlider = null,
+	answer_timer_label: Label = null,
+	question_panel: Control = null,
+	verse_data: VerseData = null,
+	translator: Callable = Callable()
 ) -> void:
 	self.title_panel = title_panel
 	self.settings_panel = settings_panel
@@ -78,10 +70,6 @@ func _init(
 	self.language_option = language_option
 	self.music_slider = music_slider
 	self.answer_timer_label = answer_timer_label
-	self.final_wager_label = final_wager_label
-	self.final_wager_input = final_wager_input
-	self.final_wager_button = final_wager_button
-	self.final_clue_button = final_clue_button
 	self.question_panel = question_panel
 	self.verse_data = verse_data
 	self.translator = translator
@@ -105,14 +93,6 @@ func apply_language_texts(current_language: String, set_language_callable: Calla
 	pause_main_menu_button.text = translator.call("Main Menu", "Menu principal")
 	_set_button_label(settings_back_button, translator.call("Back", "Voltar"))
 	_set_button_label(settings_exit_button, translator.call("Exit Game", "Sair do jogo"))
-	if final_wager_label:
-		final_wager_label.text = translator.call("Set Final Wager", "Definir aposta final")
-	if final_wager_input:
-		final_wager_input.placeholder_text = translator.call("Enter wager", "Digite a aposta")
-	if final_wager_button:
-		final_wager_button.text = translator.call("Set Wager", "Confirmar aposta")
-	if final_clue_button:
-		final_clue_button.text = translator.call("Get Clue (-10%)", "Dica (-10%)")
 
 
 func _set_button_label(button: BaseButton, text: String) -> void:
