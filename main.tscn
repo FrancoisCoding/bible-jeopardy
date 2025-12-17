@@ -2631,14 +2631,14 @@ text = "$0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Player1Panel2" type="Panel" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer"]
+[node name="Player2Panel" type="Panel" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer"]
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2647,7 +2647,7 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Placement" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel2/VBoxContainer"]
+[node name="Placement" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer"]
 custom_minimum_size = Vector2(300, 20)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -2660,18 +2660,18 @@ text = "2ND"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="Control" type="Control" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel2/VBoxContainer"]
+[node name="Control" type="Control" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer"]
 custom_minimum_size = Vector2(200, 140)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel2/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer"]
 custom_minimum_size = Vector2(200, 120)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 alignment = 1
 
-[node name="Label" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel2/VBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
@@ -2682,7 +2682,7 @@ text = "Player 2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label2" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel2/VBoxContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player2Panel/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
@@ -2691,14 +2691,14 @@ text = "$0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Player1Panel3" type="Panel" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer"]
+[node name="Player3Panel" type="Panel" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer"]
 custom_minimum_size = Vector2(300, 300)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxTexture_2cqfq")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel3"]
+[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2707,7 +2707,7 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Placement" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel3/VBoxContainer"]
+[node name="Placement" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer"]
 custom_minimum_size = Vector2(300, 20)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -2720,18 +2720,18 @@ text = "3RD"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="Control" type="Control" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel3/VBoxContainer"]
+[node name="Control" type="Control" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer"]
 custom_minimum_size = Vector2(200, 140)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel3/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer"]
 custom_minimum_size = Vector2(200, 120)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 alignment = 1
 
-[node name="Label" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel3/VBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
@@ -2742,7 +2742,7 @@ text = "Player 3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label2" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player1Panel3/VBoxContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="FinalResultsPanel/Content/VBoxContainer/HBoxPlayerContainer/Player3Panel/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")

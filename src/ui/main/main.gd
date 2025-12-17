@@ -19,7 +19,7 @@ const MUSIC_BACKGROUND := preload("res://music/background music.mp3")
 const MUSIC_QUESTION := preload("res://music/question music.mp3")
 const SFX_CORRECT := preload("res://music/correct.mp3")
 const SFX_WRONG := preload("res://music/wrong answer.mp3")
-const SFX_SELECT := preload("res://music/select_001.ogg")
+const SFX_SELECT := preload("res://music/Abstract2.mp3")
 const TEAM_COLORS := [Color(0.9, 0.2, 0.2), Color(0.2, 0.45, 0.95), Color(0.15, 0.75, 0.35)] # Red  # Blue  # Green
 const BOARD_CATEGORY_COUNT := 4
 const BOARD_TILE_ROWS := 3
@@ -872,10 +872,11 @@ func _refresh_all_score_views() -> void:
 		for i in range(players.size()):
 			game_board.update_player_score(i, _player_score_for_ui(i))
 
-	_sync_wager_top_cards()
+	if wager_panel and wager_panel.visible:
+		_sync_wager_ui()
 
 	if final_results_panel and final_results_panel.visible:
-		_sync_final_results_cards()
+		_sync_final_results_cards_fixed_order()
 
 
 func _format_score_text(score: int) -> String:
@@ -915,6 +916,35 @@ func _sync_wager_top_cards() -> void:
 			if has_player:
 				var sc := team_scores[i] if i < team_scores.size() else 0
 				score_lbl.text = _format_score_text(sc)
+
+
+func _sync_wager_ui() -> void:
+	if wager_panel == null or not is_instance_valid(wager_panel):
+		return
+
+	_sync_wager_top_cards()
+
+	# Wager selection cards (name + wager amount).
+	_ensure_wager_arrays()
+	for i in range(wager_player_name_labels.size()):
+		var has_player := i < players.size()
+		var name_lbl: Label = wager_player_name_labels[i]
+		var amt_lbl: Label = wager_amount_labels[i] if i < wager_amount_labels.size() else null
+
+		if name_lbl:
+			name_lbl.visible = has_player
+			if has_player:
+				name_lbl.text = _player_name_for_ui(i)
+
+		if amt_lbl:
+			amt_lbl.visible = has_player
+			if has_player:
+				var wager: int = final_wager_values[i] if i < final_wager_values.size() else 0
+				var max_wager: int = abs(_player_score_for_ui(i))
+				if final_wager_done.size() > i and final_wager_done[i]:
+					amt_lbl.text = _t("Wager: $%d", "Aposta: $%d") % wager
+				else:
+					amt_lbl.text = _t("Wager: $0 (of $%d)", "Aposta: $0 (de $%d)") % max_wager
 
 
 func _placement_text(idx: int) -> String:
@@ -986,7 +1016,7 @@ func _wire_final_results_ui() -> void:
 			push_error("FinalResults place label missing for slot %d" % i)
 
 
-func _sync_final_results_cards() -> void:
+func _sync_final_results_cards_fixed_order() -> void:
 	if (
 		not _labels_all_valid(final_results_name_labels)
 		or not _labels_all_valid(final_results_score_labels)
@@ -994,39 +1024,40 @@ func _sync_final_results_cards() -> void:
 	):
 		_wire_final_results_ui()
 
-	var entries: Array = []
+	# Build a distinct, descending score list so ties share the same rank.
+	var all_scores: Array[int] = []
 	for i in range(players.size()):
-		entries.append({"idx": i, "name": _player_name_for_ui(i), "score": _player_score_for_ui(i)})
+		all_scores.append(_player_score_for_ui(i))
+	var distinct_scores: Array[int] = []
+	var sorted_scores := all_scores.duplicate()
+	sorted_scores.sort() # ascending
+	sorted_scores.reverse()
+	for s in sorted_scores:
+		if not distinct_scores.has(s):
+			distinct_scores.append(s)
 
-	entries.sort_custom(
-		func(a: Dictionary, b: Dictionary) -> bool:
-			var sa := int(a.get("score", 0))
-			var sb := int(b.get("score", 0))
-			if sa == sb:
-				return int(a.get("idx", 0)) < int(b.get("idx", 0))
-			return sa > sb
-	)
-
-	for slot in range(3):
-		var has_entry := slot < entries.size()
-		var name_lbl := final_results_name_labels[slot] if slot < final_results_name_labels.size() else null
-		var score_lbl := final_results_score_labels[slot] if slot < final_results_score_labels.size() else null
-		var place_lbl := final_results_place_labels[slot] if slot < final_results_place_labels.size() else null
+	for i in range(3):
+		var has_player := i < players.size()
+		var name_lbl := final_results_name_labels[i] if i < final_results_name_labels.size() else null
+		var score_lbl := final_results_score_labels[i] if i < final_results_score_labels.size() else null
+		var place_lbl := final_results_place_labels[i] if i < final_results_place_labels.size() else null
 
 		if name_lbl:
-			name_lbl.visible = has_entry
-			if has_entry:
-				name_lbl.text = str(entries[slot].get("name", ""))
+			name_lbl.visible = has_player
+			if has_player:
+				name_lbl.text = _player_name_for_ui(i)
 
 		if score_lbl:
-			score_lbl.visible = has_entry
-			if has_entry:
-				score_lbl.text = _format_score_text(int(entries[slot].get("score", 0)))
+			score_lbl.visible = has_player
+			if has_player:
+				score_lbl.text = _format_score_text(_player_score_for_ui(i))
 
 		if place_lbl:
-			place_lbl.visible = has_entry
-			if has_entry:
-				place_lbl.text = _placement_text(slot)
+			place_lbl.visible = has_player
+			if has_player:
+				var score_i := _player_score_for_ui(i)
+				var rank := distinct_scores.find(score_i)
+				place_lbl.text = _placement_text(rank)
 
 
 func _trim_category_for_round(cat: Dictionary) -> Dictionary:
@@ -1207,6 +1238,7 @@ func _enter_round_two_state() -> void:
 func _enter_final_wager_state() -> void:
 	_hide_question_ui_for_wager()
 	_start_final_round()
+	_sync_wager_ui()
 
 
 func _enter_final_question_state() -> void:
@@ -1236,7 +1268,7 @@ func _enter_results_state() -> void:
 	_safe_set_visible(q_value_label, false)
 	q_text_label.text = ""
 	_show_results_view()
-	_sync_final_results_cards()
+	_sync_final_results_cards_fixed_order()
 	_show_winner_trophies()
 	if final_results_duration_seconds > 0.0:
 		final_results_timer = get_tree().create_timer(final_results_duration_seconds)
@@ -3385,7 +3417,7 @@ func _resolve_final_answers() -> void:
 	var correct_answer_raw := str(current_clue.get("answer", ""))
 	var correct_answer := correct_answer_raw.strip_edges().to_lower()
 	for i in range(players.size()):
-		var wager := final_wager_values[i] if i < final_wager_values.size() else 0
+		var wager: int = final_wager_values[i] if i < final_wager_values.size() else 0
 		var choice := ""
 		if i < final_answer_choices.size():
 			choice = final_answer_choices[i]
