@@ -483,6 +483,8 @@ var player_characters: Array[Dictionary] = []
 var controller_join_active: bool = false
 var answering_input_lock: Dictionary = {}
 var nav_focus_enabled: bool = false # Only grab focus highlights when a controller/keyboard joins
+var is_mobile: bool = false
+var _did_request_fullscreen: bool = false
 var settings_opened_from_pause: bool = false
 var ai_difficulty: String = "normal"
 var ai_correct_rate: float = AI_DIFFICULTY_RATES["normal"]
@@ -945,6 +947,8 @@ func _ready() -> void:
 	_ensure_default_input_actions()
 	_setup_pause_menu_focus()
 	set_process_input(true)
+	is_mobile = _detect_mobile()
+	_install_touch_buzz_area()
 	set_process(true)
 	audio_controller.configure_streams(
 		MUSIC_BACKGROUND, MUSIC_QUESTION, SFX_CORRECT, SFX_WRONG, SFX_SELECT
@@ -1867,6 +1871,96 @@ func _play_select_sfx() -> void:
 		audio_controller.play_select_sfx()
 
 
+func _detect_mobile() -> bool:
+	# Native mobile builds
+	if OS.has_feature("android") or OS.has_feature("ios"):
+		return true
+
+	# HTML5 on mobile (itch.io)
+	if OS.has_feature("web"):
+		# UA sniff is not "perfect", but works well for itch.io mobile
+		var js := "(/Mobi|Android|iPhone|iPad|iPod/i).test(navigator.userAgent);"
+		var res: Variant = JavaScriptBridge.eval(js, true)
+		return bool(res)
+
+	return false
+
+
+func _request_fullscreen_if_mobile() -> void:
+	if not is_mobile:
+		return
+	if _did_request_fullscreen:
+		return
+
+	_did_request_fullscreen = true
+
+	# Browser fullscreen requires a user gesture (Play button press is perfect)
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval(
+			"""
+			(function () {
+			  try {
+				const el = document.documentElement;
+				if (!document.fullscreenElement && el.requestFullscreen) {
+				  el.requestFullscreen({ navigationUI: "hide" }).catch(() => {});
+				}
+			  } catch (e) {}
+			})();
+		""",
+			true
+		)
+	else:
+		var win := get_window()
+		if win:
+			win.mode = Window.MODE_FULLSCREEN
+
+
+func _install_touch_buzz_area() -> void:
+	# Lets the player tap anywhere on the question screen to "buzz" (mobile-friendly)
+	if not is_mobile:
+		return
+	if question_panel == null or not is_instance_valid(question_panel):
+		return
+	if question_panel.has_node("TouchBuzzArea"):
+		return
+
+	var area := Control.new()
+	area.name = "TouchBuzzArea"
+	area.set_anchors_preset(Control.PRESET_FULL_RECT)
+	area.mouse_filter = Control.MOUSE_FILTER_STOP
+	area.gui_input.connect(_on_touch_buzz_gui_input)
+
+	# Put it behind existing UI so buttons still work
+	question_panel.add_child(area)
+	question_panel.move_child(area, 0)
+
+
+func _on_touch_buzz_gui_input(event: InputEvent) -> void:
+	if not is_mobile:
+		return
+	if current_clue.is_empty():
+		return
+	if question_phase != QuestionPhase.READING:
+		return
+	if buzzed_player != -1:
+		return
+	if players.is_empty():
+		return
+	if bool(players[0].get("is_ai", false)):
+		return
+
+	var pressed := false
+	if event is InputEventScreenTouch and (event as InputEventScreenTouch).pressed:
+		pressed = true
+	elif event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		pressed = mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT
+
+	if pressed:
+		_on_player_buzz(0)
+		get_viewport().set_input_as_handled()
+
+
 func _show_title() -> void:
 	if main_menu_screen:
 		main_menu_screen.show_title()
@@ -1883,6 +1977,23 @@ func _show_title() -> void:
 
 func _on_play_pressed() -> void:
 	_play_select_sfx()
+
+	if is_mobile:
+		_request_fullscreen_if_mobile()
+
+		# Skip controller setup entirely on mobile
+		pending_player_inputs.clear()
+		pending_allow_keyboard_fallback = true
+
+		if game_state_machine:
+			game_state_machine.transition_to(
+				GameStateMachine.State.ROUND_1, {"allow_keyboard_fallback": true}
+			)
+		else:
+			_start_game([], true)
+		return
+
+	# Desktop / controller flow
 	if game_state_machine:
 		game_state_machine.transition_to(GameStateMachine.State.CONTROLLER_SETUP)
 

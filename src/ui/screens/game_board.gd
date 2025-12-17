@@ -33,6 +33,7 @@ var grid_container: GridContainer = $Content/VBoxContainer/MarginBoardContainer/
 var tile_entries: Array[Dictionary] = []
 var tile_states: Array[Dictionary] = []
 var tile_buttons: Array[BaseButton] = []
+var _tiles_input_enabled: bool = true
 
 
 func _ready() -> void:
@@ -40,6 +41,7 @@ func _ready() -> void:
 
 
 func set_tiles_enabled(enabled: bool) -> void:
+	_tiles_input_enabled = enabled
 	for i in range(tile_entries.size()):
 		var entry := tile_entries[i]
 		var btn: BaseButton = entry.get("button") as BaseButton
@@ -73,6 +75,27 @@ func _set_non_button_controls_ignore_mouse(root: Node, keep: BaseButton) -> void
 		_set_non_button_controls_ignore_mouse(child, keep)
 
 
+func _set_non_button_controls_ignore_mouse_children(root: Node, keep: BaseButton) -> void:
+	if root == null:
+		return
+	for child: Node in root.get_children():
+		_set_non_button_controls_ignore_mouse(child, keep)
+
+
+func _on_tile_gui_input(event: InputEvent, tile_idx: int) -> void:
+	var pressed := false
+
+	if event is InputEventScreenTouch and (event as InputEventScreenTouch).pressed:
+		pressed = true
+	elif event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		pressed = mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT
+
+	if pressed:
+		_on_tile_pressed(tile_idx)
+		get_viewport().set_input_as_handled()
+
+
 func _collect_tiles() -> void:
 	if grid_container == null:
 		return
@@ -87,11 +110,18 @@ func _collect_tiles() -> void:
 		if idx >= ACTIVE_TILE_COUNT:
 			break
 
+		var tile_index: int = idx
+		var tile_root: Control = child as Control
+		if tile_root:
+			# Allow the whole tile slot to receive taps (helpful on mobile, and when the Button
+			# doesn't fully cover the tile visuals).
+			tile_root.process_mode = Node.PROCESS_MODE_ALWAYS
+			tile_root.mouse_filter = Control.MOUSE_FILTER_STOP
+
 		var btn: BaseButton = _find_first_button(child)
 
 		if btn:
 			found_count += 1
-			var tile_index: int = idx
 
 			btn.set_meta("tile_index", tile_index)
 			btn.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -103,7 +133,7 @@ func _collect_tiles() -> void:
 			btn.focus_mode = Control.FOCUS_ALL
 
 			# Prevent overlays/labels inside the tile from eating input.
-			_set_non_button_controls_ignore_mouse(child, btn)
+			_set_non_button_controls_ignore_mouse_children(child, btn)
 
 			# Connect once.
 			if not bool(btn.get_meta("tile_pressed_connected", false)):
@@ -118,6 +148,14 @@ func _collect_tiles() -> void:
 				(btn as Button).text = ""
 		else:
 			push_warning("No button found for tile slot: %s" % str(child.get_path()))
+
+		# Fallback: allow taps/clicks on the tile container itself.
+		# This covers cases where the scene uses Controls instead of Buttons, or the Button doesn't
+		# cover the entire tile area.
+		if tile_root and tile_root != btn:
+			if not bool(tile_root.get_meta("tile_gui_connected", false)):
+				tile_root.gui_input.connect(Callable(self, "_on_tile_gui_input").bind(tile_index))
+				tile_root.set_meta("tile_gui_connected", true)
 
 		tile_entries.append({"button": btn})
 		tile_states.append({})
@@ -263,6 +301,9 @@ func _disable_unused_tiles_from(start_idx: int) -> void:
 
 func _on_tile_pressed(tile_idx: int) -> void:
 	print("tile pressed idx=", tile_idx, " states=", tile_states.size())
+	if not _tiles_input_enabled:
+		print(" -> blocked: tiles disabled")
+		return
 	if tile_idx < 0 or tile_idx >= tile_states.size():
 		print(" -> blocked: idx out of range")
 		return
