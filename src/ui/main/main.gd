@@ -680,6 +680,7 @@ func _initialize_wager_answer_buttons() -> void:
 			wager_answer_button_nodes.append(btn)
 			btn.focus_mode = Control.FOCUS_ALL
 			btn.mouse_filter = Control.MOUSE_FILTER_STOP
+			btn.process_mode = Node.PROCESS_MODE_ALWAYS
 			btn.disabled = true
 			btn.set_meta("answer_text", "")
 			var callable := Callable(self, "_on_answer_button_pressed").bind(btn)
@@ -687,6 +688,111 @@ func _initialize_wager_answer_buttons() -> void:
 				btn.pressed.connect(callable)
 	_wire_focus_grid(wager_answer_button_nodes, 2)
 	_clear_selected_choice()
+
+
+func _configure_wager_process_modes() -> void:
+	if wager_panel and is_instance_valid(wager_panel):
+		wager_panel.process_mode = Node.PROCESS_MODE_ALWAYS
+	for row: Array in wager_choice_buttons:
+		for btn in row:
+			var b := btn as BaseButton
+			if b and is_instance_valid(b):
+				b.process_mode = Node.PROCESS_MODE_ALWAYS
+				b.focus_mode = Control.FOCUS_ALL
+				b.mouse_filter = Control.MOUSE_FILTER_STOP
+
+
+func _is_focusable_wager_button(btn: BaseButton) -> bool:
+	return btn != null and is_instance_valid(btn) and btn.visible and not btn.disabled
+
+
+func _first_focusable_wager_button() -> BaseButton:
+	# Layout is 3 player columns x 3 wager rows (30%/50%/100%).
+	var player_count := wager_choice_buttons.size()
+	if player_count <= 0:
+		return null
+	var wager_rows := 0
+	for row: Array in wager_choice_buttons:
+		wager_rows = max(wager_rows, row.size())
+	for wager_idx in range(wager_rows):
+		for player_idx in range(player_count):
+			var row: Array = wager_choice_buttons[player_idx]
+			if wager_idx >= row.size():
+				continue
+			var btn := row[wager_idx] as BaseButton
+			if _is_focusable_wager_button(btn):
+				return btn
+	return null
+
+
+func _focus_first_wager_button_next_frame() -> void:
+	if not nav_focus_enabled:
+		return
+	await get_tree().process_frame
+	if wager_panel == null or not is_instance_valid(wager_panel) or not wager_panel.visible:
+		return
+	var btn := _first_focusable_wager_button()
+	if btn:
+		btn.grab_focus()
+
+
+func _wager_choice_button_at(player_idx: int, wager_idx: int) -> BaseButton:
+	if player_idx < 0 or player_idx >= wager_choice_buttons.size():
+		return null
+	var row: Array = wager_choice_buttons[player_idx]
+	if wager_idx < 0 or wager_idx >= row.size():
+		return null
+	return row[wager_idx] as BaseButton
+
+
+func _wire_wager_choice_focus() -> void:
+	var player_count := wager_choice_buttons.size()
+	if player_count <= 0:
+		return
+	var wager_rows := 0
+	for row: Array in wager_choice_buttons:
+		wager_rows = max(wager_rows, row.size())
+	if wager_rows <= 0:
+		return
+
+	for wager_idx in range(wager_rows):
+		for player_idx in range(player_count):
+			var btn := _wager_choice_button_at(player_idx, wager_idx)
+			if not _is_focusable_wager_button(btn):
+				continue
+
+			var left_target: BaseButton = btn
+			for p in range(player_idx - 1, -1, -1):
+				var cand := _wager_choice_button_at(p, wager_idx)
+				if _is_focusable_wager_button(cand):
+					left_target = cand
+					break
+
+			var right_target: BaseButton = btn
+			for p in range(player_idx + 1, player_count):
+				var cand := _wager_choice_button_at(p, wager_idx)
+				if _is_focusable_wager_button(cand):
+					right_target = cand
+					break
+
+			var up_target: BaseButton = btn
+			for w in range(wager_idx - 1, -1, -1):
+				var cand := _wager_choice_button_at(player_idx, w)
+				if _is_focusable_wager_button(cand):
+					up_target = cand
+					break
+
+			var down_target: BaseButton = btn
+			for w in range(wager_idx + 1, wager_rows):
+				var cand := _wager_choice_button_at(player_idx, w)
+				if _is_focusable_wager_button(cand):
+					down_target = cand
+					break
+
+			btn.focus_neighbor_left = left_target.get_path()
+			btn.focus_neighbor_right = right_target.get_path()
+			btn.focus_neighbor_top = up_target.get_path()
+			btn.focus_neighbor_bottom = down_target.get_path()
 
 
 func _use_regular_question_ui() -> void:
@@ -779,6 +885,7 @@ func _ready() -> void:
 	_use_regular_question_ui()
 	_initialize_answer_buttons()
 	_initialize_wager_answer_buttons()
+	_configure_wager_process_modes()
 	_collect_player_cards()
 	_update_verse_of_day()
 	# Hook up UI
@@ -3037,6 +3144,16 @@ func _maybe_focus_for_nav() -> void:
 	if settings_panel and settings_panel.visible and language_option:
 		language_option.grab_focus()
 		return
+	if (
+		wager_panel
+		and is_instance_valid(wager_panel)
+		and wager_panel.visible
+		and wager_container
+		and is_instance_valid(wager_container)
+		and wager_container.visible
+	):
+		_focus_first_wager_button_next_frame()
+		return
 	if game_board and is_instance_valid(game_board) and game_board.visible:
 		if game_board.has_method("focus_first_available_tile"):
 			game_board.call("focus_first_available_tile")
@@ -3321,9 +3438,11 @@ func _show_wager_panel_ui() -> void:
 					b.visible = has_player
 					b.disabled = not has_player
 
+	_wire_wager_choice_focus()
 	_check_all_wagers_selected()
 	if not final_wager_set:
 		_start_wager_timer(FINAL_WAGER_TIME)
+	_focus_first_wager_button_next_frame()
 
 
 func _check_all_wagers_selected() -> void:
@@ -3332,7 +3451,7 @@ func _check_all_wagers_selected() -> void:
 			return
 	_cancel_wager_timer()
 	final_wager_set = true
-	final_wager_timer = get_tree().create_timer(final_wager_summary_delay_seconds)
+	final_wager_timer = get_tree().create_timer(final_wager_summary_delay_seconds, true)
 	final_wager_timer.timeout.connect(
 		func() -> void:
 			if game_state_machine:
@@ -3704,9 +3823,9 @@ func _start_wager_timer(duration: float = FINAL_WAGER_TIME) -> void:
 	_cancel_wager_timer()
 	final_wager_time_left = int(round(duration))
 	_update_wager_timer_label(final_wager_time_left)
-	final_wager_timer = get_tree().create_timer(duration)
+	final_wager_timer = get_tree().create_timer(duration, true)
 	final_wager_timer.timeout.connect(_on_final_wager_timeout)
-	final_wager_countdown_timer = get_tree().create_timer(1.0)
+	final_wager_countdown_timer = get_tree().create_timer(1.0, true)
 	final_wager_countdown_timer.timeout.connect(_on_wager_timer_tick)
 
 
@@ -3767,7 +3886,7 @@ func _on_wager_timer_tick() -> void:
 	_update_wager_timer_label(final_wager_time_left)
 	if final_wager_time_left <= 0:
 		return
-	final_wager_countdown_timer = get_tree().create_timer(1.0)
+	final_wager_countdown_timer = get_tree().create_timer(1.0, true)
 	final_wager_countdown_timer.timeout.connect(_on_wager_timer_tick)
 
 
