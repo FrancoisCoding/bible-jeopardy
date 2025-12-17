@@ -20,6 +20,7 @@ const MUSIC_QUESTION := preload("res://music/question music.mp3")
 const SFX_CORRECT := preload("res://music/correct.mp3")
 const SFX_WRONG := preload("res://music/wrong answer.mp3")
 const SFX_SELECT := preload("res://music/Abstract2.mp3")
+const MUSIC_BUS := "Master"
 const TEAM_COLORS := [Color(0.9, 0.2, 0.2), Color(0.2, 0.45, 0.95), Color(0.15, 0.75, 0.35)] # Red  # Blue  # Green
 const BOARD_CATEGORY_COUNT := 4
 const BOARD_TILE_ROWS := 3
@@ -508,6 +509,9 @@ var question_selector_team: int = 0
 var answering_player: int = -1
 var background_rect: TextureRect
 var theme_body_color: Color = Color("#633005")
+var music_bus_idx: int = -1
+var music_amp_effect_idx: int = -1
+var music_amp: AudioEffectAmplify = null
 var category_deck: Array = []
 var loading_settings: bool = false
 var settings_initialized: bool = false
@@ -573,6 +577,55 @@ func _safe_set_visible(node: Node, value: bool) -> void:
 		node.visible = value
 
 
+func _safe_focus_path(btns: Array, idx: int, fallback_idx: int) -> NodePath:
+	if idx < 0 or idx >= btns.size():
+		idx = fallback_idx
+	var target := btns[idx] as Control
+	if target and is_instance_valid(target):
+		return target.get_path()
+	var fallback := btns[fallback_idx] as Control
+	return fallback.get_path() if fallback and is_instance_valid(fallback) else NodePath("")
+
+
+func _wire_focus_grid(btns: Array, columns: int, wrap: bool = true) -> void:
+	# btns: Array[BaseButton]
+	var total := btns.size()
+	if total == 0 or columns <= 0:
+		return
+
+	var rows := int(ceil(float(total) / float(columns)))
+
+	for i in range(total):
+		var btn := btns[i] as BaseButton
+		if btn == null or not is_instance_valid(btn):
+			continue
+
+		btn.focus_mode = Control.FOCUS_ALL
+
+		var r := i / columns
+		var c := i % columns
+
+		var left_i := r * columns + (c - 1)
+		var right_i := r * columns + (c + 1)
+		var up_i := (r - 1) * columns + c
+		var down_i := (r + 1) * columns + c
+
+		if wrap:
+			if c == 0:
+				left_i = r * columns + min(columns - 1, total - 1 - r * columns)
+			if c == columns - 1 or right_i >= total:
+				right_i = r * columns
+			if r == 0:
+				up_i = (rows - 1) * columns + c
+			if down_i >= total:
+				down_i = c
+
+		btn.focus_neighbor_left = _safe_focus_path(btns, left_i, i)
+		btn.focus_neighbor_right = _safe_focus_path(btns, right_i, i)
+		btn.focus_neighbor_top = _safe_focus_path(btns, up_i, i)
+		btn.focus_neighbor_bottom = _safe_focus_path(btns, down_i, i)
+
+
 func _set_question_phase(new_phase: int) -> void:
 	question_phase = new_phase
 
@@ -608,11 +661,14 @@ func _initialize_answer_buttons() -> void:
 	for btn in buttons:
 		if btn and is_instance_valid(btn):
 			answer_button_nodes.append(btn)
+			btn.focus_mode = Control.FOCUS_ALL
+			btn.mouse_filter = Control.MOUSE_FILTER_STOP
 			btn.disabled = true
 			btn.set_meta("answer_text", "")
 			var callable := Callable(self, "_on_answer_button_pressed").bind(btn)
 			if not btn.pressed.is_connected(callable):
 				btn.pressed.connect(callable)
+	_wire_focus_grid(answer_button_nodes, 2)
 	_clear_selected_choice()
 
 
@@ -622,11 +678,14 @@ func _initialize_wager_answer_buttons() -> void:
 	for btn in buttons:
 		if btn and is_instance_valid(btn):
 			wager_answer_button_nodes.append(btn)
+			btn.focus_mode = Control.FOCUS_ALL
+			btn.mouse_filter = Control.MOUSE_FILTER_STOP
 			btn.disabled = true
 			btn.set_meta("answer_text", "")
 			var callable := Callable(self, "_on_answer_button_pressed").bind(btn)
 			if not btn.pressed.is_connected(callable):
 				btn.pressed.connect(callable)
+	_wire_focus_grid(wager_answer_button_nodes, 2)
 	_clear_selected_choice()
 
 
@@ -727,6 +786,12 @@ func _ready() -> void:
 	_safe_connect_pressed(title_settings_button, _on_settings_pressed, "Settings button")
 	_safe_connect_pressed(settings_back_button, _on_settings_back_pressed, "Settings back button")
 	_safe_connect_value_changed(music_slider, _on_music_slider_changed, "Music slider")
+	if music_slider and is_instance_valid(music_slider):
+		music_slider.min_value = 0.0
+		music_slider.max_value = 1.0
+		music_slider.step = 0.01
+		if not music_slider.drag_ended.is_connected(_on_music_slider_drag_ended):
+			music_slider.drag_ended.connect(_on_music_slider_drag_ended)
 	_safe_connect_item_selected(language_option, _on_language_selected, "Language option")
 	_safe_connect_pressed(pause_resume_button, _on_pause_resume_pressed, "Pause resume button")
 	_safe_connect_pressed(pause_main_menu_button, _on_pause_main_menu_pressed, "Pause main button")
@@ -750,6 +815,8 @@ func _ready() -> void:
 		controller_ai_option, func(idx: int) -> void: _on_ai_difficulty_selected(idx), "AI option"
 	)
 	if game_board:
+		if game_board is Control:
+			(game_board as Control).focus_mode = Control.FOCUS_ALL
 		if not game_board.tile_pressed.is_connected(_on_game_board_tile_pressed):
 			game_board.tile_pressed.connect(_on_game_board_tile_pressed)
 		if not game_board.round_complete.is_connected(_on_game_board_round_complete):
@@ -771,10 +838,12 @@ func _ready() -> void:
 	_ensure_default_input_actions()
 	_setup_pause_menu_focus()
 	set_process_input(true)
+	set_process(true)
 	audio_controller.configure_streams(
 		MUSIC_BACKGROUND, MUSIC_QUESTION, SFX_CORRECT, SFX_WRONG, SFX_SELECT
 	)
 	audio_controller.play_background_music()
+	_cache_music_amplify()
 	_populate_languages()
 	_load_settings()
 	_apply_language_texts()
@@ -791,6 +860,28 @@ func _ready() -> void:
 	_reset_round_state(0)
 	if game_state_machine:
 		game_state_machine.bootstrap(GameStateMachine.State.MAIN_MENU)
+
+
+func _cache_music_amplify() -> void:
+	music_bus_idx = AudioServer.get_bus_index(MUSIC_BUS)
+	music_amp_effect_idx = -1
+	music_amp = null
+
+	if music_bus_idx < 0:
+		push_warning("Bus '%s' not found." % MUSIC_BUS)
+		return
+
+	for i in range(AudioServer.get_bus_effect_count(music_bus_idx)):
+		var eff: AudioEffect = AudioServer.get_bus_effect(music_bus_idx, i)
+		if eff is AudioEffectAmplify:
+			music_amp_effect_idx = i
+			music_amp = eff as AudioEffectAmplify
+			break
+
+	if music_amp == null:
+		push_warning(
+			"No AudioEffectAmplify found on bus '%s'. Add it in the Audio Bus Layout." % MUSIC_BUS
+		)
 
 
 func _get_today_key() -> String:
@@ -832,6 +923,11 @@ func _setup_accessible_text() -> void:
 
 func _show_game_board(show: bool) -> void:
 	_safe_set_visible(game_board, show)
+	if show and nav_focus_enabled and game_board:
+		if game_board.has_method("focus_first_available_tile"):
+			game_board.call("focus_first_available_tile")
+		elif game_board is Control:
+			(game_board as Control).grab_focus()
 
 
 func _set_game_board_interactive(enabled: bool) -> void:
@@ -1824,6 +1920,7 @@ func _start_game(selected_inputs: Array = [], allow_keyboard_fallback: bool = tr
 	controller_join_active = false
 	_reset_round_state()
 	_setup_players(3, selected_inputs, allow_keyboard_fallback)
+	_fix_single_controller_device_id()
 	# Ensure character assignments match the current player count
 	if player_characters.size() != players.size():
 		player_characters.clear()
@@ -1953,24 +2050,10 @@ func _input(event: InputEvent) -> void:
 					return
 		return
 
-	if current_clue.is_empty() and not _event_is_for_current_turn(event):
-		var is_wager_ui := wager_panel and wager_panel.visible
-		var is_controller_ui := controller_connect_panel and controller_connect_panel.visible
-		var is_menu_ui := (title_panel and title_panel.visible) or (settings_panel and settings_panel.visible)
-
-		# If any menu-like UI is up, NEVER swallow input (let buttons work)
-		if is_wager_ui or is_controller_ui or is_menu_ui:
-			return
-
-		if not event.is_action_pressed("ui_cancel"):
-			if (
-				event is InputEventMouseButton
-				or event is InputEventJoypadButton
-				or event is InputEventJoypadMotion
-				or event is InputEventKey
-			):
-				get_viewport().set_input_as_handled()
-				return
+	if current_clue.is_empty():
+		# When selecting tiles on the board or navigating menus, don't swallow input.
+		# Focus/navigation needs to see controller/keyboard events.
+		return
 
 
 func _can_open_pause_menu() -> bool:
@@ -2051,22 +2134,27 @@ func _load_settings() -> void:
 	loading_settings = true
 	var cfg := ConfigFile.new()
 	var err := cfg.load(SETTINGS_PATH)
-	var default_db := -6.0 # Approximately 50% perceived volume
+	var default_linear := 0.5 # Approximately 50% perceived volume
 	if music_slider:
-		music_slider.min_value = -80.0
-		default_db = clamp(default_db, music_slider.min_value, music_slider.max_value)
+		music_slider.min_value = 0.0
+		music_slider.max_value = 1.0
+		default_linear = clamp(default_linear, music_slider.min_value, music_slider.max_value)
 		if err != OK:
-			music_slider.value = default_db
+			music_slider.value = default_linear
 			_on_music_slider_changed(music_slider.value)
 	if err == OK:
 		current_language = str(cfg.get_value("general", "language", current_language))
-		var has_music_key := cfg.has_section_key("audio", "music_db")
-		var saved_db := float(cfg.get_value("audio", "music_db", default_db))
-		var legacy_default := -10.0
-		if (not has_music_key) or (is_equal_approx(saved_db, legacy_default) and not is_equal_approx(default_db, legacy_default)):
-			saved_db = default_db
+		var saved_raw: Variant = cfg.get_value("audio", "music_db", default_linear)
+		var saved_linear: float = default_linear
+		if typeof(saved_raw) == TYPE_FLOAT:
+			var val := float(saved_raw)
+			# Accept legacy dB values (< -1 or > 1) by converting them.
+			if val >= 0.0 and val <= 1.0:
+				saved_linear = val
+			else:
+				saved_linear = db_to_linear(val)
 		if music_slider:
-			music_slider.value = clamp(saved_db, music_slider.min_value, music_slider.max_value)
+			music_slider.value = clamp(saved_linear, music_slider.min_value, music_slider.max_value)
 			_on_music_slider_changed(music_slider.value)
 		if language_option:
 			language_option.select(1 if current_language == "pt" else 0)
@@ -2082,10 +2170,10 @@ func _save_settings(force: bool = false) -> void:
 		return
 	var cfg := ConfigFile.new()
 	cfg.set_value("general", "language", current_language)
-	var music_db := -6.0
+	var music_linear := 0.5
 	if music_slider:
-		music_db = music_slider.value
-	cfg.set_value("audio", "music_db", music_db)
+		music_linear = clamp(music_slider.value, music_slider.min_value, music_slider.max_value)
+	cfg.set_value("audio", "music_db", music_linear)
 	var err := cfg.save(SETTINGS_PATH)
 	if err != OK:
 		push_warning("Failed to save settings: %s" % str(err))
@@ -2129,12 +2217,27 @@ func _finalize_wager(idx: int, amount: int, reason_text: String = "") -> void:
 
 
 func _on_music_slider_changed(value: float) -> void:
-	if audio_controller:
-		var db_value := value
-		if music_slider and value <= music_slider.min_value + 0.01:
-			db_value = music_slider.min_value
-		audio_controller.set_music_volume_db(db_value)
+	var linear_val := value
+	if music_slider:
+		linear_val = clamp(value, music_slider.min_value, music_slider.max_value)
+	linear_val = clamp(linear_val, 0.0, 1.0)
+	var db_value := linear_to_db(max(linear_val, 0.001))
+	_set_music_amp_db(db_value)
+
+
+func _on_music_slider_drag_ended(value_changed: bool) -> void:
+	if not value_changed:
+		return
+	_play_select_sfx()
 	_save_settings()
+
+
+func _set_music_amp_db(db_value: float) -> void:
+	if music_amp != null:
+		music_amp.volume_db = db_value
+	elif music_bus_idx >= 0:
+		# Fallback: adjust bus volume directly if no Amplify effect is present.
+		AudioServer.set_bus_volume_db(music_bus_idx, db_value)
 
 
 func _setup_players(
@@ -2213,7 +2316,24 @@ func _setup_players(
 	for i in range(team_scores.size()):
 		team_scores[i] = 0
 	_sync_team_names_from_players()
+	print("players=", players)
+	print("current_turn_team=", current_turn_team)
 	_sync_game_board_players()
+
+
+func _fix_single_controller_device_id() -> void:
+	var joypads := Input.get_connected_joypads()
+	if joypads.size() != 1:
+		return
+	if players.is_empty():
+		return
+	if players[0].get("uses_keyboard", false):
+		return
+	var stored := int(players[0].get("device_id", -1))
+	var actual := int(joypads[0])
+	if stored != actual:
+		players[0]["device_id"] = actual
+		print("Fixed device_id:", stored, "->", actual)
 
 
 func _sync_team_names_from_players() -> void:
@@ -2917,6 +3037,12 @@ func _maybe_focus_for_nav() -> void:
 	if settings_panel and settings_panel.visible and language_option:
 		language_option.grab_focus()
 		return
+	if game_board and is_instance_valid(game_board) and game_board.visible:
+		if game_board.has_method("focus_first_available_tile"):
+			game_board.call("focus_first_available_tile")
+		elif game_board is Control:
+			(game_board as Control).grab_focus()
+		return
 	if title_panel and title_panel.visible and title_play_button:
 		title_play_button.grab_focus()
 		return
@@ -3461,6 +3587,22 @@ func _resolve_final_answers() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	# Quick input-blocker debug (temporary): shows what Control is under the mouse
+	# and what currently owns focus when pressing ui_accept.
+	if event is InputEventMouseButton and event.pressed:
+		var hovered: Control = get_viewport().gui_get_hovered_control()
+		var hovered_path := "null"
+		if hovered and is_instance_valid(hovered):
+			hovered_path = str(hovered.get_path())
+		print("CLICK hovered=", hovered, " path=", hovered_path)
+
+	if event.is_action_pressed("ui_accept"):
+		var focus_owner: Control = get_viewport().gui_get_focus_owner()
+		var focus_path := "null"
+		if focus_owner and is_instance_valid(focus_owner):
+			focus_path = str(focus_owner.get_path())
+		print("ACCEPT focus_owner=", focus_owner, " path=", focus_path)
+
 	if pause_menu.visible:
 		return
 	if controller_join_active:

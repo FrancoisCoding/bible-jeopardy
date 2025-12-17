@@ -370,10 +370,8 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(520, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-min_value = -30.0
-max_value = 6.0
-step = 0.5
-value = -6.0
+max_value = 1.0
+step = 0.01
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SettingsPanel/Content/SettingsGUI/CenterContainer/VBoxContainer"]
 layout_mode = 2
@@ -718,13 +716,13 @@ theme_override_font_sizes/font_size = 48
 text = "BACK"
 
 [node name="GameBoard" type="Control" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("18_gboard")
 
 [node name="Content" type="MarginContainer" parent="GameBoard"]
@@ -741,6 +739,7 @@ offset_right = 960.0
 offset_bottom = 540.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="NinePatchRect" type="NinePatchRect" parent="GameBoard/Content"]
 custom_minimum_size = Vector2(1920, 1080)
@@ -749,6 +748,7 @@ texture = ExtResource("9_w48qg")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GameBoard/Content"]
 layout_mode = 2
+mouse_filter = 2
 
 [node name="SettingsMarginContainer" type="MarginContainer" parent="GameBoard/Content/VBoxContainer"]
 custom_minimum_size = Vector2(75, 75)
@@ -769,6 +769,7 @@ custom_minimum_size = Vector2(1400, 200)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+mouse_filter = 2
 theme_override_constants/separation = 64
 alignment = 1
 
@@ -918,6 +919,7 @@ custom_minimum_size = Vector2(1200, 120)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+mouse_filter = 2
 alignment = 1
 
 [node name="CategoryPanel1" type="Panel" parent="GameBoard/Content/VBoxContainer/HBoxCategoryContainer"]
@@ -1020,6 +1022,7 @@ size_flags_vertical = 4
 
 [node name="Panel" type="Panel" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer"]
 layout_mode = 2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_xuqvo")
 
 [node name="GridGameContainer" type="GridContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer"]
@@ -1039,18 +1042,13 @@ size_flags_vertical = 4
 
 [node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
-theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
-
-[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
 text = "$0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="MarginTileContainer2" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
 custom_minimum_size = Vector2(200, 100)
@@ -1060,18 +1058,13 @@ size_flags_vertical = 4
 
 [node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer2"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
-theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
-
-[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer2"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
 text = "$0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="MarginTileContainer3" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
 custom_minimum_size = Vector2(200, 100)
@@ -1081,18 +1074,13 @@ size_flags_vertical = 4
 
 [node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer3"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
-theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
-
-[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer3"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
 text = "$0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="MarginTileContainer4" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
 custom_minimum_size = Vector2(200, 100)
@@ -1102,18 +1090,13 @@ size_flags_vertical = 4
 
 [node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer4"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
-theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
-
-[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer4"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
 text = "$0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="MarginTileContainer5" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
 custom_minimum_size = Vector2(200, 100)
@@ -1123,18 +1106,13 @@ size_flags_vertical = 4
 
 [node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer5"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
-theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
-
-[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer5"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
 text = "$0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="MarginTileContainer6" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
 custom_minimum_size = Vector2(200, 100)
@@ -1144,18 +1122,13 @@ size_flags_vertical = 4
 
 [node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer6"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
-theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
-
-[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer6"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
 text = "$0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="MarginTileContainer7" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
 custom_minimum_size = Vector2(200, 100)
@@ -1165,18 +1138,13 @@ size_flags_vertical = 4
 
 [node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer7"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
-theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
-
-[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer7"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
 text = "$0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="MarginTileContainer8" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
 custom_minimum_size = Vector2(200, 100)
@@ -1186,18 +1154,13 @@ size_flags_vertical = 4
 
 [node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer8"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
-theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
-
-[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer8"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
 text = "$0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="MarginTileContainer9" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
 custom_minimum_size = Vector2(200, 100)
@@ -1207,18 +1170,13 @@ size_flags_vertical = 4
 
 [node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer9"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
-theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
-
-[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer9"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
 text = "$0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="MarginTileContainer10" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
 custom_minimum_size = Vector2(200, 100)
@@ -1228,18 +1186,13 @@ size_flags_vertical = 4
 
 [node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer10"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
-theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
-
-[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer10"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
 text = "$0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="MarginTileContainer11" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
 custom_minimum_size = Vector2(200, 100)
@@ -1249,18 +1202,13 @@ size_flags_vertical = 4
 
 [node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer11"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
-theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
-
-[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer11"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
 text = "$0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="MarginTileContainer12" type="MarginContainer" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer"]
 custom_minimum_size = Vector2(200, 100)
@@ -1270,18 +1218,13 @@ size_flags_vertical = 4
 
 [node name="Button" type="Button" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer12"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
-theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
-
-[node name="Label" type="Label" parent="GameBoard/Content/VBoxContainer/MarginBoardContainer/GridGameContainer/MarginTileContainer12"]
-layout_mode = 2
 theme_override_colors/font_color = Color(0.3882353, 0.1882353, 0.019607844, 1)
 theme_override_fonts/font = ExtResource("10_cegan")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_qsp4k")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_kq58d")
+theme_override_styles/hover = SubResource("StyleBoxTexture_kq58d")
 text = "$0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="QuestionPanel" type="Control" parent="."]
 visible = false
@@ -1834,6 +1777,7 @@ layout_mode = 2
 text = "Main Menu"
 
 [node name="WagerPanel" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
